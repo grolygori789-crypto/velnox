@@ -1,9 +1,16 @@
-VELNOX V1.3 UPDATE CHECKLIST
+VELNOX V1.5 UPLOAD CHECKLIST
 
-1. Upload/replace all normal V1.3 project files in the existing velnox repo root.
-2. Confirm index.html is still at repo root.
-3. Confirm .github/workflows/update-benchmarks.yml exists. Browser upload may skip .github.
-4. If missing, create it in GitHub and paste GITHUB_WORKFLOW_UPDATE_BENCHMARKS.yml.
-5. Add CLOUDFLARE_RADAR_TOKEN under Settings > Secrets and variables > Actions.
-6. Run Actions > Refresh Velnox Standard Base once.
-7. Wait for Pages redeploy and test Country + Worldwide Compare on the live URL.
+[ ] Extract ZIP
+[ ] Upload all contents to existing velnox repo root
+[ ] index.html is at repo root
+[ ] .github/workflows/update-benchmarks.yml exists in GitHub
+[ ] Commit changes
+[ ] GitHub Pages deploys successfully
+[ ] Add secret CLOUDFLARE_RADAR_TOKEN
+[ ] Run Actions > Refresh Velnox Standard Base
+[ ] Workflow finishes green
+[ ] benchmarks/index.json says ready: true
+[ ] benchmarks/global.json exists
+[ ] benchmarks/TH.json exists
+[ ] Run 3 phone tests under similar conditions
+[ ] Check Measurement confidence in Technical Details

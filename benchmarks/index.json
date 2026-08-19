@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "ready": false,
   "source": "Cloudflare Radar",
   "windowDays": 90,
@@ -8,5 +8,7 @@
   "countries": [],
   "failed": {},
   "countryCount": 0,
-  "note": "Run scripts/sync_benchmarks.py with CLOUDFLARE_RADAR_TOKEN or use the included GitHub Action."
+  "globalPartial": false,
+  "globalMetricsAvailable": [],
+  "note": "Run the included GitHub Action after adding the CLOUDFLARE_RADAR_TOKEN repository secret. Velnox never invents ranking data."
 }

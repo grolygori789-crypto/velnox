@@ -1,26 +1,44 @@
-VELNOX V1.3 QA REPORT
-Generated 2026-08-19
+VELNOX V1.5 QA REPORT
+Generated: 2026-08-19
 
-Duplicate HTML IDs: PASS
-JS direct ID selectors resolve: PASS
-TH/EN translation key parity: PASS
-HTML i18n keys resolve: PASS
-Manifest JSON parses: PASS
-Benchmark index JSON parses: PASS
-Service Worker V1.3 cache version: PASS
-Benchmark cache isolated: PASS
-Country flag helper present: PASS
-Benchmark freshness guard present: PASS
-Offline + timeout handling present: PASS
-Cloudflare AIM score support present: PASS
-Workflow hidden + visible backup identical: PASS
+STATIC / BUILD QA
+PASS  app.js JavaScript syntax (node --check)
+PASS  sw.js JavaScript syntax (node --check)
+PASS  scripts/sync_benchmarks.py Python compilation
+PASS  manifest.webmanifest JSON parsing
+PASS  benchmarks/index.json JSON parsing
+PASS  GitHub workflow YAML parsing
+PASS  Executable workflow exists at .github/workflows/update-benchmarks.yml
+PASS  No duplicate HTML element IDs (81 IDs checked)
+PASS  JavaScript-to-HTML direct ID linkage (65 direct #id references checked)
+PASS  TH/EN translation parity (173 translation keys)
+PASS  Every data-i18n key used by index.html exists in both TH and EN
+PASS  Service Worker cache version is velnox-app-v1.5.0
+PASS  Benchmark requests use network-first / no-store behavior
+PASS  PWA icon dimensions: 192x192 and 512x512
 
-Executed checks:
-- node --check app.js: PASS
-- node --check sw.js: PASS
-- python compile sync_benchmarks.py: PASS
-- synthetic benchmark percentile/flag VM tests: PASS
-- synthetic sync parser tests: PASS
+BENCHMARK / LOGIC QA
+PASS  Mock Cloudflare Radar full-data parser: download/upload/latency/jitter
+PASS  Mock partial-data parser: verified bandwidth remains usable if optional latency/jitter histograms are unavailable
+PASS  Benchmark percentile/index functions return finite 0-100 values on synthetic distributions
+PASS  Measurement-confidence logic classifies stable synthetic samples HIGH
+PASS  Measurement-confidence logic classifies highly variable synthetic samples LOW
+PASS  Country benchmark generator always includes TH when a curated country list is used
+PASS  Global benchmark is mandatory before a ready index can be written
+PASS  No fabricated benchmark values are bundled; initial Standard Base is intentionally ready:false
 
-Runtime limitation:
-Headless Chromium navigation to localhost/file URLs is blocked by the execution environment administrator, so final visual/browser QA must be performed on the live GitHub Pages deployment. The Cloudflare Radar live sync also requires the repository secret and therefore cannot be executed inside this package build environment.
+ACCURACY / PRODUCT HARDENING
+PASS  Accuracy-first Cloudflare test sequence retained from V1.4
+PASS  Bandwidth aggregation uses Cloudflare engine percentile output; fallback avoids single-peak Math.max ranking
+PASS  Test timeout increased to 120 seconds
+PASS  Low-confidence measurement produces a retest warning
+PASS  Overall composite is labelled estimated; per-metric histogram ranks remain separate
+PASS  Country detection + flag + localized country name retained
+PASS  VPN/proxy location caveat retained
+PASS  Radar API token remains server-side in GitHub Secrets; not embedded in the PWA
+
+KNOWN DEPLOYMENT REQUIREMENT
+The Country / Worldwide ranking cannot contain real percentile data until the repository owner adds a Cloudflare Radar API token as the GitHub repository secret CLOUDFLARE_RADAR_TOKEN and runs the included GitHub Action once. This is an intentional security/integrity requirement, not placeholder data.
+
+RUNTIME LIMITATION OF THIS QA ENVIRONMENT
+A fresh visual/headless Chromium pass could not be completed in this container because the installed Chromium process did not terminate even on a trivial local page. No browser-render claim is made from that failed environment check. Final mobile QA should therefore be performed on the deployed GitHub Pages URL after upload and benchmark sync.

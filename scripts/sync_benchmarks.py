@@ -20,12 +20,12 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "benchmarks"
 API = "https://api.cloudflare.com/client/v4/radar/quality/speed/histogram"
-TOKEN = os.environ.get("CLOUDFLARE_RADAR_TOKEN", "").strip()
-USER_AGENT = "VelnoxBenchmarkSync/1.3"
-SCHEMA_VERSION = 2
+TOKEN = (os.environ.get("CLOUDFLARE_RADAR_TOKEN") or os.environ.get("CLOUDFLARE_API_TOKEN") or "").strip()
+USER_AGENT = "VelnoxBenchmarkSync/1.5"
+SCHEMA_VERSION = 3
 
 if not TOKEN:
-    raise SystemExit("CLOUDFLARE_RADAR_TOKEN is required")
+    raise SystemExit("CLOUDFLARE_RADAR_TOKEN (or CLOUDFLARE_API_TOKEN) is required")
 
 
 def utc_now() -> str:
@@ -158,52 +158,59 @@ def latest_timestamp(values) -> str | None:
 
 
 def build_location(location: str | None) -> dict:
+    """Build one benchmark location.
+
+    BANDWIDTH is mandatory. LATENCY and JITTER are requested independently and
+    included only when Radar returns a usable histogram series. This prevents a
+    temporary API/schema mismatch in one metric group from blanking the entire
+    Country/Worldwide comparison.
+    """
     label = location or "GLOBAL"
     print(f"Fetching {label} ...", flush=True)
 
-    bandwidth = api_request("BANDWIDTH", location, 10)
-    time.sleep(0.16)
-    latency = api_request("LATENCY", location, 5)
-    time.sleep(0.16)
-    jitter = api_request("JITTER", location, 5)
-
+    bandwidth = api_request("BANDWIDTH", location, 5)
     bw_hist, _ = histogram_container(bandwidth)
-    lat_hist, _ = histogram_container(latency)
-    jit_hist, _ = histogram_container(jitter)
-
     download_key = choose_key(bw_hist, ["bandwidthDownload", "downloadBandwidth"], ["download"])
     upload_key = choose_key(bw_hist, ["bandwidthUpload", "uploadBandwidth"], ["upload"])
-    latency_key = choose_key(
-        lat_hist,
-        ["latencyIdle", "latencyUnloaded", "unloadedLatency"],
-        ["latency"],
-        exclude=["loaded"],
-    )
-    jitter_key = choose_key(
-        jit_hist,
-        ["jitterIdle", "jitterUnloaded", "unloadedJitter"],
-        ["jitter"],
-        exclude=["loaded"],
-    )
 
     metrics = {
         "download": metric_payload(bandwidth, download_key, "higher"),
         "upload": metric_payload(bandwidth, upload_key, "higher"),
-        "latency": metric_payload(latency, latency_key, "lower"),
-        "jitter": metric_payload(jitter, jitter_key, "lower"),
     }
+    warnings: dict[str, str] = {}
+
+    optional_groups = [
+        ("LATENCY", 2, "latency", ["latencyIdle", "latencyUnloaded", "unloadedLatency"], ["latency"], ["loaded"], "lower"),
+        ("JITTER", 1, "jitter", ["jitterIdle", "jitterUnloaded", "unloadedJitter"], ["jitter"], ["loaded"], "lower"),
+    ]
+    for group, bucket_size, out_key, exact, contains, exclude, direction in optional_groups:
+        try:
+            time.sleep(0.18)
+            result = api_request(group, location, bucket_size)
+            hist, _ = histogram_container(result)
+            series_key = choose_key(hist, exact, contains, exclude=exclude)
+            metrics[out_key] = metric_payload(result, series_key, direction)
+        except Exception as exc:
+            warnings[out_key] = str(exc)[:400]
+            print(f"WARN {label} {out_key}: {exc}", file=sys.stderr)
+
     last_updated = latest_timestamp([m.get("lastUpdated") for m in metrics.values()])
+    date_ranges = [m.get("dateRange") for m in metrics.values() if m.get("dateRange")]
     return {
         "schemaVersion": SCHEMA_VERSION,
         "location": label,
         "source": "Cloudflare Radar",
         "sourceEndpoint": "/radar/quality/speed/histogram",
+        "sourceUrl": "https://developers.cloudflare.com/api/resources/radar/subresources/quality/subresources/speed/methods/histogram/",
         "windowDays": 90,
         "lastUpdated": last_updated,
         "generatedAt": utc_now(),
+        "metricsAvailable": sorted(metrics.keys()),
+        "partial": len(metrics) < 4,
+        "warnings": warnings,
+        "dateRanges": date_ranges,
         "metrics": metrics,
     }
-
 
 def requested_countries() -> list[str]:
     raw = os.environ.get("VELNOX_COUNTRIES", "ALL").strip() or "ALL"
@@ -213,7 +220,9 @@ def requested_countries() -> list[str]:
             for line in (ROOT / "scripts" / "countries.txt").read_text(encoding="utf-8").splitlines()
             if len(line.strip()) == 2
         ]
-    return sorted({code.strip().upper() for code in raw.split(",") if len(code.strip()) == 2})
+    requested = {code.strip().upper() for code in raw.split(",") if len(code.strip()) == 2}
+    requested.add("TH")  # Velnox launch/home market; harmless for worldwide deployments.
+    return sorted(requested)
 
 
 def write_json_atomic(path: Path, payload: dict, pretty: bool = False):
@@ -257,6 +266,8 @@ def main():
         "countries": completed,
         "failed": failed,
         "countryCount": len(completed),
+        "globalPartial": bool(global_data.get("partial")),
+        "globalMetricsAvailable": global_data.get("metricsAvailable", []),
     }
     write_json_atomic(OUT / "index.json", index, pretty=True)
     print(f"Generated global + {len(completed)} country benchmark files; {len(failed)} failed.")

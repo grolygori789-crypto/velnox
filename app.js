@@ -8,7 +8,7 @@ const translations = {
     privacyLine:"No account. History stays on this device.", liveDiagnostic:"LIVE DIAGNOSTIC", checkingResponse:"Checking response time…",
     checkingDownload:"Measuring download throughput…", checkingUpload:"Measuring upload throughput…", analyzing:"Analyzing connection quality…",
     latency:"PING", download:"DOWNLOAD", upload:"UPLOAD", jitter:"JITTER", analysis:"ANALYSIS",
-    dataUsage:"The test transfers data to estimate real connection performance.", connectionQuality:"CONNECTION QUALITY", velnoxScore:"VELNOX SCORE",
+    dataUsage:"The test transfers data to estimate real connection performance. Fast connections may use larger test samples.", connectionQuality:"CONNECTION QUALITY", velnoxScore:"VELNOX SCORE",
     realWorld:"REAL-WORLD USE", whatCanDo:"What can this connection handle?", compare:"COMPARE", whereYouStand:"See where your connection stands",
     country:"COUNTRY", global:"GLOBAL", networkInsights:"NETWORK INSIGHTS", whatWeFound:"What Velnox found",
     improveConnection:"IMPROVE CONNECTION", recommendedActions:"Recommended actions", technicalDetails:"TECHNICAL DETAILS", testAgain:"TEST AGAIN",
@@ -46,7 +46,10 @@ const translations = {
     vpnNote:"Based on the network exit location. A VPN or proxy can change the detected country.", worldwideBenchmark:"Worldwide benchmark",
     benchmarkComposite:"Weighted composite of download, upload, latency and jitter percentiles.", benchmarkFresh:"Current benchmark", benchmarkStale:"Benchmark may be stale",
     benchmarkIndexName:"VELNOX BENCHMARK INDEX", benchmarkDataAge:"Data age", days:"days", yourValue:"You",
-    offlineTest:"You are offline. Reconnect and try again.", testTimedOut:"The test took too long to complete. Please try again.", benchmarkInvalid:"Benchmark data failed validation."
+    offlineTest:"You are offline. Reconnect and try again.", testTimedOut:"The test took too long to complete. Please try again.", benchmarkInvalid:"Benchmark data failed validation.",
+    measurementConfidence:"Measurement confidence", confidenceHigh:"High", confidenceMedium:"Medium", confidenceLow:"Low", confidenceUnknown:"Not enough samples",
+    unstableMeasurementTitle:"Measurement varied during this test", unstableMeasurementBody:"Throughput samples changed noticeably while testing. For a more reliable comparison, pause other network activity and run the test again.",
+    rankConfidenceNote:"This ranking is based on the current measurement. Retest if the connection was changing during the test.", partialBenchmarkNote:"Radar did not expose every histogram metric in this sync; unavailable ranks are shown as —.", estimatedTopPercent:"EST. TOP {x}%", estimatedOverall:"Estimated overall standing"
   },
   th: {
     networkHealth:"สุขภาพเครือข่าย", knowConnection:"รู้จักเน็ตของคุณให้ชัด", heroCopy:"ทั้งความเร็ว การตอบสนอง และความเสถียร — อธิบายให้เข้าใจง่าย",
@@ -54,7 +57,7 @@ const translations = {
     privacyLine:"ไม่ต้องสมัครบัญชี ประวัติเก็บไว้ในอุปกรณ์นี้", liveDiagnostic:"กำลังตรวจสอบแบบเรียลไทม์", checkingResponse:"กำลังตรวจสอบเวลาตอบสนอง…",
     checkingDownload:"กำลังวัดความเร็วดาวน์โหลด…", checkingUpload:"กำลังวัดความเร็วอัปโหลด…", analyzing:"กำลังวิเคราะห์คุณภาพการเชื่อมต่อ…",
     latency:"PING", download:"ดาวน์โหลด", upload:"อัปโหลด", jitter:"JITTER", analysis:"วิเคราะห์",
-    dataUsage:"การทดสอบจะรับส่งข้อมูลเพื่อประเมินประสิทธิภาพการเชื่อมต่อจริง", connectionQuality:"คุณภาพการเชื่อมต่อ", velnoxScore:"คะแนน VELNOX",
+    dataUsage:"การทดสอบจะรับส่งข้อมูลเพื่อประเมินประสิทธิภาพการเชื่อมต่อจริง เน็ตความเร็วสูงอาจใช้ข้อมูลทดสอบในปริมาณมากขึ้น", connectionQuality:"คุณภาพการเชื่อมต่อ", velnoxScore:"คะแนน VELNOX",
     realWorld:"การใช้งานจริง", whatCanDo:"เน็ตเส้นนี้เหมาะกับอะไรบ้าง?", compare:"เปรียบเทียบ", whereYouStand:"ดูว่าเน็ตของคุณอยู่ระดับไหน",
     country:"ประเทศ", global:"ทั่วโลก", networkInsights:"ข้อมูลเชิงลึก", whatWeFound:"สิ่งที่ Velnox พบ",
     improveConnection:"ปรับปรุงการเชื่อมต่อ", recommendedActions:"สิ่งที่แนะนำให้ลอง", technicalDetails:"รายละเอียดทางเทคนิค", testAgain:"ทดสอบอีกครั้ง",
@@ -92,7 +95,10 @@ const translations = {
     vpnNote:"อ้างอิงจากตำแหน่งปลายทางของเครือข่าย VPN หรือ Proxy อาจทำให้ประเทศที่ตรวจพบเปลี่ยนไป", worldwideBenchmark:"เกณฑ์เปรียบเทียบทั่วโลก",
     benchmarkComposite:"ดัชนีรวมแบบถ่วงน้ำหนักจากเปอร์เซ็นไทล์ Download, Upload, Latency และ Jitter", benchmarkFresh:"Benchmark ปัจจุบัน", benchmarkStale:"Benchmark อาจเก่าเกินไป",
     benchmarkIndexName:"ดัชนี VELNOX BENCHMARK", benchmarkDataAge:"อายุข้อมูล", days:"วัน", yourValue:"คุณ",
-    offlineTest:"ขณะนี้ออฟไลน์ กรุณาเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่", testTimedOut:"การทดสอบใช้เวลานานเกินกำหนด กรุณาลองใหม่", benchmarkInvalid:"ข้อมูล Benchmark ไม่ผ่านการตรวจสอบ"
+    offlineTest:"ขณะนี้ออฟไลน์ กรุณาเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่", testTimedOut:"การทดสอบใช้เวลานานเกินกำหนด กรุณาลองใหม่", benchmarkInvalid:"ข้อมูล Benchmark ไม่ผ่านการตรวจสอบ",
+    measurementConfidence:"ความมั่นใจของผลวัด", confidenceHigh:"สูง", confidenceMedium:"ปานกลาง", confidenceLow:"ต่ำ", confidenceUnknown:"ตัวอย่างยังไม่เพียงพอ",
+    unstableMeasurementTitle:"ค่าที่วัดแกว่งระหว่างการทดสอบ", unstableMeasurementBody:"ตัวอย่างความเร็วเปลี่ยนแปลงค่อนข้างมากระหว่างทดสอบ เพื่อให้การเปรียบเทียบน่าเชื่อถือขึ้น ควรหยุดกิจกรรมเครือข่ายอื่นชั่วคราวแล้วทดสอบอีกครั้ง",
+    rankConfidenceNote:"อันดับนี้อ้างอิงจากผลวัดครั้งปัจจุบัน หากเครือข่ายมีการเปลี่ยนแปลงระหว่างทดสอบ ควรทดสอบซ้ำ", partialBenchmarkNote:"รอบซิงก์นี้ Radar ไม่ได้ส่ง Histogram ครบทุกค่า อันดับที่ไม่มีข้อมูลจะแสดงเป็น — โดย Velnox จะไม่สร้างค่าขึ้นเอง", estimatedTopPercent:"ประมาณ TOP {x}%", estimatedOverall:"อันดับโดยรวมโดยประมาณ"
   }
 };
 
@@ -251,6 +257,7 @@ function buildInsights(r){
   if(r.download<25) items.push({title:t("lowDownTitle"),body:t("lowDownBody"),warn:true});
   if(r.upload<10) items.push({title:t("lowUpTitle"),body:t("lowUpBody"),warn:true});
   if(Number.isFinite(r.loadedLatency) && r.loadedLatency-r.ping>50) items.push({title:t("bufferTitle"),body:t("bufferBody"),warn:true});
+  if(r.confidence?.level==="low") items.push({title:t("unstableMeasurementTitle"),body:t("unstableMeasurementBody"),warn:true});
   if(items.length===0) items.push({title:t("balancedTitle"),body:t("balancedBody"),warn:false});
   return items.map(x=>`<div class="insight ${x.warn?"warn":""}"><span class="insight-dot"></span><div><b>${x.title}</b><p>${x.body}</p></div></div>`).join("");
 }
@@ -336,10 +343,12 @@ function benchmarkIndexValid(index){
 }
 function benchmarkDataValid(data){
   if(!data || Number(data.schemaVersion)<1 || !data.metrics)return false;
-  return ["download","upload","latency","jitter"].every(k=>{
-    const m=data.metrics[k];
-    return m && Array.isArray(m.bucketMin) && Array.isArray(m.counts) && m.bucketMin.length>0 && m.bucketMin.length===m.counts.length;
-  });
+  const validMetric=m=>m && Array.isArray(m.bucketMin) && Array.isArray(m.counts) && m.bucketMin.length>0 && m.bucketMin.length===m.counts.length;
+  if(!validMetric(data.metrics.download) || !validMetric(data.metrics.upload))return false;
+  for(const k of ["latency","jitter"]){
+    if(data.metrics[k] && !validMetric(data.metrics[k]))return false;
+  }
+  return true;
 }
 async function loadBenchmarkIndex(force=false){
   if(!force && state.benchmarkIndex!==null)return state.benchmarkIndex;
@@ -414,6 +423,11 @@ function topText(goodness){
   const top=100-goodness;
   return t("topPercent",{x:top<1?"<1":String(Math.max(1,Math.round(top)))})
 }
+function estimatedTopText(goodness){
+  if(!Number.isFinite(goodness))return "—";
+  const top=100-goodness;
+  return t("estimatedTopPercent",{x:top<1?"<1":String(Math.max(1,Math.round(top)))})
+}
 function benchmarkRank(current,data){
   const metrics=data?.metrics||{};
   const values={download:current.download,upload:current.upload,latency:current.ping,jitter:current.jitter};
@@ -465,10 +479,10 @@ async function renderCompare(){
   const freshness=benchmarkFreshness(data),ageText=Number.isFinite(freshness.age)?`${Math.round(freshness.age)} ${t("days")}`:"—";
   host.innerHTML=`
     <div class="benchmark-rank-hero">
-      <div class="benchmark-top"><span>${t("benchmarkIndexName")}</span><strong>${topText(overall)}</strong><small>${better}%</small></div>
+      <div class="benchmark-top"><span>${t("benchmarkIndexName")}</span><strong>${estimatedTopText(overall)}</strong><small>${better}/100</small></div>
       <div class="benchmark-copy">
         <div class="benchmark-location"><span class="benchmark-flag">${locationSymbol}</span><div><b>${locationName}</b><small>${locationMeta}</small></div></div>
-        <b>${Number.isFinite(overall)?t("betterThan",{x:better}):"—"}</b>
+        <b>${Number.isFinite(overall)?`${t("estimatedOverall")} • ${t("betterThan",{x:better})}`:"—"}</b>
         <p>${t("benchmarkComposite")}</p>
         <span class="benchmark-freshness ${freshness.fresh?"fresh":"stale"}">${freshness.fresh?t("benchmarkFresh"):t("benchmarkStale")} • ${ageText}</span>
       </div>
@@ -480,12 +494,15 @@ async function renderCompare(){
       ${benchmarkMetricCard(t("jitterRank"),"jitter",rank,"ms",current.jitter)}
     </div>
     <div class="benchmark-foot"><span><b>${t("source")}:</b> ${data.source||t("benchmarkCloudflare")}</span><span><b>${t("benchmarkWindow")}:</b> ${t("previous90Days")}</span><span><b>${t("updated")}:</b> ${benchmarkUpdated(data)}</span></div>
+    ${data.partial?`<p class="benchmark-partial-note">${t("partialBenchmarkNote")}</p>`:""}
+    ${current.confidence?.level==="low"?`<p class="benchmark-confidence-note">${t("rankConfidenceNote")}</p>`:""}
     ${scope==="country"?`<p class="benchmark-privacy-note">${t("vpnNote")}</p>`:""}`;
 }
 function renderTech(r){
   const benchmarkReady=!!state.benchmarkIndex?.ready;
   const rows=[
     [t("engine"),state.engineName||"—"],
+    [t("measurementConfidence"),confidenceLabel(r.confidence)],
     [t("loadedLatency"),Number.isFinite(r.loadedLatency)?`${r.loadedLatency.toFixed(1)} ms`:"—"],
     [t("jitterIdle"),`${r.jitter.toFixed(1)} ms`],
     [t("testDuration"),state.testDuration?`${(state.testDuration/1000).toFixed(1)} s`:"—"],
@@ -557,33 +574,108 @@ async function ensureCloudflareEngine(){
     return mod.default;
   }catch{return null}
 }
+function numericPercentile(values,p=.5){
+  const a=(values||[]).filter(Number.isFinite).sort((x,y)=>x-y);
+  if(!a.length)return NaN;
+  const pos=(a.length-1)*clamp(p,0,1),lo=Math.floor(pos),hi=Math.ceil(pos);
+  return a[lo]+(a[hi]-a[lo])*(pos-lo);
+}
+function coefficientOfVariation(values){
+  const xs=(values||[]).map(Number).filter(Number.isFinite).filter(v=>v>0);
+  if(xs.length<3)return null;
+  const mean=xs.reduce((a,b)=>a+b,0)/xs.length;
+  if(!mean)return null;
+  const variance=xs.reduce((a,v)=>a+(v-mean)*(v-mean),0)/xs.length;
+  return Math.sqrt(variance)/mean;
+}
+function confidenceFromSamples(downloadPoints=[],uploadPoints=[],latencyPoints=[]){
+  const bandwidthValues=points=>{
+    const valid=(points||[]).filter(p=>Number.isFinite(p?.bps));
+    let stable=valid.filter(p=>Number(p.duration)>=250);
+    if(stable.length<3)stable=valid.filter(p=>Number(p.duration)>=80);
+    return stable.map(p=>Number(p.bps)/1e6);
+  };
+  const down=bandwidthValues(downloadPoints),up=bandwidthValues(uploadPoints);
+  const lat=(latencyPoints||[]).map(Number).filter(Number.isFinite).filter(v=>v>0);
+  const downCv=coefficientOfVariation(down),upCv=coefficientOfVariation(up),latCv=coefficientOfVariation(lat);
+  const cvs=[downCv,upCv,latCv].filter(Number.isFinite);
+  if(cvs.length<2)return {level:"unknown",downCv,upCv,latCv,samples:{download:down.length,upload:up.length,latency:lat.length}};
+  const worst=Math.max(...cvs),avg=cvs.reduce((a,b)=>a+b,0)/cvs.length;
+  let level="high";
+  if(worst>.55||avg>.38)level="low";
+  else if(worst>.35||avg>.24)level="medium";
+  return {level,downCv,upCv,latCv,samples:{download:down.length,upload:up.length,latency:lat.length}};
+}
+function confidenceLabel(conf){
+  const level=conf?.level||"unknown";
+  return level==="high"?t("confidenceHigh"):level==="medium"?t("confidenceMedium"):level==="low"?t("confidenceLow"):t("confidenceUnknown");
+}
 async function runFallback(){
+  // Fallback is intentionally slower and more conservative than V1.3.
+  // Warm-up samples are ignored and bandwidth is aggregated with a percentile, not Math.max().
   state.engineName=t("fallbackEngine");
   const base="https://speed.cloudflare.com";
   const pings=[];
   setStage("latency");
-  for(let i=0;i<7;i++){
+  for(let i=0;i<14;i++){
     const s=performance.now();
     await fetch(`${base}/__down?bytes=0&_=${Date.now()}-${i}`,{cache:"no-store"});
-    const p=performance.now()-s;pings.push(p);$("#liveValue").textContent=p.toFixed(0);$("#miniPing").textContent=`${p.toFixed(0)} ms`;
+    const p=performance.now()-s;
+    if(i>=2)pings.push(p);
+    $("#liveValue").textContent=p.toFixed(0);$("#miniPing").textContent=`${p.toFixed(0)} ms`;
   }
-  const ping=[...pings].sort((a,b)=>a-b)[Math.floor(pings.length/2)];
-  const jitter=pings.slice(1).reduce((a,v,i)=>a+Math.abs(v-pings[i]),0)/Math.max(1,pings.length-1);
+  const ping=numericPercentile(pings,.5);
+  const deltas=pings.slice(1).map((v,i)=>Math.abs(v-pings[i]));
+  const jitter=numericPercentile(deltas,.5);
   $("#miniJitter").textContent=`${jitter.toFixed(1)} ms`;
+
+  const measureDown=async(bytes)=>{
+    const s=performance.now();
+    const r=await fetch(`${base}/__down?bytes=${bytes}&_=${Date.now()}-${Math.random()}`,{cache:"no-store"});
+    const blob=await r.blob();
+    const sec=(performance.now()-s)/1000;
+    return {mbps:(blob.size*8/sec)/1e6,ms:sec*1000};
+  };
+  const measureUp=async(bytes)=>{
+    const body=new Uint8Array(bytes),s=performance.now();
+    await fetch(`${base}/__up?_=${Date.now()}-${Math.random()}`,{method:"POST",body,cache:"no-store"});
+    const sec=(performance.now()-s)/1000;
+    return {mbps:(bytes*8/sec)/1e6,ms:sec*1000};
+  };
+
   setStage("download");
   const dvals=[];
-  for(const bytes of [2e6,8e6,20e6]){
-    const s=performance.now(); const r=await fetch(`${base}/__down?bytes=${bytes}&_=${Date.now()}`,{cache:"no-store"}); const blob=await r.blob();
-    const sec=(performance.now()-s)/1000; const mbps=(blob.size*8/sec)/1e6; dvals.push(mbps);$("#liveValue").textContent=mbps.toFixed(1);$("#miniDown").textContent=`${mbps.toFixed(1)} Mbps`;
+  for(const bytes of [1e6,5e6,2e7,5e7,1e8]){
+    for(let i=0;i<2;i++){
+      const m=await measureDown(bytes);
+      if(m.ms>=80)dvals.push(m.mbps);
+      $("#liveValue").textContent=m.mbps.toFixed(1);$("#miniDown").textContent=`${m.mbps.toFixed(1)} Mbps`;
+    }
+    if(dvals.length>=4 && dvals.slice(-2).every(v=>Number.isFinite(v))){
+      const lastMedian=numericPercentile(dvals.slice(-2),.5);
+      if(bytes>=2e7 && lastMedian<120)break;
+    }
   }
+
   setStage("upload");
   const uvals=[];
-  for(const bytes of [5e5,2e6,5e6]){
-    const body=new Uint8Array(bytes); const s=performance.now();
-    await fetch(`${base}/__up?_=${Date.now()}`,{method:"POST",body,cache:"no-store"});
-    const sec=(performance.now()-s)/1000; const mbps=(bytes*8/sec)/1e6; uvals.push(mbps);$("#liveValue").textContent=mbps.toFixed(1);$("#miniUp").textContent=`${mbps.toFixed(1)} Mbps`;
+  for(const bytes of [5e5,2e6,8e6,2e7,5e7]){
+    for(let i=0;i<2;i++){
+      const m=await measureUp(bytes);
+      if(m.ms>=80)uvals.push(m.mbps);
+      $("#liveValue").textContent=m.mbps.toFixed(1);$("#miniUp").textContent=`${m.mbps.toFixed(1)} Mbps`;
+    }
+    if(uvals.length>=4 && bytes>=8e6){
+      const lastMedian=numericPercentile(uvals.slice(-2),.5);
+      if(lastMedian<80)break;
+    }
   }
-  return {download:Math.max(...dvals),upload:Math.max(...uvals),ping,jitter,loadedLatency:null};
+  const confidence=confidenceFromSamples(
+    dvals.map(v=>({bps:v*1e6,duration:300})),
+    uvals.map(v=>({bps:v*1e6,duration:300})),
+    pings
+  );
+  return {download:numericPercentile(dvals,.8),upload:numericPercentile(uvals,.8),ping,jitter,loadedLatency:null,confidence};
 }
 let audioCtx=null;
 function getAudio(){
@@ -621,19 +713,42 @@ async function runTest(){
       result=await withTimeout(new Promise((resolve,reject)=>{
         const st=new SpeedTest({
           autoStart:false,
+          // Accuracy-first profile based closely on Cloudflare Speedtest's current default plan,
+          // with packet-loss omitted so Velnox does not depend on TURN/WebRTC availability.
           measurements:[
-            {type:"latency",numPackets:10},
-            {type:"download",bytes:1e5,count:3,bypassMinDuration:true},
-            {type:"download",bytes:1e6,count:3},
-            {type:"download",bytes:1e7,count:2},
-            {type:"download",bytes:2.5e7,count:1},
-            {type:"upload",bytes:1e5,count:3,bypassMinDuration:true},
-            {type:"upload",bytes:1e6,count:3},
-            {type:"upload",bytes:1e7,count:2}
+            {type:"latency",numPackets:2},
+            {type:"download",bytes:1e5,count:1,bypassMinDuration:true},
+            {type:"latency",numPackets:20},
+            {type:"download",bytes:1e5,count:9},
+            {type:"latency",numPackets:2},
+            {type:"download",bytes:1e6,count:8},
+            {type:"latency",numPackets:2},
+            {type:"upload",bytes:1e5,count:8},
+            {type:"latency",numPackets:2},
+            {type:"upload",bytes:1e6,count:6},
+            {type:"latency",numPackets:2},
+            {type:"download",bytes:1e7,count:6},
+            {type:"latency",numPackets:2},
+            {type:"upload",bytes:1e7,count:4},
+            {type:"latency",numPackets:2},
+            {type:"download",bytes:2.5e7,count:4},
+            {type:"latency",numPackets:2},
+            {type:"upload",bytes:2.5e7,count:4},
+            {type:"latency",numPackets:2},
+            {type:"download",bytes:1e8,count:3},
+            {type:"latency",numPackets:2},
+            {type:"upload",bytes:5e7,count:3},
+            {type:"latency",numPackets:2},
+            {type:"download",bytes:2.5e8,count:2}
           ],
           measureDownloadLoadedLatency:true,
           measureUploadLoadedLatency:true,
-          bandwidthFinishRequestDuration:850
+          bandwidthFinishRequestDuration:1000,
+          bandwidthPercentile:.9,
+          latencyPercentile:.5,
+          bandwidthMinRequestDuration:10,
+          loadedRequestMinDuration:250,
+          logAimApiUrl:null
         });
         st.onResultsChange=info=>{
           const type=info?.type||"";
@@ -651,11 +766,15 @@ async function runTest(){
           const dl=safeCall(res,"getDownLoadedLatency"), ul=safeCall(res,"getUpLoadedLatency");
           const loaded=[dl,ul].filter(Number.isFinite);
           const aimScores=safeCall(res,"getScores")||null;
-          resolve({download,upload,ping:Number(ping)||0,jitter:Number(jitter)||0,loadedLatency:loaded.length?Math.max(...loaded):null,aimScores});
+          const downloadPoints=safeCall(res,"getDownloadBandwidthPoints")||[];
+          const uploadPoints=safeCall(res,"getUploadBandwidthPoints")||[];
+          const latencyPoints=safeCall(res,"getUnloadedLatencyPoints")||[];
+          const confidence=confidenceFromSamples(downloadPoints,uploadPoints,latencyPoints);
+          resolve({download,upload,ping:Number(ping)||0,jitter:Number(jitter)||0,loadedLatency:loaded.length?Math.max(...loaded):null,aimScores,confidence});
         };
         st.play();
-      }),75000);
-    }else result=await withTimeout(runFallback(),75000);
+      }),120000);
+    }else result=await withTimeout(runFallback(),120000);
 
     if(!result.download || !Number.isFinite(result.ping)) throw new Error("Invalid measurement");
     setStage("analysis"); $("#liveValue").textContent=""; $("#liveUnit").textContent="";

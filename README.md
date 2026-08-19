@@ -1,88 +1,69 @@
-# Velnox V1.3 — Network Intelligence
+# Velnox V1.5 — Complete Production Package
 
-Turnkey HTML/PWA by Benedict Interactive.
+Velnox is a static HTML/PWA network-health assistant by Benedict Interactive.
+V1.5 keeps the readable V1.2 result design, the cinematic test flow, and the V1.4 accuracy profile, then hardens ranking, measurement confidence, benchmark sync, and PWA update behavior.
 
-V1.3 is the production-hardening release built from the live V1.2 GitHub Pages version. It keeps the readable scroll-based result design and adds a stronger benchmark pipeline, country presentation, cache safety, error handling, accessibility polish, and deployment QA.
+## What V1.5 does
 
-## What V1.3 improves
+- Cloudflare edge speed measurement using `@cloudflare/speedtest` 1.13.0 with an accuracy-first plan based closely on Cloudflare's current default measurement sequence (packet-loss phase intentionally omitted).
+- Conservative fallback measurement if the module cannot load.
+- Download, upload, ping, jitter, loaded-latency interpretation, Velnox score, medal, real-world use cases, insights and fixes.
+- TH / EN interface, local history, fullscreen request, procedural sound, PWA install support.
+- Automatic network-country detection with flag + localized country name.
+- Country / Worldwide comparison against a verified rolling 90-day Cloudflare Radar Standard Base.
+- Per-metric percentile ranking for every histogram Radar makes available.
+- Estimated overall Velnox Benchmark Index. It is explicitly labelled estimated because it is a weighted composite of metric percentiles, not a separately observed population distribution.
+- Measurement-confidence check based on the spread of usable speed/latency samples. Low-confidence tests are flagged and users are encouraged to retest before relying on the ranking.
+- Network-first benchmark caching so weekly benchmark updates are not trapped behind an old PWA cache.
 
-- Country comparison now presents the detected network country as **flag + localized country name**.
-- Country detection uses Cloudflare connection metadata first, Cloudflare trace second, and browser locale only as a clearly marked fallback.
-- Country UI explains that VPN/proxy exit location can change the detected country.
-- Country and Worldwide ranking use the Velnox Standard Base with per-metric percentiles for Download, Upload, Latency and Jitter.
-- Overall comparison is explicitly described as a weighted Velnox Benchmark Index rather than pretending to be a mathematically exact joint population percentile.
-- Benchmark files are validated before display and include Source, rolling 90-day window, Last Updated and freshness status.
-- Standard Base sync is hardened with retry/backoff, atomic JSON writes, schema validation, an all-country default, GitHub Actions concurrency control and a post-generation validation step.
-- Service Worker cache version is corrected to V1.3 and benchmark data uses a separate network-first cache path so fresh Standard Base data is not silently trapped behind an old app cache.
-- Network tests have offline pre-checking and a 75-second timeout instead of being allowed to hang indefinitely.
-- PWA manifest adds a stable app ID and utility/productivity categories.
-- ARIA live regions and pressed states were added to important controls.
-- Compare typography was enlarged for phone readability.
+## Important: ranking data is never fabricated
 
-## Core files
+The repository ships with `benchmarks/index.json` in `ready: false` state. Country/Worldwide ranking becomes live only after the included GitHub Action successfully fetches Cloudflare Radar data.
 
-- `index.html`
-- `styles.css`
-- `app.js`
-- `manifest.webmanifest`
-- `sw.js`
-- `assets/`
-- `benchmarks/`
-- `scripts/`
-- `.github/workflows/update-benchmarks.yml`
+Cloudflare Radar requires an API token. The token belongs in a GitHub repository secret and must never be embedded in `index.html` or `app.js`.
 
-`GITHUB_WORKFLOW_UPDATE_BENCHMARKS.yml` is also included at the project root as a visible backup copy because some browser drag-and-drop flows omit the hidden `.github` directory.
+### Activate Country / Worldwide ranking
 
-## Measurement engine
+1. In Cloudflare, create a Custom API Token with **Account > Radar > Read**.
+2. In GitHub: **velnox > Settings > Secrets and variables > Actions > New repository secret**.
+3. Secret name: `CLOUDFLARE_RADAR_TOKEN`.
+4. Paste the Cloudflare token and save it.
+5. Open **Actions > Refresh Velnox Standard Base > Run workflow**.
+6. Leave `countries` as `ALL` for worldwide coverage, or enter ISO alpha-2 codes such as `TH,SG,US,GB,JP`.
+7. Wait for the workflow to finish green. It commits generated files under `benchmarks/` automatically.
 
-Velnox uses the official `@cloudflare/speedtest` browser package, pinned to version `1.13.0`, and falls back to direct browser measurements against Cloudflare's speed-test edge endpoints if the module cannot load.
+The workflow is also scheduled weekly.
 
-The primary result set is:
+## GitHub Pages upload
 
-- Download Mbps
-- Upload Mbps
-- Idle latency / Ping ms
-- Idle jitter ms
-- Loaded latency when available
+Upload the **contents** of this folder to the root of the existing `velnox` repository. `index.html` must remain at repository root.
 
-Packet loss is deliberately not fabricated. It remains excluded until Velnox has a correctly configured TURN-based packet-loss measurement path.
+Critical workflow path:
 
-## Velnox Standard Base
+`.github/workflows/update-benchmarks.yml`
 
-V1.3 uses Cloudflare Radar's Speed Test histogram endpoint as the intended benchmark source. Cloudflare's current SDK describes that endpoint as returning histograms from the previous 90 days of Cloudflare Speed Test data, with fixed bandwidth (Mbps), latency (ms) or jitter (ms) buckets.
+GitHub only executes the workflow from that exact path. `GITHUB_WORKFLOW_UPDATE_BENCHMARKS.yml` at repository root is only a visible backup copy in case a browser upload drops the `.github` folder.
 
-The generated static files let the browser estimate:
+## Accuracy notes
 
-- Download percentile
-- Upload percentile
-- Latency percentile — lower is better
-- Jitter percentile — lower is better
-- Velnox Benchmark Index — weighted composite of the four percentile positions
+No two speed-test providers are expected to return identical numbers because edge/server location, routing, test duration, payload sizes, device load, Wi-Fi conditions, and concurrent traffic differ. Velnox therefore focuses on repeatability and transparent diagnostics rather than trying to mimic another provider's number.
 
-The public browser never receives the Cloudflare API token.
+The primary engine uses percentile aggregation supplied by Cloudflare's speed-test library. The fallback deliberately avoids choosing a single peak result.
 
-## Activate Country / Worldwide ranking
+Fast connections may transfer substantial data during an accuracy-first test.
 
-See `GITHUB_SETUP.md`. The required repository secret name is:
+## Standard Base source
 
-`CLOUDFLARE_RADAR_TOKEN`
+Cloudflare Radar endpoint:
 
-The included GitHub Action can generate every ISO alpha-2 location by default (`ALL`) and refreshes weekly.
+`GET /radar/quality/speed/histogram`
 
-## Accuracy and privacy
+Cloudflare describes it as histogram data from the previous 90 days of Cloudflare Speed Test measurements. The sync script requests BANDWIDTH and, when available from Radar, LATENCY and JITTER histograms. If an optional metric group is temporarily unavailable, Velnox keeps verified bandwidth ranking rather than inventing missing percentile data.
 
-- Browser speed measurements are estimates and can vary with device load, Wi-Fi conditions, concurrent traffic and network path.
-- Country detection represents the network exit location visible to the edge. VPNs and proxies can therefore change the detected country.
-- Velnox does not need to display or store the user's public IP address for country benchmarking.
-- History stays in local browser storage unless the user clears it.
-- Benchmark percentile values are estimates derived from bucketed distributions.
-- Velnox Score and Velnox Benchmark Index are Velnox-defined composite heuristics, not official Cloudflare scores.
+## Privacy
 
-## Deployment
-
-Static hosting over HTTPS is required for the full PWA/service-worker experience. GitHub Pages works well. Upload the project files to the repository root so `index.html` remains at the root.
-
-## Official technical references used for V1.3
-
-- Cloudflare official TypeScript SDK: `radar.quality.speed.histogram()` — previous 90 days, bandwidth/latency/jitter histogram buckets.
-- Cloudflare official `@cloudflare/speedtest` package — current package version confirmed as 1.13.0 at the time of this release.
+- No Velnox account is created.
+- History is stored in browser LocalStorage only when enabled.
+- The public app never contains the Cloudflare Radar API token.
+- Network country is used only to select a country benchmark file. VPN/proxy exit location can change the detected country.
+- Test traffic is sent to Cloudflare speed-test endpoints.

@@ -266,3 +266,7 @@ button{color:inherit}
 .compare-segmented-v12 button{min-height:34px;font-size:8.5px!important}
 @media(max-width:380px){.benchmark-location-preview .benchmark-flag,.benchmark-location .benchmark-flag{font-size:22px}.benchmark-rank-hero{grid-template-columns:96px 1fr!important}.benchmark-top{width:90px!important;height:90px!important}.benchmark-top strong{font-size:25px!important}.benchmark-copy>b{font-size:13px!important}}
 .use-case-rating-v12.rating-fair{color:#c8c78a;background:rgba(200,199,138,.05);border-color:rgba(200,199,138,.10)}
+
+/* V1.5 accuracy / benchmark confidence */
+.benchmark-confidence-note{margin:10px 2px 0;padding:9px 10px;border:1px solid rgba(224,173,102,.11);border-radius:12px;background:rgba(224,173,102,.035);font-size:8.8px;line-height:1.55;color:#8f7a60}
+.benchmark-partial-note{margin:10px 2px 0;padding:9px 10px;border:1px solid rgba(99,232,238,.08);border-radius:12px;background:rgba(99,232,238,.025);font-size:8.8px;line-height:1.55;color:#68798a}

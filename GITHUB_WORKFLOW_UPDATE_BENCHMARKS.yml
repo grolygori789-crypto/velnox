@@ -1,10 +1,11 @@
+# BACKUP COPY ONLY. GitHub executes .github/workflows/update-benchmarks.yml
 name: Refresh Velnox Standard Base
 
 on:
   workflow_dispatch:
     inputs:
       countries:
-        description: "ISO alpha-2 country codes separated by commas, or ALL"
+        description: "ISO alpha-2 countries separated by commas, or ALL"
         required: false
         default: "ALL"
   schedule:
@@ -23,36 +24,60 @@ env:
 
 jobs:
   benchmarks:
+    name: Build verified Country / Worldwide benchmarks
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 50
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out Velnox
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
         with:
-          python-version: "3.12"
-      - name: Verify Radar token is configured
+          python-version: "3.13"
+
+      - name: Verify Radar token
         shell: bash
         run: |
           if [ -z "$CLOUDFLARE_RADAR_TOKEN" ]; then
-            echo "CLOUDFLARE_RADAR_TOKEN repository secret is missing."
+            echo "Missing repository secret: CLOUDFLARE_RADAR_TOKEN"
+            echo "Create a Cloudflare Custom API Token with Account > Radar > Read, then add it in GitHub Settings > Secrets and variables > Actions."
             exit 1
           fi
-      - name: Build rolling 90-day benchmark files
+
+      - name: Build rolling 90-day Standard Base
         run: python scripts/sync_benchmarks.py
-      - name: Validate generated Standard Base
+
+      - name: Validate generated data
         shell: bash
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          p = Path('benchmarks/index.json')
-          data = json.loads(p.read_text())
-          assert data.get('ready') is True
-          assert Path('benchmarks/global.json').exists()
-          assert data.get('countryCount', 0) >= 1
-          print(f"Standard Base ready: global + {data['countryCount']} countries")
+
+          index = json.loads(Path("benchmarks/index.json").read_text(encoding="utf-8"))
+          assert index.get("ready") is True, "Benchmark index is not ready"
+          assert Path("benchmarks/global.json").exists(), "global.json missing"
+          assert Path("benchmarks/TH.json").exists(), "TH.json missing"
+          assert "TH" in index.get("countries", []), "Thailand missing from benchmark index"
+
+          global_data = json.loads(Path("benchmarks/global.json").read_text(encoding="utf-8"))
+          th_data = json.loads(Path("benchmarks/TH.json").read_text(encoding="utf-8"))
+          for name, data in (("GLOBAL", global_data), ("TH", th_data)):
+              metrics = data.get("metrics", {})
+              assert "download" in metrics and "upload" in metrics, f"{name}: bandwidth histograms missing"
+              for key, metric in metrics.items():
+                  mins = metric.get("bucketMin", [])
+                  weights = metric.get("counts", [])
+                  assert mins and len(mins) == len(weights), f"{name}/{key}: invalid histogram"
+                  assert sum(float(v) for v in weights) > 0, f"{name}/{key}: empty histogram"
+          print(f"Standard Base ready: GLOBAL + {index.get('countryCount', 0)} countries")
+          print("GLOBAL metrics:", global_data.get("metricsAvailable"))
+          print("TH metrics:", th_data.get("metricsAvailable"))
           PY
-      - name: Commit refreshed data
+
+      - name: Commit refreshed benchmark data
         shell: bash
         run: |
           git config user.name "velnox-benchmark-bot"
