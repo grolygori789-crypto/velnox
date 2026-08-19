@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#06090d">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Velnox">
+  <title>Velnox — Network Intelligence</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app" class="app">
+    <!-- Splash -->
+    <section id="splash" class="splash" aria-label="Velnox">
+      <div class="splash-grid"></div>
+      <div class="splash-core">
+        <div class="boot-mark" aria-hidden="true">
+          <span class="boot-v left"></span><span class="boot-v right"></span>
+        </div>
+        <h1 class="splash-logo">VELNOX</h1>
+        <div class="signal-line"><span></span></div>
+        <p class="studio">A BENEDICT INTERACTIVE PRODUCT</p>
+      </div>
+    </section>
+
+    <!-- App shell -->
+    <main id="mainShell" class="main-shell hidden">
+      <header class="topbar">
+        <button class="brand-button" id="homeBtn" aria-label="Home">
+          <span class="mini-v" aria-hidden="true"></span>
+          <span>VELNOX</span>
+        </button>
+
+        <div class="top-actions">
+          <div class="lang-switch" aria-label="Language">
+            <button id="langTh" data-lang="th">TH</button>
+            <span></span>
+            <button id="langEn" data-lang="en">EN</button>
+          </div>
+          <button class="icon-button" id="historyBtn" aria-label="History">
+            <svg viewBox="0 0 24 24"><path d="M3.6 12a8.4 8.4 0 1 0 2.46-5.94L3.6 8.52M3.6 4.5v4.02h4.02M12 7.5V12l3.2 1.85"/></svg>
+          </button>
+          <button class="icon-button" id="settingsBtn" aria-label="Settings">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.06.06-2.12 2.12-.06-.06a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.09 1.65v.09h-3v-.09a1.8 1.8 0 0 0-1.09-1.65 1.8 1.8 0 0 0-1.98.36l-.06.06-2.12-2.12.06-.06A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-1.65-1.09h-.09v-3h.09A1.8 1.8 0 0 0 4.6 9.82a1.8 1.8 0 0 0-.36-1.98l-.06-.06 2.12-2.12.06.06a1.8 1.8 0 0 0 1.98.36A1.8 1.8 0 0 0 9.43 4.43v-.09h3v.09a1.8 1.8 0 0 0 1.09 1.65 1.8 1.8 0 0 0 1.98-.36l.06-.06 2.12 2.12-.06.06a1.8 1.8 0 0 0-.36 1.98 1.8 1.8 0 0 0 1.65 1.09H19v3h-.09A1.8 1.8 0 0 0 19.4 15Z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Home -->
+      <section id="homeView" class="view active">
+        <div class="home-hero">
+          <div class="eyebrow" data-i18n="networkHealth">NETWORK HEALTH</div>
+          <h2 data-i18n="knowConnection">Know your connection.</h2>
+          <p class="hero-copy" data-i18n="heroCopy">Speed, responsiveness and stability — explained clearly.</p>
+
+          <button id="startBtn" class="start-orb" aria-label="Start test">
+            <span class="orb-aura a1"></span><span class="orb-aura a2"></span>
+            <span class="orb-ring"></span>
+            <span class="orb-inner">
+              <span class="start-shell" aria-hidden="true">
+                <svg viewBox="0 0 76 48">
+                  <path d="M9 32c3-17 17-25 34-23 15 1 24 10 26 23-16 6-44 7-60 0Z"/>
+                  <path d="M22 18 34 12l11 7-4 11-14 1Zm23 1 10-7 10 7-2 11-13 1Z"/>
+                </svg>
+              </span>
+              <span class="start-label" data-i18n="startTest">START TEST</span>
+              <small data-i18n="tapToAnalyze">Tap to analyze</small>
+            </span>
+          </button>
+
+          <div class="ready-row">
+            <span class="live-dot"></span>
+            <span data-i18n="ready">READY</span>
+            <span class="ready-sep">•</span>
+            <span id="connectionLabel" data-i18n="online">ONLINE</span>
+          </div>
+        </div>
+
+        <div id="lastResultCard" class="glass-card last-card hidden">
+          <div>
+            <span class="card-label" data-i18n="lastTest">LAST TEST</span>
+            <strong id="lastQuality">—</strong>
+          </div>
+          <div class="last-metrics">
+            <span><b id="lastDown">—</b><small>↓</small></span>
+            <span><b id="lastUp">—</b><small>↑</small></span>
+            <span><b id="lastPing">—</b><small>ms</small></span>
+          </div>
+        </div>
+
+        <div class="privacy-chip">
+          <svg viewBox="0 0 24 24"><path d="M12 3 5.5 5.7v5.1c0 4.2 2.7 8 6.5 9.2 3.8-1.2 6.5-5 6.5-9.2V5.7L12 3Z"/><path d="m9.5 11.8 1.65 1.65 3.65-3.9"/></svg>
+          <span data-i18n="privacyLine">No account. History stays on this device.</span>
+        </div>
+      </section>
+
+      <!-- Testing -->
+      <section id="testView" class="view">
+        <div class="test-head">
+          <div class="eyebrow" data-i18n="liveDiagnostic">LIVE DIAGNOSTIC</div>
+          <h2 id="stageTitle">Latency</h2>
+          <p id="stageCopy" data-i18n="checkingResponse">Checking response time…</p>
+        </div>
+
+        <div class="test-value-wrap">
+          <div id="liveValue" class="test-value">—</div>
+          <div id="liveUnit" class="test-unit">ms</div>
+        </div>
+
+        <div class="race-panel">
+          <div class="race-grid"></div>
+          <div id="speedTrail" class="speed-trail"></div>
+
+          <div id="runner" class="runner">
+            <svg class="turtle-svg" viewBox="0 0 240 128" aria-label="Velnox turtle">
+              <defs>
+                <linearGradient id="skin" x1="0" x2="1" y1="0" y2="1">
+                  <stop offset="0" stop-color="#a5c39a"/>
+                  <stop offset=".5" stop-color="#5d7c65"/>
+                  <stop offset="1" stop-color="#31473e"/>
+                </linearGradient>
+                <linearGradient id="shell" x1="0" x2="1" y1="0" y2="1">
+                  <stop offset="0" stop-color="#294152"/>
+                  <stop offset=".6" stop-color="#142631"/>
+                  <stop offset="1" stop-color="#0a1219"/>
+                </linearGradient>
+              </defs>
+              <g class="leg back"><ellipse cx="60" cy="95" rx="23" ry="10" fill="#405747" transform="rotate(-18 60 95)"/></g>
+              <g class="leg front"><ellipse cx="166" cy="96" rx="25" ry="10" fill="#49624e" transform="rotate(18 166 96)"/></g>
+              <path d="M45 88C49 43 91 24 137 28c41 4 65 25 71 61-38 14-126 17-163-1Z" fill="url(#shell)" stroke="#64e2e9" stroke-opacity=".58" stroke-width="1.5"/>
+              <path d="M72 54 100 39l27 16-9 27-35 2Zm55 1 29-17 28 16-5 30-35 0Zm-44 29 35-2 27 2 16 18-64 2Z" fill="none" stroke="#72eef1" stroke-opacity=".38" stroke-width="1.1"/>
+              <path d="M196 68c18-6 35-5 43 4 7 8 1 18-10 21-12 4-27 0-37-4Z" fill="url(#skin)"/>
+              <ellipse cx="228" cy="77" rx="17" ry="13" fill="url(#skin)"/>
+              <g class="eye"><ellipse cx="233" cy="73" rx="3.5" ry="4.5" fill="#061015"/><circle cx="234" cy="72" r="1.1" fill="#83fbff"/></g>
+              <path d="M231 82c3 2 6 2 8 0" fill="none" stroke="#dfe8e2" stroke-opacity=".52" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <div id="finishLine" class="finish-line" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+
+          <div id="finishFlash" class="finish-flash"></div>
+          <div id="medalDrop" class="medal-drop"><span id="medalDropText">1</span></div>
+        </div>
+
+        <div class="stage-progress">
+          <div class="stage-item active" data-stage="latency"><i></i><span data-i18n="latency">PING</span></div>
+          <div class="stage-line"><b id="line1"></b></div>
+          <div class="stage-item" data-stage="download"><i></i><span data-i18n="download">DOWNLOAD</span></div>
+          <div class="stage-line"><b id="line2"></b></div>
+          <div class="stage-item" data-stage="upload"><i></i><span data-i18n="upload">UPLOAD</span></div>
+          <div class="stage-line"><b id="line3"></b></div>
+          <div class="stage-item" data-stage="analysis"><i></i><span data-i18n="analysis">ANALYSIS</span></div>
+        </div>
+
+        <div class="live-mini">
+          <div><span data-i18n="latency">PING</span><b id="miniPing">—</b></div>
+          <div><span data-i18n="download">DOWNLOAD</span><b id="miniDown">—</b></div>
+          <div><span data-i18n="upload">UPLOAD</span><b id="miniUp">—</b></div>
+          <div><span data-i18n="jitter">JITTER</span><b id="miniJitter">—</b></div>
+        </div>
+
+        <p class="data-note" data-i18n="dataUsage">The test transfers data to estimate real connection performance.</p>
+      </section>
+
+      <!-- Result: readable premium scroll layout -->
+      <section id="resultView" class="view result-view result-v12">
+        <div id="resultStage" class="result-stage-v12">
+          <section class="result-hero-card-v12">
+            <div class="result-ambient"></div>
+            <div class="result-eyebrow-v12">
+              <div class="eyebrow" data-i18n="connectionQuality">CONNECTION QUALITY</div>
+              <span class="verified-pill"><i></i><span data-i18n="measuredLive">LIVE MEASUREMENT</span></span>
+            </div>
+
+            <div class="result-turtle-zone-v12">
+              <span class="hero-floor-v12"></span>
+              <svg class="result-turtle result-turtle-v12" viewBox="0 0 320 180" aria-label="Velnox turtle result">
+                <defs>
+                  <linearGradient id="rskin" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#9dbb94"/><stop offset=".55" stop-color="#58755f"/><stop offset="1" stop-color="#31453c"/></linearGradient>
+                  <linearGradient id="rshell" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#294153"/><stop offset=".58" stop-color="#142630"/><stop offset="1" stop-color="#0a1118"/></linearGradient>
+                </defs>
+                <ellipse cx="91" cy="139" rx="29" ry="14" fill="#354a3f" transform="rotate(-15 91 139)"/>
+                <ellipse cx="228" cy="140" rx="31" ry="14" fill="#40584a" transform="rotate(18 228 140)"/>
+                <path d="M65 128C71 72 119 44 176 49c50 4 79 33 85 77-43 17-149 22-196 2Z" fill="url(#rshell)" stroke="var(--tier)" stroke-opacity=".75" stroke-width="1.7"/>
+                <path d="M98 82 132 64l33 20-11 32-43 4Zm67 2 35-22 35 20-6 36-42 1Zm-54 38 43-5 33 3 19 22-78 3Z" fill="none" stroke="#6de6eb" stroke-opacity=".38" stroke-width="1.2"/>
+                <path d="M246 102c22-9 45-9 57 2 10 9 5 24-8 29-15 6-37 2-51-1Z" fill="url(#rskin)"/>
+                <ellipse cx="292" cy="111" rx="23" ry="18" fill="url(#rskin)"/>
+                <ellipse cx="300" cy="106" rx="5" ry="6" fill="#061016"/><circle cx="302" cy="104" r="1.5" fill="#7bf3f5"/>
+                <path id="resultMouth" d="M299 117c4 3 8 3 11 0" fill="none" stroke="#d8e1db" stroke-opacity=".58" stroke-linecap="round"/>
+                <path class="turtle-medal-part" d="M167 74 151 121h18l13-47" fill="none" stroke="var(--tier)" stroke-width="5.5" stroke-opacity=".8"/>
+                <circle class="turtle-medal-part" cx="161" cy="124" r="16" fill="#111820" stroke="var(--tier)" stroke-width="3"/>
+                <text id="turtleMedalText" class="turtle-medal-part" x="161" y="130" text-anchor="middle" font-size="17" font-weight="800" fill="var(--tier)">1</text>
+              </svg>
+            </div>
+
+            <div class="result-quality-row-v12">
+              <div class="result-tier-copy-v12">
+                <span class="tier-kicker" data-i18n="qualityTier">QUALITY TIER</span>
+                <h2 id="tierTitle">GOLD TURTLE</h2>
+                <p id="tierSubtitle">Excellent Connection</p>
+              </div>
+              <div class="score-orbit-wrap score-orbit-v12">
+                <svg class="score-orbit" viewBox="0 0 126 126" aria-hidden="true">
+                  <circle class="orbit-track" cx="63" cy="63" r="54"/>
+                  <circle id="scoreArc" class="orbit-value" cx="63" cy="63" r="54"/>
+                </svg>
+                <div class="score-core">
+                  <span data-i18n="velnoxScore">VELNOX SCORE</span>
+                  <div><strong id="scoreValue">92</strong><small>/100</small></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card-v12 metrics-section-v12">
+            <div class="section-heading-v12">
+              <div><span class="section-kicker" data-i18n="measurementResults">MEASUREMENT RESULTS</span><h3 data-i18n="coreMetrics">Core connection metrics</h3></div>
+            </div>
+            <div class="result-metrics-grid-v12">
+              <article><span data-i18n="download">DOWNLOAD</span><div><strong id="resultDown">—</strong><small>Mbps</small></div><em id="downRating">—</em></article>
+              <article><span data-i18n="upload">UPLOAD</span><div><strong id="resultUp">—</strong><small>Mbps</small></div><em id="upRating">—</em></article>
+              <article><span data-i18n="latency">PING</span><div><strong id="resultPing">—</strong><small>ms</small></div><em id="pingRating">—</em></article>
+              <article><span data-i18n="jitter">JITTER</span><div><strong id="resultJitter">—</strong><small>ms</small></div><em id="jitterRating">—</em></article>
+            </div>
+          </section>
+
+          <section class="section-card-v12">
+            <div class="section-heading-v12">
+              <div><span class="section-kicker" data-i18n="realWorld">REAL-WORLD USE</span><h3 data-i18n="whatCanDo">What can this connection handle?</h3></div>
+            </div>
+            <div id="useCases" class="use-cases-v12"></div>
+          </section>
+
+          <section class="section-card-v12 compare-card-v12">
+            <div class="section-heading-v12 compare-heading-v12">
+              <div><span class="section-kicker" data-i18n="compare">COMPARE</span><h3 data-i18n="whereYouStand">See where your connection stands</h3></div>
+              <div class="segmented compare-segmented-v12">
+                <button id="compareCountryBtn" class="active" data-i18n="country">COUNTRY</button>
+                <button id="compareGlobalBtn" data-i18n="global">GLOBAL</button>
+              </div>
+            </div>
+            <div id="compareContent" class="compare-content compare-content-v12"></div>
+          </section>
+
+          <section class="section-card-v12 insights-card-v12">
+            <div class="section-heading-v12">
+              <div><span class="section-kicker" data-i18n="networkInsights">NETWORK INSIGHTS</span><h3 data-i18n="whatWeFound">What Velnox found</h3></div>
+              <span class="insight-pulse"></span>
+            </div>
+            <div id="insightsList" class="insights-list insights-list-v12"></div>
+          </section>
+
+          <section class="section-card-v12 solutions-card-v12">
+            <div class="section-heading-v12">
+              <div><span class="section-kicker" data-i18n="improveConnection">IMPROVE CONNECTION</span><h3 data-i18n="recommendedActions">Recommended actions</h3></div>
+            </div>
+            <ol id="solutionsList" class="solutions-list solutions-list-v12"></ol>
+          </section>
+
+          <button id="technicalBtn" class="wide-secondary-v12"><span data-i18n="technicalDetails">TECHNICAL DETAILS</span><i>≡</i></button>
+          <button id="retestBtn" class="wide-primary-v12"><span data-i18n="testAgain">TEST AGAIN</span><i>↻</i></button>
+        </div>
+      </section>
+
+      <!-- History -->
+      <section id="historyView" class="view">
+        <div class="page-head">
+          <div><div class="eyebrow" data-i18n="history">HISTORY</div><h2 data-i18n="yourTests">Your tests</h2></div>
+          <button id="backFromHistory" class="small-back">←</button>
+        </div>
+        <div id="historySummary" class="history-summary"></div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+    </main>
+
+    <!-- Settings sheet -->
+    <div id="sheetBackdrop" class="sheet-backdrop"></div>
+    <aside id="settingsSheet" class="sheet" aria-label="Settings">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head"><div><span class="section-kicker" data-i18n="settings">SETTINGS</span><h3>VELNOX</h3></div><button id="closeSettings">×</button></div>
+
+      <div class="setting-row">
+        <div><b data-i18n="language">Language</b><small data-i18n="languageHelp">Choose interface language</small></div>
+        <div class="mini-segment"><button id="sheetTh">TH</button><button id="sheetEn">EN</button></div>
+      </div>
+      <div class="setting-row">
+        <div><b data-i18n="fullscreen">Auto Full Screen</b><small data-i18n="fullscreenHelp">Request full screen when a test starts</small></div>
+        <label class="switch"><input id="fullscreenToggle" type="checkbox"><span></span></label>
+      </div>
+      <div class="setting-row">
+        <div><b data-i18n="saveHistory">Save History</b><small data-i18n="saveHistoryHelp">Keep results on this device</small></div>
+        <label class="switch"><input id="historyToggle" type="checkbox"><span></span></label>
+      </div>
+      <div class="setting-row">
+        <div><b data-i18n="techDetails">Technical Details</b><small data-i18n="techDetailsHelp">Show advanced diagnostics after a test</small></div>
+        <label class="switch"><input id="techToggle" type="checkbox"><span></span></label>
+      </div>
+      <div class="setting-row">
+        <div><b data-i18n="soundEffects">Sound Effects</b><small data-i18n="soundEffectsHelp">Subtle Velnox sonic feedback for start, finish and medals</small></div>
+        <label class="switch"><input id="soundToggle" type="checkbox"><span></span></label>
+      </div>
+      <button id="clearHistoryBtn" class="danger-row" data-i18n="clearHistory">Clear test history</button>
+
+      <div class="about-box">
+        <b>VELNOX</b>
+        <span>Network Intelligence • v1.2.0</span>
+        <span>Developed by Benedict Interactive</span>
+        <small>Browser measurements are estimates and can vary with server path, device load and network conditions. The Cloudflare measurement engine may submit measurement results to Cloudflare for aggregated Internet-quality insights.</small>
+      </div>
+    </aside>
+
+    <!-- Technical sheet -->
+    <div id="techBackdrop" class="sheet-backdrop"></div>
+    <aside id="techSheet" class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head"><div><span class="section-kicker" data-i18n="technicalDetails">TECHNICAL DETAILS</span><h3 data-i18n="diagnosticData">Diagnostic data</h3></div><button id="closeTech">×</button></div>
+      <div id="techContent" class="tech-content"></div>
+    </aside>
+
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>
