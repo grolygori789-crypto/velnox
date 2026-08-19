@@ -1,0 +1,26 @@
+VELNOX V1.3 QA REPORT
+Generated 2026-08-19
+
+Duplicate HTML IDs: PASS
+JS direct ID selectors resolve: PASS
+TH/EN translation key parity: PASS
+HTML i18n keys resolve: PASS
+Manifest JSON parses: PASS
+Benchmark index JSON parses: PASS
+Service Worker V1.3 cache version: PASS
+Benchmark cache isolated: PASS
+Country flag helper present: PASS
+Benchmark freshness guard present: PASS
+Offline + timeout handling present: PASS
+Cloudflare AIM score support present: PASS
+Workflow hidden + visible backup identical: PASS
+
+Executed checks:
+- node --check app.js: PASS
+- node --check sw.js: PASS
+- python compile sync_benchmarks.py: PASS
+- synthetic benchmark percentile/flag VM tests: PASS
+- synthetic sync parser tests: PASS
+
+Runtime limitation:
+Headless Chromium navigation to localhost/file URLs is blocked by the execution environment administrator, so final visual/browser QA must be performed on the live GitHub Pages deployment. The Cloudflare Radar live sync also requires the repository secret and therefore cannot be executed inside this package build environment.

@@ -1,7 +1,7 @@
 {
   "name": "Velnox — Network Intelligence",
   "short_name": "Velnox",
-  "description": "Premium network health, speed and diagnostics.",
+  "description": "Premium network health, speed, diagnostics and verified country/global benchmarking.",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",
@@ -26,5 +26,10 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "id": "./",
+  "categories": [
+    "utilities",
+    "productivity"
   ]
 }

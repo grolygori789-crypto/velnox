@@ -1,9 +1,12 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "ready": false,
   "source": "Cloudflare Radar",
   "windowDays": 90,
   "lastUpdated": null,
+  "generatedAt": null,
   "countries": [],
-  "note": "Run scripts/sync_benchmarks.py with a Cloudflare Radar API token, or use the included GitHub Action."
+  "failed": {},
+  "countryCount": 0,
+  "note": "Run scripts/sync_benchmarks.py with CLOUDFLARE_RADAR_TOKEN or use the included GitHub Action."
 }

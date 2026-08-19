@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <meta name="theme-color" content="#06090d">
+  <meta name="velnox-version" content="1.3.0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -109,7 +110,7 @@
         </div>
 
         <div class="test-value-wrap">
-          <div id="liveValue" class="test-value">—</div>
+          <div id="liveValue" class="test-value" role="status" aria-live="polite">—</div>
           <div id="liveUnit" class="test-unit">ms</div>
         </div>
 
@@ -243,8 +244,8 @@
             <div class="section-heading-v12 compare-heading-v12">
               <div><span class="section-kicker" data-i18n="compare">COMPARE</span><h3 data-i18n="whereYouStand">See where your connection stands</h3></div>
               <div class="segmented compare-segmented-v12">
-                <button id="compareCountryBtn" class="active" data-i18n="country">COUNTRY</button>
-                <button id="compareGlobalBtn" data-i18n="global">GLOBAL</button>
+                <button id="compareCountryBtn" class="active" data-i18n="country" aria-pressed="true">COUNTRY</button>
+                <button id="compareGlobalBtn" data-i18n="global" aria-pressed="false">GLOBAL</button>
               </div>
             </div>
             <div id="compareContent" class="compare-content compare-content-v12"></div>
@@ -285,7 +286,7 @@
     <div id="sheetBackdrop" class="sheet-backdrop"></div>
     <aside id="settingsSheet" class="sheet" aria-label="Settings">
       <div class="sheet-handle"></div>
-      <div class="sheet-head"><div><span class="section-kicker" data-i18n="settings">SETTINGS</span><h3>VELNOX</h3></div><button id="closeSettings">×</button></div>
+      <div class="sheet-head"><div><span class="section-kicker" data-i18n="settings">SETTINGS</span><h3>VELNOX</h3></div><button id="closeSettings" aria-label="Close settings">×</button></div>
 
       <div class="setting-row">
         <div><b data-i18n="language">Language</b><small data-i18n="languageHelp">Choose interface language</small></div>
@@ -311,7 +312,7 @@
 
       <div class="about-box">
         <b>VELNOX</b>
-        <span>Network Intelligence • v1.2.0</span>
+        <span>Network Intelligence • v1.3.0</span>
         <span>Developed by Benedict Interactive</span>
         <small>Browser measurements are estimates and can vary with server path, device load and network conditions. The Cloudflare measurement engine may submit measurement results to Cloudflare for aggregated Internet-quality insights.</small>
       </div>
@@ -321,11 +322,11 @@
     <div id="techBackdrop" class="sheet-backdrop"></div>
     <aside id="techSheet" class="sheet">
       <div class="sheet-handle"></div>
-      <div class="sheet-head"><div><span class="section-kicker" data-i18n="technicalDetails">TECHNICAL DETAILS</span><h3 data-i18n="diagnosticData">Diagnostic data</h3></div><button id="closeTech">×</button></div>
+      <div class="sheet-head"><div><span class="section-kicker" data-i18n="technicalDetails">TECHNICAL DETAILS</span><h3 data-i18n="diagnosticData">Diagnostic data</h3></div><button id="closeTech" aria-label="Close technical details">×</button></div>
       <div id="techContent" class="tech-content"></div>
     </aside>
 
-    <div id="toast" class="toast"></div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </div>
 
   <script src="app.js" type="module"></script>

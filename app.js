@@ -37,11 +37,16 @@ const translations = {
     benchmarkSource:"Benchmark source", notConfigured:"Not configured", scoreHeuristic:"Velnox score", scoreHeuristicValue:"Heuristic composite, 0–100",
     Mbps:"Mbps", MBs:"MB/s",
     measuredLive:"LIVE MEASUREMENT", qualityTier:"QUALITY TIER", measurementResults:"MEASUREMENT RESULTS", coreMetrics:"Core connection metrics",
-    useExcellent:"Excellent for this activity", useGood:"Good for this activity", useLimited:"May have limitations",
+    useExcellent:"Excellent for this activity", useGood:"Good for this activity", useFair:"Usable, but not ideal", useLimited:"May have limitations",
     benchmarkLoading:"Loading Velnox Standard Base…", benchmarkUnavailable:"Standard Base has not been synced yet", benchmarkUnavailableBody:"Country and worldwide percentile ranking will appear here after the verified benchmark files are generated.",
     benchmarkSetup:"Source architecture ready • Cloudflare Radar • rolling 90-day distribution", overallRank:"OVERALL POSITION", betterThan:"Performs better than about {x}% of measured connections", topPercent:"TOP {x}%", median:"Median", benchmarkWindow:"Benchmark window", previous90Days:"Previous 90 days", source:"Source", updated:"Updated", detectedCountry:"Detected country", worldwide:"Worldwide",
     downloadRank:"Download", uploadRank:"Upload", latencyRank:"Latency", jitterRank:"Jitter", benchmarkNote:"Percentiles are estimated from bucketed distributions; lower latency and jitter are ranked as better.", countryFallback:"Country could not be detected automatically; using your browser locale when possible.", benchmarkNotAvailableCountry:"A verified benchmark file is not available for {country} yet.",
-    benchmarkCloudflare:"Cloudflare Radar", benchmarkReady:"VERIFIED STANDARD BASE"
+    benchmarkCloudflare:"Cloudflare Radar", benchmarkReady:"VERIFIED STANDARD BASE",
+    networkLocation:"NETWORK LOCATION", detectedAutomatically:"Detected automatically", localeEstimate:"Estimated from browser locale",
+    vpnNote:"Based on the network exit location. A VPN or proxy can change the detected country.", worldwideBenchmark:"Worldwide benchmark",
+    benchmarkComposite:"Weighted composite of download, upload, latency and jitter percentiles.", benchmarkFresh:"Current benchmark", benchmarkStale:"Benchmark may be stale",
+    benchmarkIndexName:"VELNOX BENCHMARK INDEX", benchmarkDataAge:"Data age", days:"days", yourValue:"You",
+    offlineTest:"You are offline. Reconnect and try again.", testTimedOut:"The test took too long to complete. Please try again.", benchmarkInvalid:"Benchmark data failed validation."
   },
   th: {
     networkHealth:"สุขภาพเครือข่าย", knowConnection:"รู้จักเน็ตของคุณให้ชัด", heroCopy:"ทั้งความเร็ว การตอบสนอง และความเสถียร — อธิบายให้เข้าใจง่าย",
@@ -78,11 +83,16 @@ const translations = {
     benchmarkSource:"แหล่งข้อมูล Benchmark", notConfigured:"ยังไม่ได้ตั้งค่า", scoreHeuristic:"คะแนน Velnox", scoreHeuristicValue:"คะแนนรวมแบบ heuristic 0–100",
     Mbps:"Mbps", MBs:"MB/s",
     measuredLive:"วัดผลแบบเรียลไทม์", qualityTier:"ระดับคุณภาพ", measurementResults:"ผลการวัด", coreMetrics:"ค่าหลักของการเชื่อมต่อ",
-    useExcellent:"เหมาะอย่างยิ่งสำหรับการใช้งานนี้", useGood:"ใช้งานได้ดี", useLimited:"อาจมีข้อจำกัด",
+    useExcellent:"เหมาะอย่างยิ่งสำหรับการใช้งานนี้", useGood:"ใช้งานได้ดี", useFair:"ใช้งานได้ แต่อาจไม่เหมาะที่สุด", useLimited:"อาจมีข้อจำกัด",
     benchmarkLoading:"กำลังโหลด Velnox Standard Base…", benchmarkUnavailable:"ยังไม่ได้ซิงก์ Standard Base", benchmarkUnavailableBody:"อันดับเปอร์เซ็นไทล์ระดับประเทศและทั่วโลกจะแสดงที่นี่เมื่อสร้างไฟล์ Benchmark ที่ตรวจสอบแหล่งข้อมูลแล้ว",
     benchmarkSetup:"โครงสร้างพร้อม • Cloudflare Radar • ข้อมูลแบบ Rolling 90 วัน", overallRank:"อันดับโดยรวม", betterThan:"ประสิทธิภาพดีกว่าประมาณ {x}% ของผลวัดในฐานข้อมูล", topPercent:"TOP {x}%", median:"ค่ากลาง", benchmarkWindow:"ช่วงข้อมูลอ้างอิง", previous90Days:"90 วันที่ผ่านมา", source:"แหล่งข้อมูล", updated:"อัปเดต", detectedCountry:"ประเทศที่ตรวจพบ", worldwide:"ทั่วโลก",
     downloadRank:"ดาวน์โหลด", uploadRank:"อัปโหลด", latencyRank:"Latency", jitterRank:"Jitter", benchmarkNote:"เปอร์เซ็นไทล์เป็นค่าประมาณจากข้อมูลแบบแบ่งช่วง โดย Latency และ Jitter ที่ต่ำกว่าจะถือว่าดีกว่า", countryFallback:"ไม่สามารถตรวจประเทศอัตโนมัติได้ จึงจะใช้ภูมิภาคจากภาษาของเบราว์เซอร์เมื่อทำได้", benchmarkNotAvailableCountry:"ยังไม่มีไฟล์ Benchmark ที่ตรวจสอบแล้วสำหรับ {country}",
-    benchmarkCloudflare:"Cloudflare Radar", benchmarkReady:"STANDARD BASE ที่ตรวจสอบแล้ว"
+    benchmarkCloudflare:"Cloudflare Radar", benchmarkReady:"STANDARD BASE ที่ตรวจสอบแล้ว",
+    networkLocation:"ตำแหน่งเครือข่าย", detectedAutomatically:"ตรวจพบอัตโนมัติ", localeEstimate:"ประมาณจากภูมิภาคของเบราว์เซอร์",
+    vpnNote:"อ้างอิงจากตำแหน่งปลายทางของเครือข่าย VPN หรือ Proxy อาจทำให้ประเทศที่ตรวจพบเปลี่ยนไป", worldwideBenchmark:"เกณฑ์เปรียบเทียบทั่วโลก",
+    benchmarkComposite:"ดัชนีรวมแบบถ่วงน้ำหนักจากเปอร์เซ็นไทล์ Download, Upload, Latency และ Jitter", benchmarkFresh:"Benchmark ปัจจุบัน", benchmarkStale:"Benchmark อาจเก่าเกินไป",
+    benchmarkIndexName:"ดัชนี VELNOX BENCHMARK", benchmarkDataAge:"อายุข้อมูล", days:"วัน", yourValue:"คุณ",
+    offlineTest:"ขณะนี้ออฟไลน์ กรุณาเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่", testTimedOut:"การทดสอบใช้เวลานานเกินกำหนด กรุณาลองใหม่", benchmarkInvalid:"ข้อมูล Benchmark ไม่ผ่านการตรวจสอบ"
   }
 };
 
@@ -101,6 +111,8 @@ const state = {
   compareMode:"country",
   countryCode:null,
   countryName:null,
+  countryDetectionSource:null,
+  countryApproximate:false,
   benchmarkIndex:null,
   benchmarkCache:{},
   running:false
@@ -115,6 +127,7 @@ function setLang(lang){
   state.lang = lang;
   localStorage.setItem("velnox.lang", lang);
   document.documentElement.lang = lang;
+  if(state.countryCode)state.countryName=countryDisplayName(state.countryCode);
   $$("[data-i18n]").forEach(el => el.textContent = t(el.dataset.i18n));
   $$("#langTh,#sheetTh").forEach(el=>el.classList.toggle("active",lang==="th"));
   $$("#langEn,#sheetEn").forEach(el=>el.classList.toggle("active",lang==="en"));
@@ -189,17 +202,43 @@ function rate(okExcellent,okGood){
   if(okGood)return {label:t("good"),cls:"good"};
   return {label:t("limited"),cls:"limited"};
 }
+function aimRating(score){
+  const name=score?.classificationName;
+  if(name==="great")return {label:t("excellent"),cls:"excellent"};
+  if(name==="good")return {label:t("good"),cls:"good"};
+  if(name==="average")return {label:t("fair"),cls:"fair"};
+  if(name==="poor"||name==="bad")return {label:t("limited"),cls:"limited"};
+  return null;
+}
+function capRating(rating,maxClass){
+  const order={limited:0,fair:1,good:2,excellent:3},labels={limited:t("limited"),fair:t("fair"),good:t("good"),excellent:t("excellent")};
+  if(!rating)return {label:labels[maxClass],cls:maxClass};
+  const cls=order[rating.cls]<=order[maxClass]?rating.cls:maxClass;
+  return {label:labels[cls],cls};
+}
 function buildUseCases(r){
+  const streamingAim=aimRating(r.aimScores?.streaming), gamingAim=aimRating(r.aimScores?.gaming), rtcAim=aimRating(r.aimScores?.rtc);
+  const streamingFallback=rate(r.download>=50&&r.jitter<=15,r.download>=25);
+  const gamingFallback=rate(r.ping<=30&&r.jitter<=7,r.ping<=60&&r.jitter<=15);
+  const rtcFallback=rate(r.upload>=10&&r.ping<=40&&r.jitter<=10,r.upload>=5&&r.ping<=80);
+  let fourK=streamingAim||streamingFallback;
+  if(r.download<25)fourK={label:t("limited"),cls:"limited"}; else if(r.download<50)fourK=capRating(fourK,"fair");
+  let online=gamingAim||gamingFallback;
+  let calls=rtcAim||rtcFallback;
+  let cloud=gamingAim||rate(r.download>=50&&r.ping<=30&&r.jitter<=8,r.download>=25&&r.ping<=55);
+  if(r.download<25)cloud={label:t("limited"),cls:"limited"}; else if(r.download<50)cloud=capRating(cloud,"fair");
+  let live=rtcAim||rate(r.upload>=20&&r.jitter<=10,r.upload>=8&&r.jitter<=20);
+  if(r.upload<8)live={label:t("limited"),cls:"limited"}; else if(r.upload<20)live=capRating(live,"fair");
   const items=[
-    [t("streaming4k"),"▻", rate(r.download>=50&&r.jitter<=15,r.download>=25)],
-    [t("onlineGaming"),"⌁", rate(r.ping<=30&&r.jitter<=7,r.ping<=60&&r.jitter<=15)],
-    [t("videoCalls"),"◫", rate(r.upload>=10&&r.ping<=40&&r.jitter<=10,r.upload>=5&&r.ping<=80)],
-    [t("cloudGaming"),"◇", rate(r.download>=50&&r.ping<=30&&r.jitter<=8,r.download>=25&&r.ping<=55)],
-    [t("liveStreaming"),"●", rate(r.upload>=20&&r.jitter<=10,r.upload>=8&&r.jitter<=20)],
-    [t("largeDownloads"),"⇣", rate(r.download>=200,r.download>=50)]
+    [t("streaming4k"),"▻",fourK],
+    [t("onlineGaming"),"⌁",online],
+    [t("videoCalls"),"◫",calls],
+    [t("cloudGaming"),"◇",cloud],
+    [t("liveStreaming"),"●",live],
+    [t("largeDownloads"),"⇣",rate(r.download>=200,r.download>=50)]
   ];
   return items.map(([name,icon,rating])=>{
-    const help=rating.cls==="excellent"?t("useExcellent"):rating.cls==="good"?t("useGood"):t("useLimited");
+    const help=rating.cls==="excellent"?t("useExcellent"):rating.cls==="good"?t("useGood"):rating.cls==="fair"?t("useFair"):t("useLimited");
     return `<div class="use-case-row-v12"><div class="use-case-icon-v12">${icon}</div><div class="use-case-label-v12"><b>${name}</b><small>${help}</small></div><span class="use-case-rating-v12 rating-${rating.cls}">${rating.label}</span></div>`;
   }).join("");
 }
@@ -250,6 +289,10 @@ function countryDisplayName(code){
   if(!code)return null;
   try{return new Intl.DisplayNames([state.lang==="th"?"th":"en"],{type:"region"}).of(code.toUpperCase())}catch{return code.toUpperCase()}
 }
+function countryFlag(code){
+  if(!code || !/^[A-Z]{2}$/i.test(code))return "◎";
+  return code.toUpperCase().replace(/./g,c=>String.fromCodePoint(127397+c.charCodeAt(0)));
+}
 function localeCountryFallback(){
   try{
     const locale=new Intl.Locale(navigator.language||"");
@@ -258,33 +301,55 @@ function localeCountryFallback(){
   const part=(navigator.language||"").split("-")[1];
   return part?part.toUpperCase():null;
 }
+function setDetectedCountry(code,source,approximate=false){
+  if(!code || !/^[A-Z]{2}$/i.test(code))return null;
+  state.countryCode=code.toUpperCase();
+  state.countryName=countryDisplayName(state.countryCode);
+  state.countryDetectionSource=source;
+  state.countryApproximate=!!approximate;
+  return state.countryCode;
+}
 async function detectCountry(){
   if(state.countryCode)return state.countryCode;
   try{
     const r=await fetch("https://speed.cloudflare.com/meta",{cache:"no-store"});
     if(r.ok){
       const meta=await r.json();
-      if(meta?.country && /^[A-Za-z]{2}$/.test(meta.country)){state.countryCode=meta.country.toUpperCase();state.countryName=countryDisplayName(state.countryCode);return state.countryCode}
+      if(meta?.country && /^[A-Za-z]{2}$/.test(meta.country))return setDetectedCountry(meta.country,"cloudflare-meta",false);
     }
   }catch{}
   try{
     const r=await fetch("https://cloudflare-dns.com/cdn-cgi/trace",{cache:"no-store"});
     if(r.ok){
       const text=await r.text(),m=text.match(/^loc=([A-Za-z]{2})$/m);
-      if(m){state.countryCode=m[1].toUpperCase();state.countryName=countryDisplayName(state.countryCode);return state.countryCode}
+      if(m)return setDetectedCountry(m[1],"cloudflare-trace",false);
     }
   }catch{}
-  state.countryCode=localeCountryFallback();
-  state.countryName=countryDisplayName(state.countryCode);
-  return state.countryCode;
+  const fallback=localeCountryFallback();
+  if(fallback)return setDetectedCountry(fallback,"locale",true);
+  state.countryDetectionSource="unknown";
+  state.countryApproximate=true;
+  return null;
 }
-async function loadBenchmarkIndex(){
-  if(state.benchmarkIndex!==null)return state.benchmarkIndex;
+function benchmarkIndexValid(index){
+  return !!(index && Number(index.schemaVersion)>=1 && typeof index.ready==="boolean" && Array.isArray(index.countries));
+}
+function benchmarkDataValid(data){
+  if(!data || Number(data.schemaVersion)<1 || !data.metrics)return false;
+  return ["download","upload","latency","jitter"].every(k=>{
+    const m=data.metrics[k];
+    return m && Array.isArray(m.bucketMin) && Array.isArray(m.counts) && m.bucketMin.length>0 && m.bucketMin.length===m.counts.length;
+  });
+}
+async function loadBenchmarkIndex(force=false){
+  if(!force && state.benchmarkIndex!==null)return state.benchmarkIndex;
   try{
     const r=await fetch(`./benchmarks/index.json?ts=${Date.now()}`,{cache:"no-store"});
     if(!r.ok)throw new Error("benchmark index unavailable");
-    state.benchmarkIndex=await r.json();
-  }catch{state.benchmarkIndex={ready:false,countries:[]}}
+    const index=await r.json();
+    if(!benchmarkIndexValid(index))throw new Error("benchmark index invalid");
+    state.benchmarkIndex=index;
+  }catch{state.benchmarkIndex={schemaVersion:1,ready:false,countries:[]}}
   return state.benchmarkIndex;
 }
 async function loadBenchmark(scope){
@@ -296,10 +361,27 @@ async function loadBenchmark(scope){
   if(code!=="GLOBAL" && Array.isArray(index.countries) && !index.countries.includes(code)){state.benchmarkCache[code]=null;return null}
   try{
     const file=code==="GLOBAL"?"global.json":`${code}.json`;
-    const r=await fetch(`./benchmarks/${file}?v=${encodeURIComponent(index.lastUpdated||"")}`,{cache:"no-store"});
+    const version=index.generatedAt||index.lastUpdated||Date.now();
+    const r=await fetch(`./benchmarks/${file}?v=${encodeURIComponent(version)}`,{cache:"no-store"});
     if(!r.ok)throw new Error("benchmark unavailable");
-    const data=await r.json(); state.benchmarkCache[code]=data; return data;
+    const data=await r.json();
+    if(!benchmarkDataValid(data))throw new Error("benchmark invalid");
+    state.benchmarkCache[code]=data; return data;
   }catch{state.benchmarkCache[code]=null;return null}
+}
+function benchmarkAgeDays(data){
+  const raw=data?.lastUpdated||data?.generatedAt;
+  if(!raw)return null;
+  const ms=Date.now()-new Date(raw).getTime();
+  return Number.isFinite(ms)?Math.max(0,ms/86400000):null;
+}
+function benchmarkFreshness(data){
+  const age=benchmarkAgeDays(data);
+  if(!Number.isFinite(age))return {fresh:false,age:null};
+  return {fresh:age<=14,age};
+}
+function detectionLabel(){
+  return state.countryApproximate?t("localeEstimate"):t("detectedAutomatically");
 }
 function histogramCDF(value,metric){
   if(!metric || !Array.isArray(metric.bucketMin) || !Array.isArray(metric.counts))return null;
@@ -341,10 +423,12 @@ function benchmarkRank(current,data){
   for(const k of Object.keys(weights))if(Number.isFinite(goodness[k])){sum+=goodness[k]*weights[k];w+=weights[k]}
   return {goodness,overall:w?sum/w:null,medians:Object.fromEntries(Object.keys(values).map(k=>[k,histogramMedian(metrics[k])]))};
 }
-function benchmarkMetricCard(label,key,rank,unit){
+function benchmarkMetricCard(label,key,rank,unit,current){
   const g=rank.goodness[key],med=rank.medians[key];
-  const medText=Number.isFinite(med)?`${key==="latency"||key==="jitter"?med.toFixed(1):formatSpeed(med)} ${unit}`:"—";
-  return `<div class="benchmark-metric"><span>${label}</span><b>${topText(g)}</b><small>${t("median")}: ${medText}</small></div>`;
+  const fmt=v=>key==="latency"||key==="jitter"?Number(v).toFixed(1):formatSpeed(Number(v));
+  const medText=Number.isFinite(med)?`${fmt(med)} ${unit}`:"—";
+  const yourText=Number.isFinite(current)?`${fmt(current)} ${unit}`:"—";
+  return `<div class="benchmark-metric"><span>${label}</span><b>${topText(g)}</b><small><strong>${t("yourValue")}:</strong> ${yourText}</small><small>${t("median")}: ${medText}</small></div>`;
 }
 function benchmarkUpdated(data){
   if(!data?.lastUpdated)return "—";
@@ -367,26 +451,36 @@ async function renderCompare(){
   host.innerHTML=`<div class="benchmark-empty-v12"><b>${t("benchmarkLoading")}</b><p>${t("benchmarkSetup")}</p></div>`;
   await detectCountry();
   const scope=state.compareMode==="global"?"global":"country",data=await loadBenchmark(scope);
+  const locationCode=scope==="global"?"GLOBAL":state.countryCode;
+  const locationName=scope==="global"?t("worldwide"):(state.countryName||countryDisplayName(locationCode)||"—");
+  const locationSymbol=scope==="global"?"◎":countryFlag(locationCode);
+  const locationMeta=scope==="global"?t("worldwideBenchmark"):detectionLabel();
   if(!data){
-    const country=state.countryName||state.countryCode||"—";
-    const detail=scope==="country"&&state.countryCode?t("benchmarkNotAvailableCountry",{country}):t("benchmarkUnavailableBody");
-    host.innerHTML=`<div class="benchmark-empty-v12"><b>${t("benchmarkUnavailable")}</b><p>${detail}</p><small>${t("benchmarkSetup")}</small></div>`;
+    const detail=scope==="country"&&state.countryCode?t("benchmarkNotAvailableCountry",{country:locationName}):t("benchmarkUnavailableBody");
+    host.innerHTML=`<div class="benchmark-location-preview"><span class="benchmark-flag">${locationSymbol}</span><div><b>${locationName}</b><small>${locationMeta}</small></div></div><div class="benchmark-empty-v12"><b>${t("benchmarkUnavailable")}</b><p>${detail}</p><small>${t("benchmarkSetup")}</small></div>${scope==="country"?`<p class="benchmark-privacy-note">${t("vpnNote")}</p>`:""}`;
     return;
   }
-  const rank=benchmarkRank(current,data),overall=rank.overall,location=scope==="global"?t("worldwide"):(state.countryName||countryDisplayName(data.location)||data.location||"—");
+  const rank=benchmarkRank(current,data),overall=rank.overall;
   const better=Number.isFinite(overall)?Math.round(overall):0;
+  const freshness=benchmarkFreshness(data),ageText=Number.isFinite(freshness.age)?`${Math.round(freshness.age)} ${t("days")}`:"—";
   host.innerHTML=`
     <div class="benchmark-rank-hero">
-      <div class="benchmark-top"><span>${t("overallRank")}</span><strong>${topText(overall)}</strong><small>${better}%</small></div>
-      <div class="benchmark-copy"><div class="benchmark-location"><i></i>${location}</div><b>${Number.isFinite(overall)?t("betterThan",{x:better}):"—"}</b><p>${t("benchmarkNote")}</p></div>
+      <div class="benchmark-top"><span>${t("benchmarkIndexName")}</span><strong>${topText(overall)}</strong><small>${better}%</small></div>
+      <div class="benchmark-copy">
+        <div class="benchmark-location"><span class="benchmark-flag">${locationSymbol}</span><div><b>${locationName}</b><small>${locationMeta}</small></div></div>
+        <b>${Number.isFinite(overall)?t("betterThan",{x:better}):"—"}</b>
+        <p>${t("benchmarkComposite")}</p>
+        <span class="benchmark-freshness ${freshness.fresh?"fresh":"stale"}">${freshness.fresh?t("benchmarkFresh"):t("benchmarkStale")} • ${ageText}</span>
+      </div>
     </div>
     <div class="benchmark-metrics">
-      ${benchmarkMetricCard(t("downloadRank"),"download",rank,"Mbps")}
-      ${benchmarkMetricCard(t("uploadRank"),"upload",rank,"Mbps")}
-      ${benchmarkMetricCard(t("latencyRank"),"latency",rank,"ms")}
-      ${benchmarkMetricCard(t("jitterRank"),"jitter",rank,"ms")}
+      ${benchmarkMetricCard(t("downloadRank"),"download",rank,"Mbps",current.download)}
+      ${benchmarkMetricCard(t("uploadRank"),"upload",rank,"Mbps",current.upload)}
+      ${benchmarkMetricCard(t("latencyRank"),"latency",rank,"ms",current.ping)}
+      ${benchmarkMetricCard(t("jitterRank"),"jitter",rank,"ms",current.jitter)}
     </div>
-    <div class="benchmark-foot"><span><b>${t("source")}:</b> ${data.source||t("benchmarkCloudflare")}</span><span><b>${t("benchmarkWindow")}:</b> ${t("previous90Days")}</span><span><b>${t("updated")}:</b> ${benchmarkUpdated(data)}</span></div>`;
+    <div class="benchmark-foot"><span><b>${t("source")}:</b> ${data.source||t("benchmarkCloudflare")}</span><span><b>${t("benchmarkWindow")}:</b> ${t("previous90Days")}</span><span><b>${t("updated")}:</b> ${benchmarkUpdated(data)}</span></div>
+    ${scope==="country"?`<p class="benchmark-privacy-note">${t("vpnNote")}</p>`:""}`;
 }
 function renderTech(r){
   const benchmarkReady=!!state.benchmarkIndex?.ready;
@@ -397,6 +491,7 @@ function renderTech(r){
     [t("testDuration"),state.testDuration?`${(state.testDuration/1000).toFixed(1)} s`:"—"],
     [t("measuredAt"),new Date().toLocaleString(state.lang==="th"?"th-TH":"en-GB")],
     [t("browserMode"),window.matchMedia("(display-mode: standalone)").matches?"PWA / standalone":"Browser"],
+    [t("networkLocation"),state.countryCode?`${countryFlag(state.countryCode)} ${state.countryName||state.countryCode} • ${detectionLabel()}`:"—"],
     [t("scoreHeuristic"),t("scoreHeuristicValue")],
     [t("benchmarkSource"),benchmarkReady?`${t("benchmarkCloudflare")} • 90d`:t("notConfigured")]
   ];
@@ -510,8 +605,12 @@ function soundMedal(tier){
   const seq=tier==="gold"?[[523,.025],[659,.021],[784,.018]]:tier==="silver"?[[440,.022],[554,.017]]:tier==="bronze"?[[392,.020],[466,.015]]:[[180,.018]];
   seq.forEach(([f,v],i)=>tone(f,.28,v,i?"sine":"triangle",i*.075));
 }
+function withTimeout(promise,ms=75000){
+  return Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(new Error("VELNOX_TIMEOUT")),ms))]);
+}
 async function runTest(){
   if(state.running)return;
+  if(!navigator.onLine){toast(t("offlineTest"));return}
   state.running=true; state.testStartedAt=performance.now(); state.results=null; soundStart();
   resetRace(); showView("#testView"); setStage("latency"); requestFullscreen();
   try{
@@ -519,7 +618,7 @@ async function runTest(){
     let result;
     if(SpeedTest){
       state.engineName=t("cloudflareEngine");
-      result=await new Promise((resolve,reject)=>{
+      result=await withTimeout(new Promise((resolve,reject)=>{
         const st=new SpeedTest({
           autoStart:false,
           measurements:[
@@ -551,11 +650,12 @@ async function runTest(){
           const jitter=safeCall(res,"getUnloadedJitter");
           const dl=safeCall(res,"getDownLoadedLatency"), ul=safeCall(res,"getUpLoadedLatency");
           const loaded=[dl,ul].filter(Number.isFinite);
-          resolve({download,upload,ping:Number(ping)||0,jitter:Number(jitter)||0,loadedLatency:loaded.length?Math.max(...loaded):null});
+          const aimScores=safeCall(res,"getScores")||null;
+          resolve({download,upload,ping:Number(ping)||0,jitter:Number(jitter)||0,loadedLatency:loaded.length?Math.max(...loaded):null,aimScores});
         };
         st.play();
-      });
-    }else result=await runFallback();
+      }),75000);
+    }else result=await withTimeout(runFallback(),75000);
 
     if(!result.download || !Number.isFinite(result.ping)) throw new Error("Invalid measurement");
     setStage("analysis"); $("#liveValue").textContent=""; $("#liveUnit").textContent="";
@@ -573,7 +673,7 @@ async function runTest(){
     renderResult(result); saveHistory(result);
     showView("#resultView");
   }catch(err){
-    console.error(err); toast(t("engineError")); showView("#homeView");
+    console.error(err); toast(err?.message==="VELNOX_TIMEOUT"?t("testTimedOut"):t("engineError")); showView("#homeView");
   }finally{state.running=false}
 }
 function renderSettings(){
@@ -591,14 +691,14 @@ $("#historyToggle").addEventListener("change",e=>{state.settings.history=e.targe
 $("#techToggle").addEventListener("change",e=>{state.settings.tech=e.target.checked;localStorage.setItem("velnox.tech",e.target.checked?"1":"0");if(state.results)renderResult(state.results)});
 $("#soundToggle").addEventListener("change",e=>{state.settings.sound=e.target.checked;localStorage.setItem("velnox.sound",e.target.checked?"1":"0");if(e.target.checked){getAudio();tone(523,.14,.018,"sine")}});
 $("#clearHistoryBtn").addEventListener("click",()=>{localStorage.removeItem("velnox.history");renderLastResult();renderHistory();toast(t("historyCleared"))});
-$("#compareCountryBtn").addEventListener("click",()=>{state.compareMode="country";$("#compareCountryBtn").classList.add("active");$("#compareGlobalBtn").classList.remove("active");renderCompare()});
-$("#compareGlobalBtn").addEventListener("click",()=>{state.compareMode="global";$("#compareGlobalBtn").classList.add("active");$("#compareCountryBtn").classList.remove("active");renderCompare()});
+$("#compareCountryBtn").addEventListener("click",()=>{state.compareMode="country";$("#compareCountryBtn").classList.add("active");$("#compareGlobalBtn").classList.remove("active");$("#compareCountryBtn").setAttribute("aria-pressed","true");$("#compareGlobalBtn").setAttribute("aria-pressed","false");renderCompare()});
+$("#compareGlobalBtn").addEventListener("click",()=>{state.compareMode="global";$("#compareGlobalBtn").classList.add("active");$("#compareCountryBtn").classList.remove("active");$("#compareGlobalBtn").setAttribute("aria-pressed","true");$("#compareCountryBtn").setAttribute("aria-pressed","false");renderCompare()});
 
 function boot(){
   setLang(state.lang);renderSettings();renderLastResult();renderHistory();updateConnectionStatus();
   detectCountry().then(()=>loadBenchmarkIndex()).catch(()=>{});
   setTimeout(()=>{$("#splash").classList.add("exit");$("#mainShell").classList.remove("hidden")},1550);
   setTimeout(()=>$("#splash").remove(),2250);
-  if("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  if("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).then(reg=>reg.update()).catch(()=>{});
 }
 boot();

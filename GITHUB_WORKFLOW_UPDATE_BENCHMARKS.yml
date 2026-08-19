@@ -1,0 +1,66 @@
+name: Refresh Velnox Standard Base
+
+on:
+  workflow_dispatch:
+    inputs:
+      countries:
+        description: "ISO alpha-2 country codes separated by commas, or ALL"
+        required: false
+        default: "ALL"
+  schedule:
+    - cron: "17 3 * * 1"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: velnox-standard-base
+  cancel-in-progress: false
+
+env:
+  CLOUDFLARE_RADAR_TOKEN: ${{ secrets.CLOUDFLARE_RADAR_TOKEN }}
+  VELNOX_COUNTRIES: ${{ inputs.countries || vars.VELNOX_COUNTRIES || 'ALL' }}
+
+jobs:
+  benchmarks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify Radar token is configured
+        shell: bash
+        run: |
+          if [ -z "$CLOUDFLARE_RADAR_TOKEN" ]; then
+            echo "CLOUDFLARE_RADAR_TOKEN repository secret is missing."
+            exit 1
+          fi
+      - name: Build rolling 90-day benchmark files
+        run: python scripts/sync_benchmarks.py
+      - name: Validate generated Standard Base
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('benchmarks/index.json')
+          data = json.loads(p.read_text())
+          assert data.get('ready') is True
+          assert Path('benchmarks/global.json').exists()
+          assert data.get('countryCount', 0) >= 1
+          print(f"Standard Base ready: global + {data['countryCount']} countries")
+          PY
+      - name: Commit refreshed data
+        shell: bash
+        run: |
+          git config user.name "velnox-benchmark-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add benchmarks
+          if git diff --cached --quiet; then
+            echo "No benchmark changes"
+          else
+            git commit -m "chore: refresh Velnox Standard Base"
+            git push
+          fi
