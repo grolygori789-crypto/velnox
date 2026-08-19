@@ -1,4 +1,4 @@
-const APP_CACHE = "velnox-app-v1.5.0";
+const APP_CACHE = "velnox-app-v1.5.1";
 const BENCH_CACHE = "velnox-benchmarks-v1";
 const CORE = [
   "./",

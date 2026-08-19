@@ -1,3 +1,13 @@
+# Velnox V1.5.1 — Exit Control Patch
+
+- Adds a restrained power/exit control to the existing top bar without changing the locked Velnox visual direction.
+- Exit control is shown only when Velnox is running as an installed/standalone PWA or while browser fullscreen is active.
+- Pressing Exit leaves Full Screen first when applicable, then attempts `window.close()` only where the browser permits it.
+- If the platform blocks script-initiated closing, Velnox reports that limitation honestly and instructs the user to use the device Home/Back control instead of pretending the app closed.
+- Exit fallback messaging is available in Thai and English.
+- About/version text updated to V1.5.1.
+- PWA app cache bumped to `velnox-app-v1.5.1`; benchmark cache policy remains unchanged.
+
 # Velnox V1.5 — Accuracy + Verified Ranking Completion
 
 - Retains the V1.4 accuracy-first Cloudflare measurement plan based closely on Cloudflare's current default sequence, excluding packet loss.

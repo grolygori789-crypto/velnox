@@ -1,0 +1,33 @@
+VELNOX V1.5.1 — EXIT CONTROL PATCH
+Prepared from current main on 2026-08-19.
+
+FILES TO REPLACE AT REPOSITORY ROOT
+- index.html
+- sw.js
+- RELEASE_NOTES.md
+- QA_REPORT.txt
+
+DO NOT upload benchmark files from this package. None are included.
+
+SAFE DEPLOYMENT ORDER
+1. First confirm the current "Refresh Velnox Standard Base" workflow is no longer In progress.
+2. Recheck main. If an automated "chore: refresh Velnox Standard Base" commit appeared, keep all generated benchmark files exactly as they are.
+3. In grolygori789-crypto/velnox, upload the four files in this package to the repository root, replacing files with the same names.
+4. Commit to main with a message such as:
+   Velnox V1.5.1 exit control
+5. Wait for GitHub Pages to deploy normally.
+6. Launch the installed PWA fresh and test the Exit button.
+7. Do not call the patch production-validated until real-device runtime QA is completed.
+
+EXPECTED EXIT UX
+- Installed/standalone PWA: power/exit button appears in the top bar.
+- Ordinary browser tab: button stays hidden unless browser fullscreen is active.
+- Fullscreen: Exit leaves fullscreen first.
+- Where the browser permits window.close(): Velnox attempts to close.
+- Where closing is blocked: Velnox says so and tells the user to use device Home/Back.
+
+SHA-256
+index.html: 873457b40b21561f2312e8e3050b9eed1f4e8fd717c0bd9b3aac351aafda4bf1
+sw.js: 4940ad9e6e4791d327a28cac229cb51b5e53078b4b333f16e4d7308193794e57
+RELEASE_NOTES.md: 97c895ed8ea652d91f395c996d9c66a32dd9080d2a68be81f14d5079bfcbcf91
+QA_REPORT.txt: 573cfbc7c562686bc5af191a0f8ca6481d7aba131cd7b670b61223f15466ddfd

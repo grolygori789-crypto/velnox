@@ -1,44 +1,49 @@
-VELNOX V1.5 QA REPORT
+VELNOX V1.5.1 EXIT PATCH QA REPORT
 Generated: 2026-08-19
 
-STATIC / BUILD QA
-PASS  app.js JavaScript syntax (node --check)
+PATCH SCOPE
+This QA report covers only the V1.5.1 Exit control patch prepared from current GitHub main.
+The V1.5 measurement engine, benchmark generator, styles.css, app.js, manifest, icons and benchmark semantics are unchanged by this patch.
+
+PATCH-SPECIFIC STATIC QA
 PASS  sw.js JavaScript syntax (node --check)
-PASS  scripts/sync_benchmarks.py Python compilation
-PASS  manifest.webmanifest JSON parsing
-PASS  benchmarks/index.json JSON parsing
-PASS  GitHub workflow YAML parsing
-PASS  Executable workflow exists at .github/workflows/update-benchmarks.yml
-PASS  No duplicate HTML element IDs (81 IDs checked)
-PASS  JavaScript-to-HTML direct ID linkage (65 direct #id references checked)
-PASS  TH/EN translation parity (173 translation keys)
-PASS  Every data-i18n key used by index.html exists in both TH and EN
-PASS  Service Worker cache version is velnox-app-v1.5.0
-PASS  Benchmark requests use network-first / no-store behavior
-PASS  PWA icon dimensions: 192x192 and 512x512
+PASS  Exit inline JavaScript syntax (node --check after extraction from index.html)
+PASS  No duplicate HTML element IDs (82 IDs checked)
+PASS  exitBtn exists exactly once
+PASS  Every getElementById reference used by the Exit patch resolves to an element in index.html
+PASS  Exit control reuses the existing icon-button visual system; no CSS file change required
+PASS  Exit control remains hidden in an ordinary browser tab unless browser fullscreen is active
+PASS  Exit control is available in standalone/installed PWA display mode
+PASS  Exit behavior requests document.exitFullscreen() before attempting window.close()
+PASS  Browser-blocked close path displays an explicit fallback instead of claiming success
+PASS  Exit fallback message is implemented in both Thai and English
+PASS  About text updated to v1.5.1
+PASS  Service Worker app cache bumped to velnox-app-v1.5.1
+PASS  Benchmark cache name and benchmark network-first/no-store implementation are unchanged
+PASS  No Cloudflare token or secret is added by this patch
+PASS  Country / Worldwide benchmark files are not modified by this patch
 
-BENCHMARK / LOGIC QA
-PASS  Mock Cloudflare Radar full-data parser: download/upload/latency/jitter
-PASS  Mock partial-data parser: verified bandwidth remains usable if optional latency/jitter histograms are unavailable
-PASS  Benchmark percentile/index functions return finite 0-100 values on synthetic distributions
-PASS  Measurement-confidence logic classifies stable synthetic samples HIGH
-PASS  Measurement-confidence logic classifies highly variable synthetic samples LOW
-PASS  Country benchmark generator always includes TH when a curated country list is used
-PASS  Global benchmark is mandatory before a ready index can be written
-PASS  No fabricated benchmark values are bundled; initial Standard Base is intentionally ready:false
+INHERITED V1.5 BASELINE
+The existing V1.5 static/build QA, accuracy-first measurement behavior, measurement confidence,
+verified benchmark architecture, no-fabrication rule, privacy contract, TH/EN interface,
+and result-page UX remain inherited from the current V1.5 main baseline.
 
-ACCURACY / PRODUCT HARDENING
-PASS  Accuracy-first Cloudflare test sequence retained from V1.4
-PASS  Bandwidth aggregation uses Cloudflare engine percentile output; fallback avoids single-peak Math.max ranking
-PASS  Test timeout increased to 120 seconds
-PASS  Low-confidence measurement produces a retest warning
-PASS  Overall composite is labelled estimated; per-metric histogram ranks remain separate
-PASS  Country detection + flag + localized country name retained
-PASS  VPN/proxy location caveat retained
-PASS  Radar API token remains server-side in GitHub Secrets; not embedded in the PWA
+RUNTIME QA STILL REQUIRED AFTER DEPLOYMENT
+- Installed PWA: Exit button is visible on Home
+- Browser tab: Exit button is hidden before fullscreen
+- Fullscreen browser test: Exit button appears while fullscreen is active
+- Press Exit in fullscreen: fullscreen exits first
+- On a platform that allows script close: PWA/window closes
+- On a platform that blocks script close: bilingual fallback is shown and app remains truthful
+- TH/EN switching updates Exit tooltip/fallback language
+- Existing Home, History, Settings, Test, Result and Compare flows remain unaffected
+- Service worker updates from velnox-app-v1.5.0 to velnox-app-v1.5.1 correctly
 
-KNOWN DEPLOYMENT REQUIREMENT
-The Country / Worldwide ranking cannot contain real percentile data until the repository owner adds a Cloudflare Radar API token as the GitHub repository secret CLOUDFLARE_RADAR_TOKEN and runs the included GitHub Action once. This is an intentional security/integrity requirement, not placeholder data.
+IMPORTANT DEPLOYMENT NOTE
+At the final repository check made while preparing this patch, benchmarks/index.json on main was still ready:false
+and no automated benchmark refresh commit had appeared yet. Do not upload this patch to main while the first ALL-country
+benchmark workflow is still running, because changing main can make the workflow's final git push fail as non-fast-forward.
+Upload the patch only after the benchmark workflow has completed (success or failure) and the current main state has been rechecked.
 
-RUNTIME LIMITATION OF THIS QA ENVIRONMENT
-A fresh visual/headless Chromium pass could not be completed in this container because the installed Chromium process did not terminate even on a trivial local page. No browser-render claim is made from that failed environment check. Final mobile QA should therefore be performed on the deployed GitHub Pages URL after upload and benchmark sync.
+NO 10/10 CLAIM
+This patch has passed patch-specific static QA only. It has not yet been runtime-tested on the deployed GitHub Pages PWA.
