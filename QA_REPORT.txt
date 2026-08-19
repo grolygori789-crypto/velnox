@@ -1,49 +1,68 @@
-VELNOX V1.5.1 EXIT PATCH QA REPORT
+VELNOX V1.5.2 DEFECT HARDENING QA REPORT
 Generated: 2026-08-19
+Baseline: GitHub main commit e0fd0709b15ca9a22657b04a7059bbaf808c4f30 (Velnox V1.5.1 exit control)
 
-PATCH SCOPE
-This QA report covers only the V1.5.1 Exit control patch prepared from current GitHub main.
-The V1.5 measurement engine, benchmark generator, styles.css, app.js, manifest, icons and benchmark semantics are unchanged by this patch.
+SCOPE
+This release addresses five owner-observed defects plus one directly related Exit visibility defect discovered during QA:
+1) Exit during Test did not cancel the active measurement lifecycle.
+2) Real-World Use ratings could be overly pessimistic because AIM classifications include packet-loss semantics while Velnox intentionally omits packet-loss measurement.
+3) Live Diagnostic visual stage jumped backward with interleaved latency probes.
+4) Sound Effects could be silent/unreliable on Android/PWA AudioContext lifecycle.
+5) Secondary typography/contrast was too subdued for comfortable mobile reading.
+6) HTML hidden state for Exit could be overridden by the icon-button display rule in an ordinary browser tab.
 
-PATCH-SPECIFIC STATIC QA
+STATIC / REGRESSION GATE
+PASS  app.js JavaScript syntax (node --check)
 PASS  sw.js JavaScript syntax (node --check)
-PASS  Exit inline JavaScript syntax (node --check after extraction from index.html)
-PASS  No duplicate HTML element IDs (82 IDs checked)
-PASS  exitBtn exists exactly once
-PASS  Every getElementById reference used by the Exit patch resolves to an element in index.html
-PASS  Exit control reuses the existing icon-button visual system; no CSS file change required
-PASS  Exit control remains hidden in an ordinary browser tab unless browser fullscreen is active
-PASS  Exit control is available in standalone/installed PWA display mode
-PASS  Exit behavior requests document.exitFullscreen() before attempting window.close()
-PASS  Browser-blocked close path displays an explicit fallback instead of claiming success
-PASS  Exit fallback message is implemented in both Thai and English
-PASS  About text updated to v1.5.1
-PASS  Service Worker app cache bumped to velnox-app-v1.5.1
-PASS  Benchmark cache name and benchmark network-first/no-store implementation are unchanged
-PASS  No Cloudflare token or secret is added by this patch
-PASS  Country / Worldwide benchmark files are not modified by this patch
+PASS  No duplicate HTML IDs (82 IDs)
+PASS  Direct app/Exit element-ID linkage resolves to existing HTML elements
+PASS  TH/EN translation-key parity (175 keys each)
+PASS  Every data-i18n key in index.html exists in both TH and EN
+PASS  No Cloudflare Radar token, Bearer credential or Authorization secret added
+PASS  V1.5.1 -> V1.5.2 measurement plan/config block is unchanged byte-for-byte
+PASS  Packet-loss measurement remains intentionally absent
+PASS  Velnox Score calculation block is unchanged
+PASS  Benchmark histogram percentile and benchmark-index calculation blocks are unchanged
+PASS  styles.css changes are append-only readability/visibility overrides over the V1.5.1 stylesheet
+PASS  index.html changes are limited to V1.5.2 version text and Exit cancellation bridge/timing
+PASS  Service Worker change is limited to APP_CACHE v1.5.1 -> v1.5.2
+PASS  BENCH_CACHE remains velnox-benchmarks-v1
+PASS  Benchmark data files and generator/workflow are not modified by this patch
 
-INHERITED V1.5 BASELINE
-The existing V1.5 static/build QA, accuracy-first measurement behavior, measurement confidence,
-verified benchmark architecture, no-fabrication rule, privacy contract, TH/EN interface,
-and result-page UX remain inherited from the current V1.5 main baseline.
+LOGIC UNIT QA (Node VM)
+PASS  Real-World Use classifier: observed high-bandwidth / moderate-jitter profile 308/268 Mbps, 17 ms ping, 16.5 ms jitter, 80 ms loaded latency -> Good / Fair / Good / Fair / Good / Excellent
+PASS  AIM 'bad' input cannot override the measured-metrics Velnox use-case ratings
+PASS  Strong profile -> all Excellent
+PASS  Weak profile -> all Limited
+PASS  Visual stage remains monotonic when raw events interleave latency/download/upload
+PASS  Cancellation pauses active engine, aborts fallback controller, settles cancel race, clears running state and invalidates old run serial
+PASS  Cancel race rejects with dedicated VELNOX_CANCELLED status
+PASS  Audio lifecycle waits for resume before scheduling tones when resume succeeds
+PASS  Start / Finish / Gold medal tone scheduling produces expected oscillator lifecycle
+PASS  Exit bridge exports cancelActiveTest() and isTestRunning() to index.html
 
-RUNTIME QA STILL REQUIRED AFTER DEPLOYMENT
-- Installed PWA: Exit button is visible on Home
-- Browser tab: Exit button is hidden before fullscreen
-- Fullscreen browser test: Exit button appears while fullscreen is active
-- Press Exit in fullscreen: fullscreen exits first
-- On a platform that allows script close: PWA/window closes
-- On a platform that blocks script close: bilingual fallback is shown and app remains truthful
-- TH/EN switching updates Exit tooltip/fallback language
-- Existing Home, History, Settings, Test, Result and Compare flows remain unaffected
-- Service worker updates from velnox-app-v1.5.0 to velnox-app-v1.5.1 correctly
+DETERMINISTIC CHROMIUM RUNTIME QA
+Browser: Chromium 144 headless via DevTools Runtime injection.
+Reason for injection harness: the environment's enterprise policy blocks localhost, file:// and data: navigation. DOM, CSS, events and JavaScript still execute in the real Chromium engine on about:blank; only the network transport is replaced by a deterministic mock for repeatable defect validation.
 
-IMPORTANT DEPLOYMENT NOTE
-At the final repository check made while preparing this patch, benchmarks/index.json on main was still ready:false
-and no automated benchmark refresh commit had appeared yet. Do not upload this patch to main while the first ALL-country
-benchmark workflow is still running, because changing main can make the workflow's final git push fail as non-fast-forward.
-Upload the patch only after the benchmark workflow has completed (success or failure) and the current main state has been rechecked.
+PASS  Exit is hidden in ordinary browser mode (hidden=true and computed display=none)
+PASS  About UI reports v1.5.2
+PASS  Readability overrides are active in computed CSS
+PASS  Sound toggle enables and persists without browser runtime error
+PASS  Raw measurement events remain interleaved
+PASS  Visible stage never moves backward and resolves Ping -> Download -> Upload -> Analysis
+PASS  Result UI renders measured-metrics use-case classes Good / Fair / Good / Fair / Good / Excellent for the defect-reproduction profile
+PASS  Second test is actively running before Exit acceptance test
+PASS  Exit click cancels active lifecycle, pauses mock Cloudflare engine, clears running state, returns Home and attempts platform close
+PASS  Cancelled run cannot publish a stale result after its original finish time
+PASS  Browser runtime produced no captured JavaScript error/unhandled rejection in the acceptance flow
+PASS  Visual sanity screenshots inspected for Home, Result and Real-World Use readability
 
-NO 10/10 CLAIM
-This patch has passed patch-specific static QA only. It has not yet been runtime-tested on the deployed GitHub Pages PWA.
+IMPORTANT ACCURACY / PRODUCT INTEGRITY
+- The accuracy-first Cloudflare measurement sequence is unchanged. Interleaved latency probes remain part of measurement; only the visible stage presentation is monotonic.
+- Packet loss is still not measured, displayed or inferred.
+- Real-World Use is a Velnox heuristic interpretation, not a guarantee of application performance. It now avoids treating missing packet-loss measurement as evidence of packet loss.
+- Country/Worldwide Standard Base, benchmark percentile math, source provenance and no-fabrication behavior are unchanged.
+
+RUNTIME LIMITATION / FINAL DEVICE GATE
+All five defect acceptance paths pass static, unit and deterministic Chromium runtime QA. This environment cannot physically validate Android speaker loudness, installed-PWA close permission, real Full Screen browser policy, or live Cloudflare path behavior on the owner's device. Those are platform/hardware-dependent and must be confirmed once on the deployed Android/PWA build after upload. This report therefore does not claim hardware/mobile production validation that was not actually performed.

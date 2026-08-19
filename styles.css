@@ -270,3 +270,36 @@ button{color:inherit}
 /* V1.5 accuracy / benchmark confidence */
 .benchmark-confidence-note{margin:10px 2px 0;padding:9px 10px;border:1px solid rgba(224,173,102,.11);border-radius:12px;background:rgba(224,173,102,.035);font-size:8.8px;line-height:1.55;color:#8f7a60}
 .benchmark-partial-note{margin:10px 2px 0;padding:9px 10px;border:1px solid rgba(99,232,238,.08);border-radius:12px;background:rgba(99,232,238,.025);font-size:8.8px;line-height:1.55;color:#68798a}
+
+/* =========================================================
+   VELNOX V1.5.2 — Mobile Readability + Exit Visibility Hardening
+   Preserve the premium dark palette while lifting secondary-copy contrast.
+   ========================================================= */
+.icon-button[hidden],[hidden]{display:none!important}
+.hero-copy,.test-head p{color:#9aa7b7}
+.orb-inner small,.ready-row{color:#7e8c9e}
+.privacy-chip{color:#748396}.privacy-chip svg{stroke:#7f8fa2}
+.data-note{color:#748395;font-size:8.5px;font-weight:500}
+.result-metrics-grid-v12 article>span{color:#7c8a9b}
+.result-metrics-grid-v12 small{color:#8190a1}
+.tier-kicker{color:#798798}
+.score-orbit-v12 .score-core>span{color:#7a8899}
+.use-case-label-v12 b{color:#bec8d2}
+.use-case-label-v12 small{color:#7e8c9d;font-weight:500}
+.benchmark-location small{color:#8291a3!important}
+.benchmark-copy p{color:#93a0b0!important}
+.benchmark-top span,.benchmark-top small{color:#8190a2!important}
+.benchmark-metric span{color:#8190a2!important}
+.benchmark-metric small{color:#8896a7!important}
+.benchmark-foot{color:#7e8c9e!important}.benchmark-foot b{color:#96a4b5!important}
+.benchmark-privacy-note{color:#7d8b9d;font-weight:500}
+.benchmark-empty-v12 p{color:#8290a1!important}.benchmark-empty-v12 small{color:#718093!important}
+.benchmark-confidence-note{color:#b39a7a}
+.benchmark-partial-note{color:#8192a3}
+.insights-list-v12 .insight p{color:#909dac}
+.solutions-list-v12 li{color:#9aa6b5}
+.setting-row small{color:#8291a3;font-size:8.5px;font-weight:500}
+.about-box span{color:#8795a6}.about-box small{color:#758496;font-size:7.5px}
+.tech-row span{color:#8391a2}
+.history-item .date span,.history-item .hm small{color:#7e8c9d}
+.toast{color:#c0c9d3}

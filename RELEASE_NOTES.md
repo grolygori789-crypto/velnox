@@ -1,3 +1,15 @@
+# Velnox V1.5.2 — Defect Hardening
+
+- Fixes Exit during an active test: Velnox now cancels its active measurement lifecycle before leaving Full Screen or attempting to close. The Cloudflare engine is paused, fallback fetches are aborted, and stale cancelled results cannot overwrite the UI later.
+- Fixes Exit visibility so the power control is genuinely hidden in an ordinary browser tab and remains available for installed/standalone PWA or browser Full Screen use.
+- Reworks Real-World Use ratings into a four-level Velnox classifier (Excellent / Good / Fair / Limited) based only on metrics Velnox actually measures: download, upload, unloaded latency, jitter and loaded latency when available. Cloudflare AIM no longer overrides these ratings while packet loss is intentionally omitted.
+- Keeps the accuracy-first interleaved measurement sequence unchanged while making the visible diagnostic stage progress only forward: Ping → Download → Upload → Analysis. Background/interleaved latency probes continue updating live metrics without making the UI jump backward.
+- Hardens procedural Web Audio on mobile/PWA: audio resume is awaited with a bounded timeout, test/Full Screen permission paths are non-blocking, and start/finish/medal cues use slightly stronger but still restrained levels.
+- Improves mobile readability by lifting secondary-text contrast and weight across results, use cases, benchmark details, insights, recommendations, settings, technical details and privacy/disclaimer copy without changing the locked Velnox visual direction.
+- About/version text updated to V1.5.2.
+- PWA app cache bumped to `velnox-app-v1.5.2`; benchmark cache/versioning and network-first/no-store benchmark policy are unchanged.
+- Accuracy-first measurement configuration, Velnox Score formula, verified Country/Worldwide benchmark mathematics, privacy model and benchmark files are unchanged.
+
 # Velnox V1.5.1 — Exit Control Patch
 
 - Adds a restrained power/exit control to the existing top bar without changing the locked Velnox visual direction.

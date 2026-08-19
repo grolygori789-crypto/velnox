@@ -49,7 +49,8 @@ const translations = {
     offlineTest:"You are offline. Reconnect and try again.", testTimedOut:"The test took too long to complete. Please try again.", benchmarkInvalid:"Benchmark data failed validation.",
     measurementConfidence:"Measurement confidence", confidenceHigh:"High", confidenceMedium:"Medium", confidenceLow:"Low", confidenceUnknown:"Not enough samples",
     unstableMeasurementTitle:"Measurement varied during this test", unstableMeasurementBody:"Throughput samples changed noticeably while testing. For a more reliable comparison, pause other network activity and run the test again.",
-    rankConfidenceNote:"This ranking is based on the current measurement. Retest if the connection was changing during the test.", partialBenchmarkNote:"Radar did not expose every histogram metric in this sync; unavailable ranks are shown as —.", estimatedTopPercent:"EST. TOP {x}%", estimatedOverall:"Estimated overall standing"
+    rankConfidenceNote:"This ranking is based on the current measurement. Retest if the connection was changing during the test.", partialBenchmarkNote:"Radar did not expose every histogram metric in this sync; unavailable ranks are shown as —.", estimatedTopPercent:"EST. TOP {x}%", estimatedOverall:"Estimated overall standing",
+    soundUnavailable:"Sound is unavailable in this browser or device audio session."
   },
   th: {
     networkHealth:"สุขภาพเครือข่าย", knowConnection:"รู้จักเน็ตของคุณให้ชัด", heroCopy:"ทั้งความเร็ว การตอบสนอง และความเสถียร — อธิบายให้เข้าใจง่าย",
@@ -98,7 +99,8 @@ const translations = {
     offlineTest:"ขณะนี้ออฟไลน์ กรุณาเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่", testTimedOut:"การทดสอบใช้เวลานานเกินกำหนด กรุณาลองใหม่", benchmarkInvalid:"ข้อมูล Benchmark ไม่ผ่านการตรวจสอบ",
     measurementConfidence:"ความมั่นใจของผลวัด", confidenceHigh:"สูง", confidenceMedium:"ปานกลาง", confidenceLow:"ต่ำ", confidenceUnknown:"ตัวอย่างยังไม่เพียงพอ",
     unstableMeasurementTitle:"ค่าที่วัดแกว่งระหว่างการทดสอบ", unstableMeasurementBody:"ตัวอย่างความเร็วเปลี่ยนแปลงค่อนข้างมากระหว่างทดสอบ เพื่อให้การเปรียบเทียบน่าเชื่อถือขึ้น ควรหยุดกิจกรรมเครือข่ายอื่นชั่วคราวแล้วทดสอบอีกครั้ง",
-    rankConfidenceNote:"อันดับนี้อ้างอิงจากผลวัดครั้งปัจจุบัน หากเครือข่ายมีการเปลี่ยนแปลงระหว่างทดสอบ ควรทดสอบซ้ำ", partialBenchmarkNote:"รอบซิงก์นี้ Radar ไม่ได้ส่ง Histogram ครบทุกค่า อันดับที่ไม่มีข้อมูลจะแสดงเป็น — โดย Velnox จะไม่สร้างค่าขึ้นเอง", estimatedTopPercent:"ประมาณ TOP {x}%", estimatedOverall:"อันดับโดยรวมโดยประมาณ"
+    rankConfidenceNote:"อันดับนี้อ้างอิงจากผลวัดครั้งปัจจุบัน หากเครือข่ายมีการเปลี่ยนแปลงระหว่างทดสอบ ควรทดสอบซ้ำ", partialBenchmarkNote:"รอบซิงก์นี้ Radar ไม่ได้ส่ง Histogram ครบทุกค่า อันดับที่ไม่มีข้อมูลจะแสดงเป็น — โดย Velnox จะไม่สร้างค่าขึ้นเอง", estimatedTopPercent:"ประมาณ TOP {x}%", estimatedOverall:"อันดับโดยรวมโดยประมาณ",
+    soundUnavailable:"ไม่สามารถเปิดเสียงได้ในเบราว์เซอร์หรือสถานะเสียงของอุปกรณ์นี้"
   }
 };
 
@@ -121,7 +123,13 @@ const state = {
   countryApproximate:false,
   benchmarkIndex:null,
   benchmarkCache:{},
-  running:false
+  running:false,
+  runSerial:0,
+  activeEngine:null,
+  abortController:null,
+  cancelCurrent:null,
+  visualStage:"latency",
+  visualStageIndex:0
 };
 
 function t(key, vars={}) {
@@ -203,45 +211,58 @@ function metricRating(type,v){
   return "—";
 }
 function useCase(name,icon,rating){ return `<div class="use-case"><div class="use-icon">${icon}</div><div class="use-copy"><b>${name}</b><small class="rating-${rating.cls}">${rating.label}</small></div></div>`; }
-function rate(okExcellent,okGood){
-  if(okExcellent)return {label:t("excellent"),cls:"excellent"};
-  if(okGood)return {label:t("good"),cls:"good"};
-  return {label:t("limited"),cls:"limited"};
+function useRating(level){
+  const labels={excellent:t("excellent"),good:t("good"),fair:t("fair"),limited:t("limited")};
+  return {label:labels[level]||labels.limited,cls:level in labels?level:"limited"};
 }
-function aimRating(score){
-  const name=score?.classificationName;
-  if(name==="great")return {label:t("excellent"),cls:"excellent"};
-  if(name==="good")return {label:t("good"),cls:"good"};
-  if(name==="average")return {label:t("fair"),cls:"fair"};
-  if(name==="poor"||name==="bad")return {label:t("limited"),cls:"limited"};
-  return null;
+function rateFour(okExcellent,okGood,okFair){
+  if(okExcellent)return useRating("excellent");
+  if(okGood)return useRating("good");
+  if(okFair)return useRating("fair");
+  return useRating("limited");
 }
-function capRating(rating,maxClass){
-  const order={limited:0,fair:1,good:2,excellent:3},labels={limited:t("limited"),fair:t("fair"),good:t("good"),excellent:t("excellent")};
-  if(!rating)return {label:labels[maxClass],cls:maxClass};
-  const cls=order[rating.cls]<=order[maxClass]?rating.cls:maxClass;
-  return {label:labels[cls],cls};
+function loadedDelta(r){
+  if(!Number.isFinite(r.loadedLatency)||!Number.isFinite(r.ping))return null;
+  return Math.max(0,r.loadedLatency-r.ping);
 }
 function buildUseCases(r){
-  const streamingAim=aimRating(r.aimScores?.streaming), gamingAim=aimRating(r.aimScores?.gaming), rtcAim=aimRating(r.aimScores?.rtc);
-  const streamingFallback=rate(r.download>=50&&r.jitter<=15,r.download>=25);
-  const gamingFallback=rate(r.ping<=30&&r.jitter<=7,r.ping<=60&&r.jitter<=15);
-  const rtcFallback=rate(r.upload>=10&&r.ping<=40&&r.jitter<=10,r.upload>=5&&r.ping<=80);
-  let fourK=streamingAim||streamingFallback;
-  if(r.download<25)fourK={label:t("limited"),cls:"limited"}; else if(r.download<50)fourK=capRating(fourK,"fair");
-  let online=gamingAim||gamingFallback;
-  let calls=rtcAim||rtcFallback;
-  let cloud=gamingAim||rate(r.download>=50&&r.ping<=30&&r.jitter<=8,r.download>=25&&r.ping<=55);
-  if(r.download<25)cloud={label:t("limited"),cls:"limited"}; else if(r.download<50)cloud=capRating(cloud,"fair");
-  let live=rtcAim||rate(r.upload>=20&&r.jitter<=10,r.upload>=8&&r.jitter<=20);
-  if(r.upload<8)live={label:t("limited"),cls:"limited"}; else if(r.upload<20)live=capRating(live,"fair");
+  // V1.5.2: classify only from metrics Velnox actually measures. Cloudflare AIM is
+  // retained in raw results for diagnostics, but it is not an authoritative override
+  // because Velnox intentionally omits packet-loss measurement in this release.
+  const load=loadedDelta(r), loadWithin=max=>load===null||load<=max;
+  const fourK=rateFour(
+    r.download>=50&&r.jitter<=15&&loadWithin(120),
+    r.download>=25&&r.jitter<=25&&loadWithin(180),
+    r.download>=15&&r.jitter<=35&&loadWithin(260)
+  );
+  const online=rateFour(
+    r.download>=10&&r.upload>=2&&r.ping<=30&&r.jitter<=7&&loadWithin(50),
+    r.download>=5&&r.upload>=1&&r.ping<=50&&r.jitter<=12&&loadWithin(90),
+    r.download>=3&&r.upload>=.5&&r.ping<=80&&r.jitter<=25&&loadWithin(160)
+  );
+  const calls=rateFour(
+    r.download>=10&&r.upload>=10&&r.ping<=40&&r.jitter<=10&&loadWithin(80),
+    r.download>=5&&r.upload>=5&&r.ping<=80&&r.jitter<=20&&loadWithin(140),
+    r.download>=2&&r.upload>=2&&r.ping<=150&&r.jitter<=35&&loadWithin(240)
+  );
+  const cloud=rateFour(
+    r.download>=50&&r.ping<=30&&r.jitter<=8&&loadWithin(60),
+    r.download>=25&&r.ping<=50&&r.jitter<=15&&loadWithin(110),
+    r.download>=15&&r.ping<=80&&r.jitter<=25&&loadWithin(180)
+  );
+  const live=rateFour(
+    r.upload>=20&&r.ping<=50&&r.jitter<=10&&loadWithin(100),
+    r.upload>=10&&r.ping<=80&&r.jitter<=20&&loadWithin(160),
+    r.upload>=5&&r.ping<=120&&r.jitter<=30&&loadWithin(260)
+  );
+  const downloads=rateFour(r.download>=200,r.download>=50,r.download>=15);
   const items=[
     [t("streaming4k"),"▻",fourK],
     [t("onlineGaming"),"⌁",online],
     [t("videoCalls"),"◫",calls],
     [t("cloudGaming"),"◇",cloud],
     [t("liveStreaming"),"●",live],
-    [t("largeDownloads"),"⇣",rate(r.download>=200,r.download>=50)]
+    [t("largeDownloads"),"⇣",downloads]
   ];
   return items.map(([name,icon,rating])=>{
     const help=rating.cls==="excellent"?t("useExcellent"):rating.cls==="good"?t("useGood"):rating.cls==="fair"?t("useFair"):t("useLimited");
@@ -531,18 +552,21 @@ function renderHistory(){
     return `<div class="history-item"><div class="date"><b>${q.rating}</b><span>${d.toLocaleString(state.lang==="th"?"th-TH":"en-GB",{dateStyle:"medium",timeStyle:"short"})}</span></div><div class="hm"><span><b>${formatSpeed(r.download)}</b><small>↓ Mbps</small></span><span><b>${formatSpeed(r.upload)}</b><small>↑ Mbps</small></span><span><b>${Math.round(r.ping)}</b><small>ms</small></span></div></div>`;
   }).join("");
 }
-function setStage(stage){
+function setStage(stage,force=false){
   const map={
     latency:["8%","Latency",t("checkingResponse"),"ms"],
     download:["31%","Download",t("checkingDownload"),"Mbps"],
     upload:["52%","Upload",t("checkingUpload"),"Mbps"],
     analysis:["calc(100% - 205px)","Analysis",t("analyzing"),""]
   };
+  const order=["latency","download","upload","analysis"],idx=order.indexOf(stage);
+  if(idx<0)return;
+  if(!force&&idx<state.visualStageIndex)return;
+  state.visualStage=stage; state.visualStageIndex=idx;
   const [x,title,copy,unit]=map[stage];
   $("#runner").style.setProperty("--runner-left",x);
   $("#stageTitle").textContent=title; $("#stageCopy").textContent=copy; $("#liveUnit").textContent=unit;
   if(stage==="download"||stage==="upload") $("#speedTrail").classList.add("fast"); else $("#speedTrail").classList.remove("fast");
-  const order=["latency","download","upload","analysis"],idx=order.indexOf(stage);
   $$(".stage-item").forEach((el,i)=>{el.classList.toggle("active",i===idx);el.classList.toggle("done",i<idx)});
   $("#line1").style.width=idx>=1?"100%":"0"; $("#line2").style.width=idx>=2?"100%":"0"; $("#line3").style.width=idx>=3?"100%":"0";
 }
@@ -550,10 +574,13 @@ function safeCall(obj,name){try{return obj?.[name]?.()}catch{return null}}
 function updateLiveFromResults(res,type){
   const ping=safeCall(res,"getUnloadedLatency"), jitter=safeCall(res,"getUnloadedJitter");
   const down=safeCall(res,"getDownloadBandwidth"), up=safeCall(res,"getUploadBandwidth");
-  if(Number.isFinite(ping)){$("#miniPing").textContent=`${ping.toFixed(0)} ms`; if(type==="latency")$("#liveValue").textContent=ping.toFixed(0)}
+  if(Number.isFinite(ping))$("#miniPing").textContent=`${ping.toFixed(0)} ms`;
   if(Number.isFinite(jitter))$("#miniJitter").textContent=`${jitter.toFixed(1)} ms`;
-  if(Number.isFinite(down)){$("#miniDown").textContent=`${(down/1e6).toFixed(1)} Mbps`;if(type==="download")$("#liveValue").textContent=(down/1e6).toFixed(1)}
-  if(Number.isFinite(up)){$("#miniUp").textContent=`${(up/1e6).toFixed(1)} Mbps`;if(type==="upload")$("#liveValue").textContent=(up/1e6).toFixed(1)}
+  if(Number.isFinite(down))$("#miniDown").textContent=`${(down/1e6).toFixed(1)} Mbps`;
+  if(Number.isFinite(up))$("#miniUp").textContent=`${(up/1e6).toFixed(1)} Mbps`;
+  if(state.visualStage==="latency"&&Number.isFinite(ping))$("#liveValue").textContent=ping.toFixed(0);
+  else if(state.visualStage==="download"&&Number.isFinite(down))$("#liveValue").textContent=(down/1e6).toFixed(1);
+  else if(state.visualStage==="upload"&&Number.isFinite(up))$("#liveValue").textContent=(up/1e6).toFixed(1);
 }
 async function requestFullscreen(){
   if(!state.settings.fullscreen)return;
@@ -563,6 +590,7 @@ async function requestFullscreen(){
   }catch{ /* browser may require different gesture handling */ }
 }
 function resetRace(){
+  state.visualStage="latency"; state.visualStageIndex=0;
   $("#runner").style.setProperty("--runner-left","-10px");
   $("#medalDrop").classList.remove("drop"); $("#finishFlash").classList.remove("burst");
   $("#liveValue").textContent="—"; $("#miniPing").textContent=$("#miniDown").textContent=$("#miniUp").textContent=$("#miniJitter").textContent="—";
@@ -610,7 +638,7 @@ function confidenceLabel(conf){
   const level=conf?.level||"unknown";
   return level==="high"?t("confidenceHigh"):level==="medium"?t("confidenceMedium"):level==="low"?t("confidenceLow"):t("confidenceUnknown");
 }
-async function runFallback(){
+async function runFallback(signal){
   // Fallback is intentionally slower and more conservative than V1.3.
   // Warm-up samples are ignored and bandwidth is aggregated with a percentile, not Math.max().
   state.engineName=t("fallbackEngine");
@@ -619,7 +647,7 @@ async function runFallback(){
   setStage("latency");
   for(let i=0;i<14;i++){
     const s=performance.now();
-    await fetch(`${base}/__down?bytes=0&_=${Date.now()}-${i}`,{cache:"no-store"});
+    await fetch(`${base}/__down?bytes=0&_=${Date.now()}-${i}`,{cache:"no-store",signal});
     const p=performance.now()-s;
     if(i>=2)pings.push(p);
     $("#liveValue").textContent=p.toFixed(0);$("#miniPing").textContent=`${p.toFixed(0)} ms`;
@@ -631,14 +659,14 @@ async function runFallback(){
 
   const measureDown=async(bytes)=>{
     const s=performance.now();
-    const r=await fetch(`${base}/__down?bytes=${bytes}&_=${Date.now()}-${Math.random()}`,{cache:"no-store"});
+    const r=await fetch(`${base}/__down?bytes=${bytes}&_=${Date.now()}-${Math.random()}`,{cache:"no-store",signal});
     const blob=await r.blob();
     const sec=(performance.now()-s)/1000;
     return {mbps:(blob.size*8/sec)/1e6,ms:sec*1000};
   };
   const measureUp=async(bytes)=>{
     const body=new Uint8Array(bytes),s=performance.now();
-    await fetch(`${base}/__up?_=${Date.now()}-${Math.random()}`,{method:"POST",body,cache:"no-store"});
+    await fetch(`${base}/__up?_=${Date.now()}-${Math.random()}`,{method:"POST",body,cache:"no-store",signal});
     const sec=(performance.now()-s)/1000;
     return {mbps:(bytes*8/sec)/1e6,ms:sec*1000};
   };
@@ -678,39 +706,82 @@ async function runFallback(){
   return {download:numericPercentile(dvals,.8),upload:numericPercentile(uvals,.8),ping,jitter,loadedLatency:null,confidence};
 }
 let audioCtx=null;
-function getAudio(){
+async function ensureAudioReady(){
   if(!state.settings.sound)return null;
-  try{ audioCtx ||= new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==="suspended")audioCtx.resume(); return audioCtx; }catch{return null}
+  try{
+    const AudioCtor=window.AudioContext||window.webkitAudioContext;
+    if(!AudioCtor)return null;
+    audioCtx ||= new AudioCtor({latencyHint:"interactive"});
+    if(audioCtx.state==="suspended"){
+      const resumeTask=audioCtx.resume();
+      await Promise.race([resumeTask,new Promise(resolve=>setTimeout(resolve,800))]);
+    }
+    return audioCtx.state==="running"?audioCtx:null;
+  }catch{return null}
 }
-function tone(freq=440,dur=.12,vol=.025,type="sine",delay=0){
-  const a=getAudio(); if(!a)return;
+function scheduleTone(a,freq=440,dur=.12,vol=.035,type="sine",delay=0){
+  if(!a||a.state!=="running")return false;
   const o=a.createOscillator(),g=a.createGain(),now=a.currentTime+delay;
   o.type=type;o.frequency.setValueAtTime(freq,now);g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(vol,now+.015);g.gain.exponentialRampToValueAtTime(.0001,now+dur);
-  o.connect(g).connect(a.destination);o.start(now);o.stop(now+dur+.03);
+  o.connect(g).connect(a.destination);o.start(now);o.stop(now+dur+.03);return true;
 }
-function soundStart(){tone(170,.14,.022,"sine");tone(340,.11,.010,"triangle",.045)}
-function soundFinish(){
-  const a=getAudio(); if(!a)return;
-  const o=a.createOscillator(),g=a.createGain(),now=a.currentTime;o.type="sine";o.frequency.setValueAtTime(260,now);o.frequency.exponentialRampToValueAtTime(820,now+.16);g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.018,now+.025);g.gain.exponentialRampToValueAtTime(.0001,now+.19);o.connect(g).connect(a.destination);o.start(now);o.stop(now+.22);
+async function soundStart(){
+  const a=await ensureAudioReady(); if(!a)return false;
+  scheduleTone(a,170,.16,.038,"sine"); scheduleTone(a,340,.13,.022,"triangle",.045); return true;
 }
-function soundMedal(tier){
-  const seq=tier==="gold"?[[523,.025],[659,.021],[784,.018]]:tier==="silver"?[[440,.022],[554,.017]]:tier==="bronze"?[[392,.020],[466,.015]]:[[180,.018]];
-  seq.forEach(([f,v],i)=>tone(f,.28,v,i?"sine":"triangle",i*.075));
+async function soundFinish(){
+  const a=await ensureAudioReady(); if(!a)return false;
+  const o=a.createOscillator(),g=a.createGain(),now=a.currentTime;o.type="sine";o.frequency.setValueAtTime(260,now);o.frequency.exponentialRampToValueAtTime(820,now+.18);g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.038,now+.025);g.gain.exponentialRampToValueAtTime(.0001,now+.21);o.connect(g).connect(a.destination);o.start(now);o.stop(now+.24);return true;
 }
-function withTimeout(promise,ms=75000){
-  return Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(new Error("VELNOX_TIMEOUT")),ms))]);
+async function soundMedal(tier){
+  const a=await ensureAudioReady(); if(!a)return false;
+  const seq=tier==="gold"?[[523,.046],[659,.040],[784,.034]]:tier==="silver"?[[440,.040],[554,.033]]:tier==="bronze"?[[392,.036],[466,.030]]:[[180,.032]];
+  seq.forEach(([f,v],i)=>scheduleTone(a,f,.30,v,i?"sine":"triangle",i*.075)); return true;
+}
+function cancelError(){return new Error("VELNOX_CANCELLED")}
+function withTimeoutAndCancel(promise,ms=75000,runId=state.runSerial){
+  let timer=null,cancelReject=null;
+  const cancelPromise=new Promise((_,reject)=>{cancelReject=()=>reject(cancelError())});
+  if(runId===state.runSerial)state.cancelCurrent=cancelReject;
+  const timeoutPromise=new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error("VELNOX_TIMEOUT")),ms)});
+  return Promise.race([promise,cancelPromise,timeoutPromise]).finally(()=>{
+    if(timer)clearTimeout(timer);
+    if(state.cancelCurrent===cancelReject)state.cancelCurrent=null;
+  });
+}
+async function cancelActiveTest({returnHome=true}={}){
+  if(!state.running)return false;
+  state.runSerial+=1;
+  try{state.activeEngine?.pause?.()}catch{}
+  state.activeEngine=null;
+  try{state.abortController?.abort()}catch{}
+  state.abortController=null;
+  const cancel=state.cancelCurrent; state.cancelCurrent=null;
+  if(cancel)cancel();
+  state.running=false; state.results=null;
+  if(returnHome){resetRace();showView("#homeView")}
+  return true;
 }
 async function runTest(){
   if(state.running)return;
   if(!navigator.onLine){toast(t("offlineTest"));return}
-  state.running=true; state.testStartedAt=performance.now(); state.results=null; soundStart();
-  resetRace(); showView("#testView"); setStage("latency"); requestFullscreen();
+  const runId=++state.runSerial;
+  const controller=new AbortController();
+  state.abortController=controller; state.running=true; state.testStartedAt=performance.now(); state.results=null;
+  let engine=null;
   try{
+    resetRace(); showView("#testView"); setStage("latency",true);
+    // Trigger fullscreen and audio unlock synchronously from the same user gesture.
+    // Both are best-effort side effects and never gate the measurement engine.
+    requestFullscreen();
+    soundStart();
+    if(runId!==state.runSerial)throw cancelError();
     const SpeedTest=await ensureCloudflareEngine();
+    if(runId!==state.runSerial)throw cancelError();
     let result;
     if(SpeedTest){
       state.engineName=t("cloudflareEngine");
-      result=await withTimeout(new Promise((resolve,reject)=>{
+      const measurementPromise=new Promise((resolve,reject)=>{
         const st=new SpeedTest({
           autoStart:false,
           // Accuracy-first profile based closely on Cloudflare Speedtest's current default plan,
@@ -750,7 +821,9 @@ async function runTest(){
           loadedRequestMinDuration:250,
           logAimApiUrl:null
         });
+        engine=st; state.activeEngine=st;
         st.onResultsChange=info=>{
+          if(runId!==state.runSerial)return;
           const type=info?.type||"";
           if(type.includes("latency"))setStage("latency");
           else if(type.includes("download"))setStage("download");
@@ -759,6 +832,7 @@ async function runTest(){
         };
         st.onError=e=>reject(new Error(String(e)));
         st.onFinish=res=>{
+          if(runId!==state.runSerial){reject(cancelError());return}
           const download=(safeCall(res,"getDownloadBandwidth")||0)/1e6;
           const upload=(safeCall(res,"getUploadBandwidth")||0)/1e6;
           const ping=safeCall(res,"getUnloadedLatency");
@@ -773,27 +847,43 @@ async function runTest(){
           resolve({download,upload,ping:Number(ping)||0,jitter:Number(jitter)||0,loadedLatency:loaded.length?Math.max(...loaded):null,aimScores,confidence});
         };
         st.play();
-      }),120000);
-    }else result=await withTimeout(runFallback(),120000);
+      });
+      result=await withTimeoutAndCancel(measurementPromise,120000,runId);
+    }else{
+      state.engineName=t("fallbackEngine");
+      result=await withTimeoutAndCancel(runFallback(controller.signal),120000,runId);
+    }
 
+    if(runId!==state.runSerial)throw cancelError();
     if(!result.download || !Number.isFinite(result.ping)) throw new Error("Invalid measurement");
     setStage("analysis"); $("#liveValue").textContent=""; $("#liveUnit").textContent="";
     await new Promise(r=>setTimeout(r,500));
+    if(runId!==state.runSerial)throw cancelError();
     result.score=calculateScore(result); const q=qualityLabel(result.score);
     document.documentElement.style.setProperty("--tier",q.color);document.documentElement.style.setProperty("--tier-rgb",q.rgb);
     $("#medalDropText").textContent=q.medal;
     $("#runner").style.setProperty("--runner-left","calc(100% - 176px)");
-    $("#finishFlash").classList.add("burst"); soundFinish();
-    setTimeout(()=>{$("#medalDrop").classList.add("drop");soundMedal(q.tier)},220);
+    $("#finishFlash").classList.add("burst"); await soundFinish();
+    setTimeout(()=>{if(runId===state.runSerial){$("#medalDrop").classList.add("drop");soundMedal(q.tier)}},220);
     await new Promise(r=>setTimeout(r,1050));
+    if(runId!==state.runSerial)throw cancelError();
 
     state.testDuration=performance.now()-state.testStartedAt;
     result.ts=Date.now(); state.results=result;
     renderResult(result); saveHistory(result);
     showView("#resultView");
   }catch(err){
-    console.error(err); toast(err?.message==="VELNOX_TIMEOUT"?t("testTimedOut"):t("engineError")); showView("#homeView");
-  }finally{state.running=false}
+    if(err?.message==="VELNOX_CANCELLED"||err?.name==="AbortError"){
+      if(runId===state.runSerial)showView("#homeView");
+    }else{
+      console.error(err); toast(err?.message==="VELNOX_TIMEOUT"?t("testTimedOut"):t("engineError"));
+      if(runId===state.runSerial)showView("#homeView");
+    }
+  }finally{
+    if(state.activeEngine===engine)state.activeEngine=null;
+    if(state.abortController===controller)state.abortController=null;
+    if(runId===state.runSerial)state.running=false;
+  }
 }
 function renderSettings(){
   $("#fullscreenToggle").checked=state.settings.fullscreen; $("#historyToggle").checked=state.settings.history; $("#techToggle").checked=state.settings.tech; $("#soundToggle").checked=state.settings.sound;
@@ -808,10 +898,15 @@ $("#technicalBtn").addEventListener("click",()=>openSheet("#techSheet","#techBac
 $("#fullscreenToggle").addEventListener("change",e=>{state.settings.fullscreen=e.target.checked;localStorage.setItem("velnox.fullscreen",e.target.checked?"1":"0")});
 $("#historyToggle").addEventListener("change",e=>{state.settings.history=e.target.checked;localStorage.setItem("velnox.saveHistory",e.target.checked?"1":"0")});
 $("#techToggle").addEventListener("change",e=>{state.settings.tech=e.target.checked;localStorage.setItem("velnox.tech",e.target.checked?"1":"0");if(state.results)renderResult(state.results)});
-$("#soundToggle").addEventListener("change",e=>{state.settings.sound=e.target.checked;localStorage.setItem("velnox.sound",e.target.checked?"1":"0");if(e.target.checked){getAudio();tone(523,.14,.018,"sine")}});
+$("#soundToggle").addEventListener("change",async e=>{state.settings.sound=e.target.checked;localStorage.setItem("velnox.sound",e.target.checked?"1":"0");if(e.target.checked){const a=await ensureAudioReady();if(a)scheduleTone(a,523,.16,.034,"sine");else toast(t("soundUnavailable"))}else if(audioCtx?.state==="running"){audioCtx.suspend().catch(()=>{})}});
 $("#clearHistoryBtn").addEventListener("click",()=>{localStorage.removeItem("velnox.history");renderLastResult();renderHistory();toast(t("historyCleared"))});
 $("#compareCountryBtn").addEventListener("click",()=>{state.compareMode="country";$("#compareCountryBtn").classList.add("active");$("#compareGlobalBtn").classList.remove("active");$("#compareCountryBtn").setAttribute("aria-pressed","true");$("#compareGlobalBtn").setAttribute("aria-pressed","false");renderCompare()});
 $("#compareGlobalBtn").addEventListener("click",()=>{state.compareMode="global";$("#compareGlobalBtn").classList.add("active");$("#compareCountryBtn").classList.remove("active");$("#compareGlobalBtn").setAttribute("aria-pressed","true");$("#compareCountryBtn").setAttribute("aria-pressed","false");renderCompare()});
+
+window.VelnoxApp=Object.freeze({
+  cancelActiveTest,
+  isTestRunning:()=>state.running
+});
 
 function boot(){
   setLang(state.lang);renderSettings();renderLastResult();renderHistory();updateConnectionStatus();

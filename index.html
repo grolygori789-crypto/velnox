@@ -314,7 +314,7 @@
 
       <div class="about-box">
         <b>VELNOX</b>
-        <span>Network Intelligence • v1.5.1</span>
+        <span>Network Intelligence • v1.5.2</span>
         <span>Developed by Benedict Interactive</span>
         <small>Browser measurements are estimates and can vary with server path, device load and network conditions. Test traffic is sent to Cloudflare speed-test endpoints; Velnox stores history only on this device when enabled.</small>
       </div>
@@ -369,6 +369,12 @@
 
       exitBtn.addEventListener("click", async () => {
         try {
+          if (window.VelnoxApp?.isTestRunning?.()) {
+            await window.VelnoxApp.cancelActiveTest({ returnHome: true });
+          }
+        } catch {}
+
+        try {
           if (document.fullscreenElement && document.exitFullscreen) {
             await document.exitFullscreen();
           }
@@ -378,7 +384,7 @@
 
         setTimeout(() => {
           if (document.visibilityState === "visible") showExitFallback();
-        }, 180);
+        }, 220);
       });
 
       document.addEventListener("fullscreenchange", syncExitVisibility);
