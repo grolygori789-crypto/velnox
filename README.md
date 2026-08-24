@@ -1,8 +1,17 @@
-# Velnox V1.7.0 — Premium Experience
+# Velnox V1.7.1 — Premium Experience
 
 Velnox is a browser-based Network Intelligence product by Benedict Interactive.
 
-V1.7.0 is a presentation and interaction hardening release built on the already-deployed V1.6.0 Trust & Product Maturity layer and the V1.5.2 accuracy/measurement core.
+V1.7.1 is a presentation and interaction hardening release built on the already-deployed V1.6.0 Trust & Product Maturity layer and the V1.5.2 accuracy/measurement core.
+
+
+## V1.7.1 benchmark hero polish
+
+- Makes `TOP x%` the dominant KPI inside the benchmark ring so the standing is readable at a glance on mobile.
+- Adds a restrained one-pass gold trace around the benchmark ring when a Country/Global result is revealed; it does not loop continuously.
+- Adds a subtle inner tick ring, stronger spacing and a divider between the rank KPI and explanatory copy.
+- Keeps the composite `x / 100` visually secondary and preserves all underlying benchmark values unchanged.
+- Reduced Motion disables the reveal animation and shows the ring in a static state.
 
 ## What V1.7 improves
 

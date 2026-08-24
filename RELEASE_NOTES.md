@@ -1,3 +1,15 @@
+# Velnox V1.7.1 — Benchmark Hero Polish
+
+- Fixes the benchmark-ring typography regression where the inherited `.benchmark-top span` rule could force the `TOP x%` value down to helper-text size on mobile.
+- Makes `TOP x%` the dominant KPI with a larger, higher-contrast gold value and clearer `ESTIMATED` / `TOP` hierarchy.
+- Adds a restrained one-pass gold trace around the ring on reveal, plus a subtle inner tick ring; the animation does not loop.
+- Adds a light vertical divider and spacing refinement between rank KPI and location/explanation copy.
+- Keeps `x / 100` secondary and preserves Country/Global percentile values, benchmark data and all benchmark mathematics unchanged.
+- Reduced Motion suppresses the reveal animation and leaves a static accent.
+- Updates visible/About version and presentation-layer versions to V1.7.1.
+- Bumps only the app-shell cache to `velnox-app-v1.7.1`; benchmark cache/policy remain unchanged.
+- `app.js`, `styles.css`, measurement logic, score logic, benchmark data, benchmark workflow and history behavior are untouched.
+
 # Velnox V1.7.0 — Premium Experience
 
 - Adds an isolated `premium.css` / `premium.js` presentation layer over the deployed V1.6 product-trust release.

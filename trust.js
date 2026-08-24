@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.7.0';
+  const VERSION = '1.7.1';
   const LEGAL_VERSION = '1.0.0';
   const EFFECTIVE_DATE = '2026-08-24';
   const STUDIO = 'Benedict Interactive';

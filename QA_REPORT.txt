@@ -1,76 +1,48 @@
-VELNOX V1.7.0 — PREMIUM EXPERIENCE
+VELNOX V1.7.1 — BENCHMARK HERO POLISH
 QA REPORT
 Date: 2026-08-24
 
 BASELINE
-- Live main inspected before work.
-- Baseline commit: d34dd1e2a8feb48a56dd653927d61cb801f2a7b1
-- Baseline message: Velnox V1.6.0 trust and product maturity
-- Local V1.6 source package used for the patch matched the deployed Git blob for index.html and trust.js; other V1.6 package files were produced by the same uploaded release.
+- Live main verified before implementation.
+- Baseline commit: 223e9fd0f39cce4603bb2196e82b157e39f3756b
+- Baseline message: Velnox V1.7.0 premium experience
+- Local V1.7.0 package blobs matched deployed GitHub blobs for premium.css, premium.js, index.html and sw.js before modification.
 
 REGRESSION BOUNDARY
-PASS — package does not contain replacements for app.js, styles.css or manifest.webmanifest.
-PASS — package does not contain benchmark JSON, benchmark generator or GitHub workflow files.
-PASS — measurement engine, measurement sequence, fallback measurement, Velnox Score, Real-World Use classifier, confidence logic, country detection, benchmark percentile/index math and history code are therefore outside the V1.7 edit surface.
+PASS — app.js not present in patch package.
+PASS — styles.css not present in patch package.
+PASS — manifest.webmanifest not present in patch package.
+PASS — benchmarks/, scripts/ and .github/workflows/ not present in patch package.
+PASS — measurement sequence, fallback measurement, Velnox Score, Real-World Use classifier, confidence logic, country detection, benchmark percentile/index mathematics and local history are outside the edit surface.
 
-INTENTIONAL RUNTIME FILE CHANGES
-- index.html: links premium.css/premium.js and shows V1.7.0.
-- premium.css: presentation-only premium layer.
-- premium.js: DOM presentation enhancement for benchmark hierarchy, test-progress guidance and container presentation detection.
-- trust.js: V1.7 version alignment; existing V1.6 trust functionality retained.
-- trust.css is intentionally not replaced; the deployed V1.6 trust visual layer remains the base and premium.css overrides only presentation where needed.
-- sw.js: app-shell cache bump + new premium assets; benchmark cache policy unchanged.
+INTENTIONAL CHANGES
+- premium.css: benchmark ring hierarchy, spacing, one-pass gold trace, responsive and Reduced Motion rules.
+- premium.js: version alignment only; benchmark transformation logic remains unchanged.
+- trust.js: version alignment only.
+- index.html: visible About version only.
+- sw.js: app-shell cache version only.
+- README.md / RELEASE_NOTES.md / QA_REPORT.txt: release documentation.
 
 STATIC GATES
-PASS — node --check: trust.js
-PASS — node --check: premium.js
-PASS — node --check: sw.js
-PASS — no duplicate IDs in production index.html
-PASS — index links app.js + trust.js + premium.js
-PASS — index links styles.css + trust.css + premium.css
-PASS — Service Worker app cache = velnox-app-v1.7.0
-PASS — benchmark cache remains velnox-benchmarks-v1
-PASS — benchmark network path still uses cache: no-store
-PASS — premium CSS brace sanity
-PASS — secret-pattern scan
-PASS — package does not ship protected core files
+- node --check premium.js: PASS
+- node --check trust.js: PASS
+- node --check sw.js: PASS
+- production index duplicate-ID check: PASS
+- premium CSS brace sanity: PASS
+- Service Worker benchmark cache remains velnox-benchmarks-v1: PASS
+- benchmark request path still uses cache: no-store: PASS
+- protected-core/package boundary: PASS
 
 DETERMINISTIC CHROMIUM ACCEPTANCE
-Environment: Chromium headless, about:blank CDP injection because local/file/data navigation is restricted by the execution environment.
-Viewport tested: mobile 390 CSS px.
-PASS — VelnoxPremium initializes as 1.7.0
-PASS — stage progress panel is injected exactly once
-PASS — initial Ping stage reports 10% stage progress
-PASS — Upload stage advances to 68% without a time countdown
-PASS — user guidance displays `Usually about 1 minute`
-PASS — Thai guidance displays `โดยทั่วไปใช้เวลาประมาณ 1 นาที`
-PASS — benchmark hero transforms into premium hierarchy
-PASS — `EST. TOP 26%` is presented as ESTIMATED + TOP + 26% without changing the underlying rank
-PASS — `74/100` is reformatted as `74 / 100` without changing the value
-PASS — benchmark freshness moves into the hero header
-PASS — all four benchmark metric cards receive the premium presentation hook
-PASS — no horizontal overflow in 320 / 350 / 360 / 390 / 412 / 768 px deterministic responsive checks
-PASS — Analysis stage reports 94% stage progress, shows `Finalizing analysis…`, and removes the approximate-time note
-PASS — Reduced Motion computes no premium progress animation / transition
-PASS — dynamic Country/Global rerender is re-enhanced automatically without modifying benchmark values
-PASS — V1.7 Trust/Settings initializes 7 groups with Motion control intact
-PASS — Settings sheet remains within viewport at 320 / 360 / 390 / 412 px and caps at 520 px on tablet/desktop
-PASS — VelnoxTrust and VelnoxPremium both report version 1.7.0
+- Benchmark hero transformation: PASS
+- `TOP 27%` rendered as dominant KPI without changing the source rank: PASS
+- computed rank value font >= 39px at all supported two-column mobile widths: PASS
+- composite `73 / 100` remains secondary: PASS
+- one-pass gold trace present: PASS
+- gold trace does not use infinite iteration: PASS
+- Reduced Motion disables reveal animation: PASS
+- Country/Global rerender re-applies presentation without changing values: PASS
+- no horizontal overflow at 320 / 350 / 360 / 390 / 412 / 768 CSS px: PASS
 
-DESIGN/ACCURACY CONTRACT
-- No exact seconds-remaining countdown is shown because Velnox cannot guarantee an exact duration under variable network/device conditions.
-- Progress is stage-based, not a claim about bytes/time remaining.
-- Existing SVG turtle/medal identity remains; no 3D/WebGL dependency added.
-- Reduced Motion disables premium progress animation/microinteraction animation.
-
-REAL-DEVICE ACCEPTANCE STILL REQUIRED AFTER DEPLOYMENT
-Automated and deterministic browser tests cannot prove every Android/WebView/PWA policy. Final device acceptance should verify:
-1. Chrome complete test and result rendering.
-2. Installed PWA Service Worker update from 1.6.0 to 1.7.0.
-3. Fullscreen/Exit behavior.
-4. Sound on/off on real speaker hardware.
-5. HelloTalk/in-app-browser behavior.
-6. Ko-fi / PromptPay / mail-app external handoff.
-7. Country/Global benchmark live data after deployment.
-
-No claim of 100% real-device validation is made until those device-specific checks are completed.
+REAL-DEVICE CHECK AFTER DEPLOYMENT
+Verify on the target Android device: Chrome result rendering, installed-PWA cache refresh, Country/Global switch, Reduced Motion, and in-app browser presentation. No claim of universal hardware/browser validation is made before that pass.
