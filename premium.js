@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.7.1';
+  const VERSION = '1.8.0';
   const TEXT = {
     en: {
       testing: 'Testing in progress',

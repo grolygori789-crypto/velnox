@@ -1,4 +1,4 @@
-const APP_CACHE = "velnox-app-v1.7.1";
+const APP_CACHE = "velnox-app-v1.8.0";
 const BENCH_CACHE = "velnox-benchmarks-v1";
 const CORE = [
   "./",
@@ -10,8 +10,13 @@ const CORE = [
   "./trust.js",
   "./premium.js",
   "./manifest.webmanifest",
+  "./assets/velnox-mark.svg",
+  "./assets/favicon-32.png",
+  "./assets/apple-touch-icon-180.png",
   "./assets/icon-192.png",
-  "./assets/icon-512.png"
+  "./assets/icon-512.png",
+  "./assets/icon-maskable-192.png",
+  "./assets/icon-maskable-512.png"
 ];
 self.addEventListener("install", event => { event.waitUntil(caches.open(APP_CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", event => { event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith("velnox-") && ![APP_CACHE, BENCH_CACHE].includes(k)).map(k => caches.delete(k)))).then(() => self.clients.claim())); });

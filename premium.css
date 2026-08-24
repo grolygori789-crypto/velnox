@@ -303,3 +303,47 @@ html[data-velnox-motion="reduced"] .benchmark-rank-hero[data-premium="1"] .bench
     opacity:.62!important;
   }
 }
+
+
+/* Velnox V1.8.0 — Brand Identity
+   Geometric V + abstract turtle-shell DNA. Brand presentation only. */
+.velnox-brand-mark{display:block;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.velnox-brand-mark--topbar{width:27px;height:27px;flex:0 0 27px;filter:drop-shadow(0 0 9px rgba(77,225,234,.10)) drop-shadow(0 0 8px rgba(216,183,98,.055))}
+.brand-button{gap:9px!important;letter-spacing:.255em!important}
+.brand-button>span:last-child{position:relative;top:.5px}
+
+.velnox-brand-mark--splash{width:118px;height:118px;margin:0 auto 7px;opacity:0;animation:markIn .65s .08s cubic-bezier(.2,.9,.2,1) forwards;filter:drop-shadow(0 10px 28px rgba(0,0,0,.36)) drop-shadow(0 0 20px rgba(55,212,223,.10))}
+.splash-logo{margin-top:0!important;letter-spacing:.31em!important;padding-left:.31em;font-weight:590!important}
+.splash-network-intelligence{margin:7px 0 0;color:#d7b45c;font-size:8px;font-weight:720;letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;opacity:0;animation:studioIn .5s .82s forwards}
+.signal-line{margin-top:12px!important}
+
+.settings-brand-lockup,.about-brand-lockup,.trust-brand-lockup{display:flex;align-items:center;min-width:0}
+.settings-brand-lockup{gap:10px}
+.velnox-brand-mark--settings{width:31px;height:31px;flex:0 0 31px;filter:drop-shadow(0 0 9px rgba(83,218,226,.08))}
+.settings-brand-lockup h3{letter-spacing:.20em!important;font-weight:650!important}
+.about-brand-lockup{gap:8px;margin-bottom:1px}
+.velnox-brand-mark--about{width:29px;height:29px;flex:0 0 29px}
+.about-brand-lockup b{letter-spacing:.22em!important;font-weight:690!important}
+
+.trust-topbar>.trust-brand-lockup{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:8px!important;text-align:left!important}
+.velnox-brand-mark--trust{width:27px;height:27px;flex:0 0 27px}
+.trust-brand-lockup>div{display:flex;flex-direction:column;min-width:0;gap:1px}
+.trust-topbar .trust-brand-lockup strong{letter-spacing:.22em!important}
+.trust-topbar .trust-brand-lockup small{letter-spacing:.13em!important}
+.trust-about-hero{text-align:center}
+.velnox-brand-mark--trust-about{width:74px;height:74px;margin:0 auto 12px;filter:drop-shadow(0 10px 24px rgba(0,0,0,.28))}
+.trust-about-hero>span{display:block}
+
+/* The mark is premium through restraint: no perpetual logo spin or pulse. */
+.velnox-brand-mark{transition:filter .22s ease,transform .22s var(--px-ease)}
+@media(hover:hover){.brand-button:hover .velnox-brand-mark--topbar{filter:drop-shadow(0 0 11px rgba(91,227,235,.18)) drop-shadow(0 0 8px rgba(216,183,98,.08))}}
+.brand-button:active .velnox-brand-mark--topbar{transform:scale(.965)}
+
+@media(max-width:370px){
+  .velnox-brand-mark--topbar{width:24px;height:24px;flex-basis:24px}
+  .brand-button{gap:7px!important;font-size:13px!important;letter-spacing:.22em!important}
+  .velnox-brand-mark--splash{width:104px;height:104px}
+}
+@media(max-width:350px){.brand-button>span:last-child{display:none}.brand-button{padding-right:0!important}}
+html[data-velnox-motion="reduced"] .velnox-brand-mark{transition:none!important}
+@media(prefers-reduced-motion:reduce){.velnox-brand-mark{transition:none!important}}

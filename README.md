@@ -1,9 +1,22 @@
-# Velnox V1.7.1 — Premium Experience
+# Velnox V1.8.0 — Brand Identity
 
-Velnox is a browser-based Network Intelligence product by Benedict Interactive.
+Velnox is a browser-based Network Intelligence product by **Benedict Interactive**.
 
-V1.7.1 is a presentation and interaction hardening release built on the already-deployed V1.6.0 Trust & Product Maturity layer and the V1.5.2 accuracy/measurement core.
+V1.8.0 introduces the production Velnox emblem: a geometric cyan **V** integrated with restrained gold turtle-shell geometry. The V remains the primary technical mark while the shell language connects the identity to the Velnox turtle mascot without turning the product logo into a cartoon.
 
+## V1.8.0 brand system
+
+- New vector master mark at `assets/velnox-mark.svg`.
+- New favicon and Apple touch icon.
+- New PWA install icons at 192 and 512 px.
+- Dedicated maskable 192/512 icons for launchers that apply their own icon shape.
+- New logo treatment on Splash, top navigation, Settings/About and Trust screens.
+- No perpetual logo animation; the mark remains restrained and technical.
+- The V1.7.1 benchmark hero polish remains intact.
+
+## Regression boundary
+
+V1.8.0 does **not** modify `app.js`, `styles.css`, measurement sequencing, Velnox Score, Real-World Use logic, benchmark mathematics, history behaviour or benchmark data/workflow. Brand work is isolated to presentation, identity assets, manifest metadata and app-shell caching.
 
 ## V1.7.1 benchmark hero polish
 

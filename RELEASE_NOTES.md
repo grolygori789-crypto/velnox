@@ -1,3 +1,13 @@
+# Velnox V1.8.0 — Brand Identity
+
+- Introduces the production Velnox emblem: cyan V + abstract gold turtle-shell geometry.
+- Replaces the generic V treatment on Splash and top navigation with the new vector mark.
+- Adds coordinated brand treatment to Settings/About and Trust screens.
+- Rebuilds favicon, Apple touch icon and installed-PWA launcher icons from the same master geometry.
+- Adds dedicated maskable launcher icons instead of reusing one icon for both `any` and `maskable` purposes.
+- Bumps the app-shell cache to `velnox-app-v1.8.0` and precaches all identity assets.
+- Preserves V1.7.1 benchmark hero polish and does not modify measurement/scoring/benchmark core.
+
 # Velnox V1.7.1 — Benchmark Hero Polish
 
 - Fixes the benchmark-ring typography regression where the inherited `.benchmark-top span` rule could force the `TOP x%` value down to helper-text size on mobile.

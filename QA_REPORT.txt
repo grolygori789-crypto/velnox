@@ -1,48 +1,93 @@
-VELNOX V1.7.1 — BENCHMARK HERO POLISH
+VELNOX V1.8.0 — BRAND IDENTITY
 QA REPORT
 Date: 2026-08-24
 
-BASELINE
-- Live main verified before implementation.
-- Baseline commit: 223e9fd0f39cce4603bb2196e82b157e39f3756b
-- Baseline message: Velnox V1.7.0 premium experience
-- Local V1.7.0 package blobs matched deployed GitHub blobs for premium.css, premium.js, index.html and sw.js before modification.
+SOURCE BASELINE
+- Live repository inspected before implementation.
+- main HEAD at final baseline verification: 7b195b9f834a734046b603e7ce48148a4167333b — Velnox V1.7.1 benchmark hero polish.
+- Runtime baseline is the deployed V1.7.1 benchmark hero polish; repository cleanup is already included in its ancestry.
+- Local baseline files used for index.html, premium.css, premium.js, trust.js and sw.js were verified against the live Git blob SHAs before editing.
 
-REGRESSION BOUNDARY
-PASS — app.js not present in patch package.
-PASS — styles.css not present in patch package.
-PASS — manifest.webmanifest not present in patch package.
-PASS — benchmarks/, scripts/ and .github/workflows/ not present in patch package.
-PASS — measurement sequence, fallback measurement, Velnox Score, Real-World Use classifier, confidence logic, country detection, benchmark percentile/index mathematics and local history are outside the edit surface.
+CHANGE BOUNDARY
+V1.8.0 changes product identity only:
+- New vector master mark: assets/velnox-mark.svg
+- New favicon / Apple touch / PWA launcher / maskable icons
+- Brand treatment on Splash, top navigation, Settings/About and Trust screens
+- Manifest icon declarations
+- App-shell cache version and identity-asset precache
+- Visible/product version metadata
 
-INTENTIONAL CHANGES
-- premium.css: benchmark ring hierarchy, spacing, one-pass gold trace, responsive and Reduced Motion rules.
-- premium.js: version alignment only; benchmark transformation logic remains unchanged.
-- trust.js: version alignment only.
-- index.html: visible About version only.
-- sw.js: app-shell cache version only.
-- README.md / RELEASE_NOTES.md / QA_REPORT.txt: release documentation.
+V1.8.0 intentionally does NOT ship or modify:
+- app.js
+- styles.css
+- benchmark JSON data
+- benchmark generator/workflow
+- measurement sequence or fallback measurement
+- Velnox Score mathematics
+- Real-World Use classifier
+- confidence logic
+- country detection
+- Country / Worldwide percentile/index mathematics
+- history storage contract
 
-STATIC GATES
-- node --check premium.js: PASS
-- node --check trust.js: PASS
-- node --check sw.js: PASS
-- production index duplicate-ID check: PASS
-- premium CSS brace sanity: PASS
-- Service Worker benchmark cache remains velnox-benchmarks-v1: PASS
-- benchmark request path still uses cache: no-store: PASS
-- protected-core/package boundary: PASS
+STATIC ACCEPTANCE — PASS
+- premium.js: node --check PASS
+- trust.js: node --check PASS
+- sw.js: node --check PASS
+- manifest.webmanifest JSON validation PASS
+- premium.css parsed with tinycss2: 0 parse errors
+- index.html duplicate IDs: NONE
+- Brand SVG XML parse: PASS
+- Brand SVG self-contained: PASS (no embedded raster/external image dependency)
+- favicon-32.png dimensions: 32x32 PASS
+- apple-touch-icon-180.png dimensions: 180x180 PASS
+- icon-192.png dimensions: 192x192 PASS
+- icon-512.png dimensions: 512x512 PASS
+- icon-maskable-192.png dimensions: 192x192 PASS
+- icon-maskable-512.png dimensions: 512x512 PASS
+- Manifest separates `any` and `maskable` icon purposes PASS
+- Service Worker app cache: velnox-app-v1.8.0 PASS
+- Benchmark cache remains velnox-benchmarks-v1 PASS
+- Benchmark fetch remains network-first with cache:no-store PASS
+- All new identity assets are precached PASS
+- Patch package excludes app.js/styles.css/benchmarks PASS
 
-DETERMINISTIC CHROMIUM ACCEPTANCE
-- Benchmark hero transformation: PASS
-- `TOP 27%` rendered as dominant KPI without changing the source rank: PASS
-- computed rank value font >= 39px at all supported two-column mobile widths: PASS
-- composite `73 / 100` remains secondary: PASS
-- one-pass gold trace present: PASS
-- gold trace does not use infinite iteration: PASS
-- Reduced Motion disables reveal animation: PASS
-- Country/Global rerender re-applies presentation without changing values: PASS
-- no horizontal overflow at 320 / 350 / 360 / 390 / 412 / 768 CSS px: PASS
+DETERMINISTIC CHROMIUM REGRESSION — PASS
+Existing V1.7 premium behavior was rerun after the V1.8 version/identity changes:
+- Premium runtime version 1.8.0 PASS
+- Test progress UI PASS
+- Ping -> Download -> Upload -> Analysis stage presentation PASS
+- `Usually about 1 minute` guidance PASS
+- Country benchmark hero transformation PASS
+- TOP percentile / benchmark score preservation PASS
+- Metric card enhancement PASS
+- Thai progress/estimated copy PASS
+- Horizontal overflow in the benchmark harness: NONE
 
-REAL-DEVICE CHECK AFTER DEPLOYMENT
-Verify on the target Android device: Chrome result rendering, installed-PWA cache refresh, Country/Global switch, Reduced Motion, and in-app browser presentation. No claim of universal hardware/browser validation is made before that pass.
+DETERMINISTIC CHROMIUM BRAND ACCEPTANCE — PASS
+Brand lockups were exercised at 320, 350, 360, 390, 412 and 768 CSS px:
+- Brand SVG decoded successfully PASS
+- Main topbar overflow: NONE
+- Trust topbar overflow: NONE
+- Document horizontal overflow: NONE
+- Trust brand lockup remains horizontal PASS
+- At <=350 px the VELNOX wordmark hides while the emblem remains, preserving control space on narrow installed-PWA layouts PASS
+- At >=360 px emblem + VELNOX wordmark display together PASS
+
+DESIGN CONTRACT
+- Primary identity remains a technical V mark.
+- Turtle-shell geometry is abstract rather than cartoon branding.
+- Cyan remains the primary technical accent; gold is restrained to shell/identity detailing.
+- No perpetual logo rotation/pulse was introduced.
+- Existing turtle mascot remains the product character and is not replaced by the logo.
+
+REAL-DEVICE ACCEPTANCE STILL REQUIRED AFTER DEPLOYMENT
+1. Confirm Android launcher refreshes the installed PWA icon after the Service Worker/manifest update.
+2. Confirm Chrome browser tab/favicon refresh after cache replacement.
+3. Confirm Splash and topbar visual scale on the target phone.
+4. Confirm installed-PWA icon appearance under the device launcher mask.
+5. Confirm Settings/About and Trust topbar alignment on the target phone.
+
+QA CONCLUSION
+PASS for packaging and deployment candidate status.
+No measurement/scoring/benchmark core regression was introduced by the V1.8.0 brand-identity patch boundary.

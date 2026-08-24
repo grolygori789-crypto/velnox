@@ -10,8 +10,9 @@
   <meta name="apple-mobile-web-app-title" content="Velnox">
   <title>Velnox — Network Intelligence</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon-192.png">
-  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="icon" href="assets/velnox-mark.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon-180.png" sizes="180x180">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="trust.css">
   <link rel="stylesheet" href="premium.css">
@@ -22,10 +23,9 @@
     <section id="splash" class="splash" aria-label="Velnox">
       <div class="splash-grid"></div>
       <div class="splash-core">
-        <div class="boot-mark" aria-hidden="true">
-          <span class="boot-v left"></span><span class="boot-v right"></span>
-        </div>
+        <img class="velnox-brand-mark velnox-brand-mark--splash" src="assets/velnox-mark.svg" alt="" aria-hidden="true">
         <h1 class="splash-logo">VELNOX</h1>
+        <p class="splash-network-intelligence">NETWORK INTELLIGENCE</p>
         <div class="signal-line"><span></span></div>
         <p class="studio">A BENEDICT INTERACTIVE PRODUCT</p>
       </div>
@@ -35,7 +35,7 @@
     <main id="mainShell" class="main-shell hidden">
       <header class="topbar">
         <button class="brand-button" id="homeBtn" aria-label="Home">
-          <span class="mini-v" aria-hidden="true"></span>
+          <img class="velnox-brand-mark velnox-brand-mark--topbar" src="assets/velnox-mark.svg" alt="" aria-hidden="true">
           <span>VELNOX</span>
         </button>
 
@@ -290,7 +290,7 @@
     <div id="sheetBackdrop" class="sheet-backdrop"></div>
     <aside id="settingsSheet" class="sheet" aria-label="Settings">
       <div class="sheet-handle"></div>
-      <div class="sheet-head"><div><span class="section-kicker" data-i18n="settings">SETTINGS</span><h3>VELNOX</h3></div><button id="closeSettings">×</button></div>
+      <div class="sheet-head"><div class="settings-brand-lockup"><img class="velnox-brand-mark velnox-brand-mark--settings" src="assets/velnox-mark.svg" alt="" aria-hidden="true"><div><span class="section-kicker" data-i18n="settings">SETTINGS</span><h3>VELNOX</h3></div></div><button id="closeSettings">×</button></div>
 
       <div class="setting-row">
         <div><b data-i18n="language">Language</b><small data-i18n="languageHelp">Choose interface language</small></div>
@@ -315,8 +315,8 @@
       <button id="clearHistoryBtn" class="danger-row" data-i18n="clearHistory">Clear test history</button>
 
       <div class="about-box">
-        <b>VELNOX</b>
-        <span>Network Intelligence • v1.7.1</span>
+        <div class="about-brand-lockup"><img class="velnox-brand-mark velnox-brand-mark--about" src="assets/velnox-mark.svg" alt="" aria-hidden="true"><b>VELNOX</b></div>
+        <span>Network Intelligence • v1.8.0</span>
         <span>Developed by Benedict Interactive</span>
         <small>Browser measurements are estimates and can vary with server path, device load and network conditions. Test traffic is sent to Cloudflare speed-test endpoints; Velnox stores history only on this device when enabled.</small>
       </div>

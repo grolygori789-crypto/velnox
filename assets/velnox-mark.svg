@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Velnox emblem</title>
+  <desc id="desc">A cyan V integrated with an abstract gold turtle-shell geometry.</desc>
+  <defs>
+    <linearGradient id="cyan" x1="0" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#A9FBFF"/>
+      <stop offset="0.32" stop-color="#4FE6EF"/>
+      <stop offset="0.72" stop-color="#14BFD0"/>
+      <stop offset="1" stop-color="#08798C"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF0A8"/>
+      <stop offset="0.42" stop-color="#F2CD69"/>
+      <stop offset="1" stop-color="#B77A20"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F8D97C"/>
+      <stop offset="0.5" stop-color="#C79637"/>
+      <stop offset="1" stop-color="#6A4314"/>
+    </linearGradient>
+    <filter id="cyanGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="goldGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- restrained orbit: stability / continuity -->
+  <circle cx="256" cy="238" r="176" fill="none" stroke="url(#gold)" stroke-width="7" stroke-linecap="round" stroke-dasharray="240 74 212 80" transform="rotate(-88 256 238)" opacity="0.88"/>
+
+  <!-- abstract turtle-shell crown -->
+  <g fill="none" stroke="url(#gold)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" filter="url(#goldGlow)">
+    <path d="M174 116 214 78h84l40 38-19 62-63 31-63-31Z" opacity="0.96"/>
+    <path d="M214 78 256 116 298 78"/>
+    <path d="M174 116 222 132 256 116 290 132 338 116"/>
+    <path d="M222 132 233 179M290 132 279 179M233 179h46"/>
+  </g>
+
+  <!-- V: speed / precision, with gold edge tying the mascot DNA to the mark -->
+  <path d="M122 126 183 150 256 332 329 150 390 126 256 432Z" fill="#06151B" stroke="url(#edge)" stroke-width="10" stroke-linejoin="miter" opacity="0.98"/>
+  <path d="M136 138 180 156 256 347 332 156 376 138 256 409Z" fill="url(#cyan)" stroke="#63EEF4" stroke-opacity="0.50" stroke-width="2.5" stroke-linejoin="miter" filter="url(#cyanGlow)"/>
+  <path d="M180 156 256 347 332 156" fill="none" stroke="#D9FCFF" stroke-opacity="0.28" stroke-width="3"/>
+  <path d="M256 347v62" stroke="#023E49" stroke-width="3" opacity="0.85"/>
+
+  <!-- tiny top highlight kept visible at favicon scale -->
+  <path d="M219 82h74" stroke="#FFF3BD" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+</svg>
