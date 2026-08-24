@@ -1,3 +1,17 @@
+# Velnox V1.9.0 — Share & Studio Identity
+
+- Adds a premium `Share Result` mode for the current result screen.
+- Generates the result card locally at 1080×1350 as PNG using the Velnox V1.8 emblem and branded dark/cyan/gold visual system.
+- Lets users choose whether to include exact metrics, Country standing and Worldwide standing.
+- Reuses the existing Country/Global result renderer to capture standings instead of duplicating benchmark calculations.
+- Uses Web Share file sharing where supported and falls back to `Download Image` where direct image sharing is unavailable.
+- Adds Share actions to saved History results. Historical shares intentionally omit benchmark standing because Velnox history does not store the original benchmark standing and Velnox will not fabricate/recalculate a historical rank against a newer Standard Base.
+- Share cards exclude raw IP, saved-history content beyond the selected measurement, detailed diagnostics and precise user location.
+- Adds `Bangkok, Thailand` as the Benedict Interactive studio location in About/static studio identity and share-card footer.
+- Updates in-app/repository legal notices to legal version 1.1.0 for local Share Result generation and user-initiated file handoff.
+- Bumps only the app-shell cache to `velnox-app-v1.9.0` and precaches `share.css` / `share.js`; benchmark cache and network-first/no-store benchmark policy remain unchanged.
+- `app.js`, `styles.css`, measurement, scoring, Real-World classification, country detection, benchmark data/mathematics and history storage are unchanged.
+
 # Velnox V1.8.0 — Brand Identity
 
 - Introduces the production Velnox emblem: cyan V + abstract gold turtle-shell geometry.

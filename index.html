@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="trust.css">
   <link rel="stylesheet" href="premium.css">
+  <link rel="stylesheet" href="share.css">
 </head>
 <body>
   <div id="app" class="app">
@@ -270,6 +271,7 @@
             <ol id="solutionsList" class="solutions-list solutions-list-v12"></ol>
           </section>
 
+          <button id="shareResultBtn" class="wide-secondary-v12 vshare-launch"><span>SHARE RESULT</span><i aria-hidden="true">↗</i></button>
           <button id="technicalBtn" class="wide-secondary-v12"><span data-i18n="technicalDetails">TECHNICAL DETAILS</span><i>≡</i></button>
           <button id="retestBtn" class="wide-primary-v12"><span data-i18n="testAgain">TEST AGAIN</span><i>↻</i></button>
         </div>
@@ -316,8 +318,9 @@
 
       <div class="about-box">
         <div class="about-brand-lockup"><img class="velnox-brand-mark velnox-brand-mark--about" src="assets/velnox-mark.svg" alt="" aria-hidden="true"><b>VELNOX</b></div>
-        <span>Network Intelligence • v1.8.0</span>
+        <span>Network Intelligence • v1.9.0</span>
         <span>Developed by Benedict Interactive</span>
+        <span>Bangkok, Thailand</span>
         <small>Browser measurements are estimates and can vary with server path, device load and network conditions. Test traffic is sent to Cloudflare speed-test endpoints; Velnox stores history only on this device when enabled.</small>
       </div>
     </aside>
@@ -336,6 +339,7 @@
   <script src="app.js" type="module"></script>
   <script src="trust.js" defer></script>
   <script src="premium.js" defer></script>
+  <script src="share.js" defer></script>
   <script>
     (() => {
       const exitBtn = document.getElementById("exitBtn");

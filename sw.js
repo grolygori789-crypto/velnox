@@ -1,4 +1,4 @@
-const APP_CACHE = "velnox-app-v1.8.0";
+const APP_CACHE = "velnox-app-v1.9.0";
 const BENCH_CACHE = "velnox-benchmarks-v1";
 const CORE = [
   "./",
@@ -6,9 +6,11 @@ const CORE = [
   "./styles.css",
   "./trust.css",
   "./premium.css",
+  "./share.css",
   "./app.js",
   "./trust.js",
   "./premium.js",
+  "./share.js",
   "./manifest.webmanifest",
   "./assets/velnox-mark.svg",
   "./assets/favicon-32.png",

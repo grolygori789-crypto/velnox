@@ -1,93 +1,120 @@
-VELNOX V1.8.0 — BRAND IDENTITY
+VELNOX V1.9.0 — SHARE & STUDIO IDENTITY
 QA REPORT
 Date: 2026-08-24
 
 SOURCE BASELINE
-- Live repository inspected before implementation.
-- main HEAD at final baseline verification: 7b195b9f834a734046b603e7ce48148a4167333b — Velnox V1.7.1 benchmark hero polish.
-- Runtime baseline is the deployed V1.7.1 benchmark hero polish; repository cleanup is already included in its ancestry.
-- Local baseline files used for index.html, premium.css, premium.js, trust.js and sw.js were verified against the live Git blob SHAs before editing.
+- Live GitHub main was inspected before implementation and again before packaging.
+- Final verified baseline HEAD: 7c8e8298ccc04210c083e015245711cb1149def7 — Velnox V1.8.0 brand identity.
+- V1.8.0 already contains the V1.7.1 benchmark hero polish and production Velnox identity assets.
 
-CHANGE BOUNDARY
-V1.8.0 changes product identity only:
-- New vector master mark: assets/velnox-mark.svg
-- New favicon / Apple touch / PWA launcher / maskable icons
-- Brand treatment on Splash, top navigation, Settings/About and Trust screens
-- Manifest icon declarations
-- App-shell cache version and identity-asset precache
-- Visible/product version metadata
+RELEASE SCOPE
+V1.9.0 adds two isolated product features:
+1. Share Result
+   - Current result: locally generated branded PNG (1080x1350).
+   - Optional exact metrics, Country standing and Worldwide standing.
+   - Native device/browser file Share where supported.
+   - Download Image fallback where direct file sharing is not supported.
+   - Share actions on saved History results.
+   - Historical result cards deliberately do not reconstruct Country/Worldwide standing because History does not store the benchmark standing shown at the original measurement time.
+2. Benedict Interactive studio identity
+   - Studio: Benedict Interactive.
+   - Studio location: Bangkok, Thailand.
+   - Location is presented as studio identity, not as a registered-office/corporate-registration claim.
 
-V1.8.0 intentionally does NOT ship or modify:
+PRIVACY / DATA CONTRACT
+- Result-card rendering is local Canvas rendering in the browser.
+- share.js contains no fetch/XHR/sendBeacon/WebSocket/EventSource transport.
+- No raw IP is placed on the card.
+- No saved-history dump is placed on the card.
+- No detailed diagnostics or precise user location is placed on the card.
+- Country/Worldwide and exact metrics are user-controlled share-card options.
+- Native Share hands the generated PNG to the browser/OS share interface only after the user chooses Share.
+- Legal notices updated coherently to legal version 1.1.0.
+
+REGRESSION BOUNDARY
+V1.9.0 package intentionally excludes and does not modify:
 - app.js
 - styles.css
-- benchmark JSON data
+- manifest.webmanifest
+- benchmark JSON files
 - benchmark generator/workflow
 - measurement sequence or fallback measurement
 - Velnox Score mathematics
 - Real-World Use classifier
 - confidence logic
 - country detection
-- Country / Worldwide percentile/index mathematics
-- history storage contract
+- history storage format/limit
+- Country/Worldwide percentile/index mathematics
+
+Presentation/feature changes are isolated to share.js, share.css, index integration, trust/legal copy, version metadata and Service Worker app-shell precache.
 
 STATIC ACCEPTANCE — PASS
 - premium.js: node --check PASS
 - trust.js: node --check PASS
+- share.js: node --check PASS
 - sw.js: node --check PASS
-- manifest.webmanifest JSON validation PASS
-- premium.css parsed with tinycss2: 0 parse errors
+- share.css tinycss2 parse: 0 errors
 - index.html duplicate IDs: NONE
-- Brand SVG XML parse: PASS
-- Brand SVG self-contained: PASS (no embedded raster/external image dependency)
-- favicon-32.png dimensions: 32x32 PASS
-- apple-touch-icon-180.png dimensions: 180x180 PASS
-- icon-192.png dimensions: 192x192 PASS
-- icon-512.png dimensions: 512x512 PASS
-- icon-maskable-192.png dimensions: 192x192 PASS
-- icon-maskable-512.png dimensions: 512x512 PASS
-- Manifest separates `any` and `maskable` icon purposes PASS
-- Service Worker app cache: velnox-app-v1.8.0 PASS
+- share.css linked: PASS
+- share.js linked: PASS
+- Share Result control present: PASS
+- V1.9.0 version coherence (index / premium / trust / share / SW): PASS
+- Legal version 1.1.0 coherence: PASS
+- Benedict Interactive / Bangkok, Thailand identity coherence: PASS
+- Service Worker app cache: velnox-app-v1.9.0 PASS
 - Benchmark cache remains velnox-benchmarks-v1 PASS
-- Benchmark fetch remains network-first with cache:no-store PASS
-- All new identity assets are precached PASS
-- Patch package excludes app.js/styles.css/benchmarks PASS
+- Benchmark network-first + cache:no-store policy preserved PASS
+- share.js contains no application/network upload transport PASS
+- Package excludes app.js/styles.css/manifest/benchmarks/workflow PASS
+- Targeted secret scan: PASS
+- Static gate result: 49 / 49 PASS
 
-DETERMINISTIC CHROMIUM REGRESSION — PASS
-Existing V1.7 premium behavior was rerun after the V1.8 version/identity changes:
-- Premium runtime version 1.8.0 PASS
-- Test progress UI PASS
-- Ping -> Download -> Upload -> Analysis stage presentation PASS
-- `Usually about 1 minute` guidance PASS
-- Country benchmark hero transformation PASS
-- TOP percentile / benchmark score preservation PASS
-- Metric card enhancement PASS
-- Thai progress/estimated copy PASS
-- Horizontal overflow in the benchmark harness: NONE
+DETERMINISTIC CHROMIUM SHARE ACCEPTANCE — PASS
+Fallback-browser path:
+- Share runtime version 1.9.0 PASS
+- History Share action injected PASS
+- Current Share modal opens PASS
+- Exact metrics option default ON PASS
+- Country option enabled/ON when current rank exists PASS
+- Worldwide option enabled/ON when current rank exists PASS
+- PNG preview generated as Blob PASS
+- Share card canvas dimensions 1080x1350 PASS
+- Existing Country/Global compare scope restored after rank capture PASS
+- Browser without file Share presents Download Image fallback PASS
+- Historical Country/Worldwide controls disabled PASS
+- Historical share copy explains that benchmark standing was not stored PASS
+- TH language mutation updates Share Result copy PASS
+- No horizontal document overflow at 320 / 350 / 360 / 390 / 412 / 768 CSS px PASS
 
-DETERMINISTIC CHROMIUM BRAND ACCEPTANCE — PASS
-Brand lockups were exercised at 320, 350, 360, 390, 412 and 768 CSS px:
-- Brand SVG decoded successfully PASS
-- Main topbar overflow: NONE
-- Trust topbar overflow: NONE
-- Document horizontal overflow: NONE
-- Trust brand lockup remains horizontal PASS
-- At <=350 px the VELNOX wordmark hides while the emblem remains, preserving control space on narrow installed-PWA layouts PASS
-- At >=360 px emblem + VELNOX wordmark display together PASS
+Simulated native-file-share path:
+- Primary action becomes SHARE RESULT PASS
+- Download Image remains a secondary action PASS
+- navigator.share receives one image/png File PASS
+- Share payload title: Velnox — Network Intelligence PASS
+- Share text includes Velnox score and app URL PASS
 
-DESIGN CONTRACT
-- Primary identity remains a technical V mark.
-- Turtle-shell geometry is abstract rather than cartoon branding.
-- Cyan remains the primary technical accent; gold is restrained to shell/identity detailing.
-- No perpetual logo rotation/pulse was introduced.
-- Existing turtle mascot remains the product character and is not replaced by the logo.
+SHARE CARD VISUAL SANITY — PASS
+- Generated deterministic card reviewed at 1080x1350.
+- Primary hierarchy: Velnox identity -> tier/score -> metrics -> optional benchmark -> studio/footer.
+- Long 'Measured with Velnox Network Intelligence' copy wraps inside the score panel; no clipping/overflow.
+- Country and Worldwide rank cards remain visually separated from exact metrics.
+- Footer includes Benedict Interactive · Bangkok, Thailand.
+- Dark/cyan/gold visual language remains consistent with V1.8 identity.
+- Production uses the existing same-origin assets/velnox-mark.svg; the deterministic about:blank harness exercises the built-in vector fallback mark because it has no normal application origin.
+
+INTEGRITY DECISIONS
+- Current benchmark standing is read through the existing Country/Global comparison UI. V1.9 does not duplicate benchmark mathematics.
+- Historical benchmark standing is not recalculated against a newer Standard Base; this prevents misleading historical rank claims.
+- Current result capture waits for the result-score reveal to settle before taking the share snapshot, preventing partial animated scores in exported cards.
 
 REAL-DEVICE ACCEPTANCE STILL REQUIRED AFTER DEPLOYMENT
-1. Confirm Android launcher refreshes the installed PWA icon after the Service Worker/manifest update.
-2. Confirm Chrome browser tab/favicon refresh after cache replacement.
-3. Confirm Splash and topbar visual scale on the target phone.
-4. Confirm installed-PWA icon appearance under the device launcher mask.
-5. Confirm Settings/About and Trust topbar alignment on the target phone.
+1. Android Chrome / installed PWA: confirm native Share Sheet accepts the PNG file.
+2. Confirm sharing to at least one installed target app (e.g. LINE or another normal Android share target) returns cleanly to Velnox.
+3. HelloTalk in-app browser: confirm Download Image fallback behaviour if file sharing is unavailable there.
+4. Confirm actual production share card uses the V1.8 Velnox emblem from assets/velnox-mark.svg.
+5. Confirm TH/EN Share modal text and 1080x1350 card appearance on the target phone.
+6. Confirm Country/Global tab returns to the user's original tab after Share preparation.
 
 QA CONCLUSION
-PASS for packaging and deployment candidate status.
-No measurement/scoring/benchmark core regression was introduced by the V1.8.0 brand-identity patch boundary.
+PASS for packaging and deployment-candidate status.
+The automated/static acceptance criteria available in this environment pass. Physical-device native Share Sheet and embedded-WebView file handoff remain post-deployment acceptance items and are not claimed as hardware-validated here.
