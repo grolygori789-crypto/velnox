@@ -1,68 +1,96 @@
-VELNOX V1.5.2 DEFECT HARDENING QA REPORT
-Generated: 2026-08-19
-Baseline: GitHub main commit e0fd0709b15ca9a22657b04a7059bbaf808c4f30 (Velnox V1.5.1 exit control)
+VELNOX V1.6.0 — TRUST & PRODUCT MATURITY
+QA REPORT
+Date: 2026-08-24
 
-SCOPE
-This release addresses five owner-observed defects plus one directly related Exit visibility defect discovered during QA:
-1) Exit during Test did not cancel the active measurement lifecycle.
-2) Real-World Use ratings could be overly pessimistic because AIM classifications include packet-loss semantics while Velnox intentionally omits packet-loss measurement.
-3) Live Diagnostic visual stage jumped backward with interleaved latency probes.
-4) Sound Effects could be silent/unreliable on Android/PWA AudioContext lifecycle.
-5) Secondary typography/contrast was too subdued for comfortable mobile reading.
-6) HTML hidden state for Exit could be overridden by the icon-button display rule in an ordinary browser tab.
+SOURCE BASELINE
+- Live repository checked before implementation and re-checked before packaging.
+- main HEAD: 06499f1ef138f85613e00c65f81bbd114edc21e9
+- Commit: chore: refresh Velnox Standard Base
+- Parent runtime: 08b16e08ef6f65bd9b15b48938e00ffe3f188b2f — Velnox V1.5.2 defect hardening
+- The current HEAD only refreshes benchmark data above that runtime parent.
 
-STATIC / REGRESSION GATE
-PASS  app.js JavaScript syntax (node --check)
-PASS  sw.js JavaScript syntax (node --check)
-PASS  No duplicate HTML IDs (82 IDs)
-PASS  Direct app/Exit element-ID linkage resolves to existing HTML elements
-PASS  TH/EN translation-key parity (175 keys each)
-PASS  Every data-i18n key in index.html exists in both TH and EN
-PASS  No Cloudflare Radar token, Bearer credential or Authorization secret added
-PASS  V1.5.1 -> V1.5.2 measurement plan/config block is unchanged byte-for-byte
-PASS  Packet-loss measurement remains intentionally absent
-PASS  Velnox Score calculation block is unchanged
-PASS  Benchmark histogram percentile and benchmark-index calculation blocks are unchanged
-PASS  styles.css changes are append-only readability/visibility overrides over the V1.5.1 stylesheet
-PASS  index.html changes are limited to V1.5.2 version text and Exit cancellation bridge/timing
-PASS  Service Worker change is limited to APP_CACHE v1.5.1 -> v1.5.2
-PASS  BENCH_CACHE remains velnox-benchmarks-v1
-PASS  Benchmark data files and generator/workflow are not modified by this patch
+CHANGE BOUNDARY
+V1.6 intentionally does NOT replace or modify:
+- app.js measurement/scoring/runtime logic
+- styles.css locked Velnox core visual system
+- manifest.webmanifest
+- benchmarks/
+- benchmark generator/workflow
+- Velnox Score mathematics
+- V1.5.2 Real-World classifier
+- accuracy-first interleaved measurement sequence
 
-LOGIC UNIT QA (Node VM)
-PASS  Real-World Use classifier: observed high-bandwidth / moderate-jitter profile 308/268 Mbps, 17 ms ping, 16.5 ms jitter, 80 ms loaded latency -> Good / Fair / Good / Fair / Good / Excellent
-PASS  AIM 'bad' input cannot override the measured-metrics Velnox use-case ratings
-PASS  Strong profile -> all Excellent
-PASS  Weak profile -> all Limited
-PASS  Visual stage remains monotonic when raw events interleave latency/download/upload
-PASS  Cancellation pauses active engine, aborts fallback controller, settles cancel race, clears running state and invalidates old run serial
-PASS  Cancel race rejects with dedicated VELNOX_CANCELLED status
-PASS  Audio lifecycle waits for resume before scheduling tones when resume succeeds
-PASS  Start / Finish / Gold medal tone scheduling produces expected oscillator lifecycle
-PASS  Exit bridge exports cancelActiveTest() and isTestRunning() to index.html
+Runtime changes are isolated to:
+- index.html: trust.css/trust.js linkage, version string, PWA fullscreen display-mode Exit detection
+- trust.js: settings/trust/support/help/legal/about layer
+- trust.css: V1.6 trust-layer visual system + Reduced Motion controls
+- sw.js: app cache v1.6.0 + trust assets in app shell
 
-DETERMINISTIC CHROMIUM RUNTIME QA
-Browser: Chromium 144 headless via DevTools Runtime injection.
-Reason for injection harness: the environment's enterprise policy blocks localhost, file:// and data: navigation. DOM, CSS, events and JavaScript still execute in the real Chromium engine on about:blank; only the network transport is replaced by a deterministic mock for repeatable defect validation.
+STATIC ACCEPTANCE — PASS
+- trust.js: node --check PASS
+- sw.js: node --check PASS
+- index.html parsed without duplicate IDs PASS
+- trust.css linked exactly once PASS
+- trust.js linked exactly once PASS
+- About version V1.6.0 PASS
+- Exit detection includes display-mode: fullscreen PASS
+- index.html regression diff PASS: after reversing the four intended edits, file is byte-identical to the V1.5.2 baseline index
+- Service Worker app cache = velnox-app-v1.6.0 PASS
+- Service Worker CORE includes trust.css + trust.js PASS
+- Benchmark cache remains velnox-benchmarks-v1 PASS
+- Benchmark fetch remains network-first / cache:no-store PASS
+- No benchmarks directory in patch package PASS (prevents accidental overwrite of freshly synced data)
+- No app.js/styles.css in patch package PASS (prevents accidental measurement/UI regression)
+- Secret-pattern scan PASS; no Cloudflare token/API key/private key embedded
+- Legal repository documents present PASS
 
-PASS  Exit is hidden in ordinary browser mode (hidden=true and computed display=none)
-PASS  About UI reports v1.5.2
-PASS  Readability overrides are active in computed CSS
-PASS  Sound toggle enables and persists without browser runtime error
-PASS  Raw measurement events remain interleaved
-PASS  Visible stage never moves backward and resolves Ping -> Download -> Upload -> Analysis
-PASS  Result UI renders measured-metrics use-case classes Good / Fair / Good / Fair / Good / Excellent for the defect-reproduction profile
-PASS  Second test is actively running before Exit acceptance test
-PASS  Exit click cancels active lifecycle, pauses mock Cloudflare engine, clears running state, returns Home and attempts platform close
-PASS  Cancelled run cannot publish a stale result after its original finish time
-PASS  Browser runtime produced no captured JavaScript error/unhandled rejection in the acceptance flow
-PASS  Visual sanity screenshots inspected for Home, Result and Real-World Use readability
+DETERMINISTIC CHROMIUM ACCEPTANCE — PASS
+The environment blocks localhost/file/data navigation by administrator policy, so the V1.6 DOM layer was tested in Chromium through an about:blank deterministic harness with the production index DOM and V1.6 trust assets injected directly.
 
-IMPORTANT ACCURACY / PRODUCT INTEGRITY
-- The accuracy-first Cloudflare measurement sequence is unchanged. Interleaved latency probes remain part of measurement; only the visible stage presentation is monotonic.
-- Packet loss is still not measured, displayed or inferred.
-- Real-World Use is a Velnox heuristic interpretation, not a guarantee of application performance. It now avoids treating missing packet-loss measurement as evidence of packet loss.
-- Country/Worldwide Standard Base, benchmark percentile math, source provenance and no-fabrication behavior are unchanged.
+Observed acceptance results:
+- Page/runtime errors: 0
+- Settings groups created: 7
+- Motion control created: 1
+- Support controls: 2
+- Help/Feedback controls: 3
+- Legal Center control: 1
+- VelnoxTrust runtime API available: PASS
+- Legal Center opens: PASS
+- Legal document cards: 4
+- Privacy Policy document renders: PASS
+- Reduced Motion state applies: PASS
+- Diagnostic output excludes raw IP and saved test history: PASS
+- Thai Legal Center copy renders: PASS
+- External-link disclosure appears before Ko-fi/PromptPay navigation: PASS
+- Trust screen horizontal overflow at 390 px viewport: NONE
 
-RUNTIME LIMITATION / FINAL DEVICE GATE
-All five defect acceptance paths pass static, unit and deterministic Chromium runtime QA. This environment cannot physically validate Android speaker loudness, installed-PWA close permission, real Full Screen browser policy, or live Cloudflare path behavior on the owner's device. Those are platform/hardware-dependent and must be confirmed once on the deployed Android/PWA build after upload. This report therefore does not claim hardware/mobile production validation that was not actually performed.
+PRIVACY / TRUST CONTRACTS — PASS
+- No account introduced.
+- Local test history behaviour remains controlled by the existing V1.5.2 Save History setting.
+- V1.6 diagnostics include only app/platform/browser/environment/viewport/time/service-worker state.
+- Diagnostics do not include raw IP, saved test history, payment details or benchmark token.
+- Support is explicitly optional and isolated from measurement, ranking, feature access and quality.
+- External destinations receive an in-app disclosure before navigation.
+- Legal Center does not add a mandatory consent wall before testing.
+
+KNOWN EXTERNAL DEPENDENCY
+- Thailand support reuses the existing Benedict Interactive PromptPay QR hosted by the same owner under the Little Ganesha GitHub Pages asset path.
+- If that external asset is unavailable/offline, Velnox hides the broken image and preserves the support card/recipient verification text.
+- Ko-fi, PromptPay, email-app handoff and GitHub Pages are external services and must be verified after deployment on the target phone.
+
+REAL-DEVICE ACCEPTANCE STILL REQUIRED AFTER DEPLOYMENT
+Automated/static acceptance is complete for the package, but the following cannot be truthfully certified before the new build is deployed:
+1. Installed-PWA Service Worker update from 1.5.2 -> 1.6.0 on the target Android phone.
+2. Final visual feel of the expanded Settings sheet with the production core CSS on the target device.
+3. Ko-fi external-open/return flow from Chrome and in-app browsers such as HelloTalk.
+4. PromptPay QR loading/opening and banking-app recipient verification.
+5. mailto handoff to the user's installed email app.
+6. Fullscreen/PWA Exit visibility across the target browser/PWA container.
+
+LEGAL NOTE
+The V1.6 legal documents are product notices drafted to describe the implemented application and its current data flows. They are not a substitute for jurisdiction-specific legal counsel.
+
+QA CONCLUSION
+PASS for packaging and deployment candidate status.
+No measurement, scoring or benchmark regression was introduced by the patch boundary.
+Final production sign-off should follow the short real-device acceptance pass after GitHub Pages deploys V1.6.0.

@@ -1,30 +1,37 @@
-VELNOX V1.5.2 — MANUAL UPLOAD INSTRUCTIONS
+VELNOX V1.6.0 — UPLOAD INSTRUCTIONS
 
-BASE VERIFIED BEFORE PATCH
-Repository: grolygori789-crypto/velnox
-Branch: main
-Baseline commit: e0fd0709b15ca9a22657b04a7059bbaf808c4f30
+Baseline verified before build:
+main HEAD 06499f1ef138f85613e00c65f81bbd114edc21e9
+(chore: refresh Velnox Standard Base)
+Runtime parent: V1.5.2 defect hardening.
 
-UPLOAD / REPLACE THESE FILES AT REPOSITORY ROOT
+UPLOAD / REPLACE AT REPOSITORY ROOT:
 - index.html
-- app.js
-- styles.css
 - sw.js
+- trust.css          [NEW]
+- trust.js           [NEW]
+- LICENSE.md         [NEW]
+- README.md
 - RELEASE_NOTES.md
 - QA_REPORT.txt
+- docs/legal/COPYRIGHT_AND_IP.md       [NEW]
+- docs/legal/TERMS_OF_USE.md           [NEW]
+- docs/legal/PRIVACY_POLICY.md         [NEW]
+- docs/legal/THIRD_PARTY_NOTICES.md    [NEW]
 
-Do not delete or replace benchmarks/, scripts/, .github/workflows/, manifest.webmanifest or assets/.
+DO NOT replace/delete:
+- app.js
+- styles.css
+- manifest.webmanifest
+- benchmarks/
+- scripts/
+- .github/workflows/update-benchmarks.yml
+- existing icons/assets
 
-Recommended commit message:
-Velnox V1.5.2 defect hardening
+Suggested commit message:
+Velnox V1.6.0 trust and product maturity
 
-AFTER GITHUB PAGES DEPLOYS
-1. Close/reopen the installed PWA (or hard-refresh once in browser) so the app shell upgrades to velnox-app-v1.5.2.
-2. Confirm the About panel shows v1.5.2.
-3. Run one normal live test and confirm Country/Global comparison still loads the verified Standard Base.
-4. During a second test, press Exit and confirm the test stops immediately; if Android blocks app-window close, Velnox should return Home/show the truthful fallback instead of remaining stuck in Test.
-5. Confirm the visible test stages only move Ping -> Download -> Upload -> Analysis even though live Ping/Jitter values continue updating.
-6. With Sound Effects ON, confirm the enable confirmation tone plus Start / Finish / Medal cues are audible at normal media volume.
-7. Confirm secondary copy is comfortably readable on the actual phone.
+After deployment, refresh once so the v1.6.0 Service Worker takes control. For installed PWA, close/reopen after the update if the old shell is still visible.
 
-The ZIP contains only the V1.5.2 patch files. Benchmark JSON is intentionally not bundled or overwritten.
+PromptPay note:
+V1.6 reuses the existing Benedict Interactive PromptPay QR hosted by the same owner from the Little Ganesha GitHub Pages asset. Ko-fi and PromptPay remain optional and isolated from Velnox measurement/ranking logic.

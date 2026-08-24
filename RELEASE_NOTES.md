@@ -1,3 +1,17 @@
+# Velnox V1.6.0 — Trust & Product Maturity
+
+- Rebuilds Settings into a structured product control center: Experience, Privacy & Data, Measurement & Transparency, Support Velnox, Help & Feedback, Legal & Privacy, and About Velnox.
+- Adds Motion preference with System / Full / Reduced options and a Reduced Motion override for accessibility.
+- Adds an in-app Measurement & Transparency center covering the accuracy-first measurement sequence, data usage, Velnox Score, Country/Worldwide benchmark methodology, network-exit country detection, VPN behaviour, uncertainty, and deliberate omission of unmeasured packet loss.
+- Adds voluntary support routes: Worldwide through Benedict Interactive on Ko-fi and Thailand through the existing Benedict Interactive PromptPay QR. Support is isolated from measurements, rankings, features and access.
+- Adds Help & Feedback with problem reports, product feedback, optional non-sensitive diagnostics, clipboard fallback and email handoff. Diagnostics intentionally exclude raw IP and saved test history.
+- Adds an in-app Legal Center with Copyright & Intellectual Property, Terms of Use, Privacy Policy and Third-Party Notices. Legal notices use separate legal version 1.0.0 and do not add a consent wall before testing.
+- Adds a proprietary `LICENSE.md` and matching repository notices under `docs/legal/`.
+- Expands About Velnox with version, studio identity, measurement source, benchmark source, hosting, privacy model and source status.
+- Hardens Exit visibility by recognising installed PWA `display-mode: fullscreen` in addition to standalone/fullscreen API state.
+- PWA app cache moves to `velnox-app-v1.6.0` and precaches `trust.css` and `trust.js`. Benchmark cache/versioning and network-first/no-store benchmark policy are unchanged.
+- V1.5.2 measurement configuration, Velnox Score implementation, Real-World classifier, benchmark mathematics, benchmark workflow and local-history model are unchanged.
+
 # Velnox V1.5.2 — Defect Hardening
 
 - Fixes Exit during an active test: Velnox now cancels its active measurement lifecycle before leaving Full Screen or attempting to close. The Cloudflare engine is paused, fallback fetches are aborted, and stale cancelled results cannot overwrite the UI later.
