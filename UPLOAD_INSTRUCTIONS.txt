@@ -1,37 +1,49 @@
-VELNOX V1.6.0 — UPLOAD INSTRUCTIONS
+VELNOX V1.7.0 — PREMIUM EXPERIENCE
+UPLOAD INSTRUCTIONS
 
-Baseline verified before build:
-main HEAD 06499f1ef138f85613e00c65f81bbd114edc21e9
-(chore: refresh Velnox Standard Base)
-Runtime parent: V1.5.2 defect hardening.
+Target repository:
+grolygori789-crypto/velnox
+Branch: main
+Upload to repository ROOT, preserving folders.
 
-UPLOAD / REPLACE AT REPOSITORY ROOT:
+REPLACE these existing files:
 - index.html
+- trust.js
 - sw.js
-- trust.css          [NEW]
-- trust.js           [NEW]
-- LICENSE.md         [NEW]
 - README.md
 - RELEASE_NOTES.md
 - QA_REPORT.txt
-- docs/legal/COPYRIGHT_AND_IP.md       [NEW]
-- docs/legal/TERMS_OF_USE.md           [NEW]
-- docs/legal/PRIVACY_POLICY.md         [NEW]
-- docs/legal/THIRD_PARTY_NOTICES.md    [NEW]
+- UPLOAD_INSTRUCTIONS.txt
+- docs/legal/README.md
+- docs/legal/PRIVACY_POLICY.md
 
-DO NOT replace/delete:
+ADD these new files:
+- premium.css
+- premium.js
+
+KEEP existing files unchanged, especially:
 - app.js
 - styles.css
 - manifest.webmanifest
-- benchmarks/
-- scripts/
-- .github/workflows/update-benchmarks.yml
-- existing icons/assets
+- assets/*
+- benchmarks/*
+- scripts/*
+- .github/workflows/*
+- trust.css
+- LICENSE.md
+- docs/legal/COPYRIGHT_AND_IP.md
+- docs/legal/TERMS_OF_USE.md
+- docs/legal/THIRD_PARTY_NOTICES.md
 
-Suggested commit message:
-Velnox V1.6.0 trust and product maturity
+Recommended commit message:
+Velnox V1.7.0 premium experience
 
-After deployment, refresh once so the v1.6.0 Service Worker takes control. For installed PWA, close/reopen after the update if the old shell is still visible.
+After GitHub Pages deploys:
+1. Open Velnox in Chrome and refresh once.
+2. If installed as a PWA, fully close and reopen it so `velnox-app-v1.7.0` can take control.
+3. Run one complete test and verify Ping → Download → Upload → Analysis progress.
+4. Check Country and Global benchmark cards.
+5. Open Settings and verify TH/EN, Motion, Support, Help, Legal and About.
+6. Open once from HelloTalk/in-app browser to confirm graceful embedded-browser presentation.
 
-PromptPay note:
-V1.6 reuses the existing Benedict Interactive PromptPay QR hosted by the same owner from the Little Ganesha GitHub Pages asset. Ko-fi and PromptPay remain optional and isolated from Velnox measurement/ranking logic.
+Do not upload the outer package folder itself if GitHub would nest the app under another directory. Upload its CONTENTS to repository root.

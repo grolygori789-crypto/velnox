@@ -1,44 +1,47 @@
-# Velnox — Network Intelligence
+# Velnox V1.7.0 — Premium Experience
 
-Velnox is a static HTML/PWA network-health assistant by **Benedict Interactive**, built around:
+Velnox is a browser-based Network Intelligence product by Benedict Interactive.
 
-**Measure → Interpret → Compare → Diagnose → Recommend → Retest**
+V1.7.0 is a presentation and interaction hardening release built on the already-deployed V1.6.0 Trust & Product Maturity layer and the V1.5.2 accuracy/measurement core.
 
-Velnox prioritises repeatability, transparent methodology, privacy by design and graceful failure over unsupported claims.
+## What V1.7 improves
 
-## V1.6.0 — Trust & Product Maturity
+- Rebuilds the Country / Global benchmark hero for clearer hierarchy and more breathing room.
+- Separates `Estimated`, `TOP x%`, and the composite `x / 100` presentation instead of crowding them into one label.
+- Refines benchmark metric cards and source/provenance presentation.
+- Keeps the Velnox SVG turtle as the signature testing character and improves the surrounding motion/finish presentation without introducing heavy 3D/WebGL assets.
+- Adds honest test-progress guidance: stage-based progress plus `Usually about 1 minute`; no fake second-by-second countdown.
+- Adds a premium spacing, typography, microinteraction and focus-visible layer across results, Settings and trust screens.
+- Adds responsive refinements for narrow phones, larger phones, tablets and desktop widths.
+- Adds a lightweight in-app-browser presentation mode for embedded WebViews.
+- Preserves Reduced Motion behavior from V1.6.
+- Keeps empty/error/toast states visually consistent with the premium product language.
 
-V1.6 adds a product-trust layer around the existing V1.5.2 measurement engine: structured premium Settings, Motion/Reduced Motion, Measurement & Transparency, voluntary project support, Help & Feedback, non-sensitive diagnostics, an in-app Legal Center, proprietary source notices, and expanded About/source/privacy disclosure.
+## Regression boundary
 
-The V1.5.2 speed measurement sequence, scoring implementation, Real-World classifier, benchmark mathematics and benchmark workflow remain unchanged.
+V1.7 deliberately does **not** ship replacements for:
 
-## Measurement
+- `app.js`
+- `styles.css`
+- `manifest.webmanifest`
+- benchmark JSON files
+- benchmark generator/workflow
 
-Primary measurement uses `@cloudflare/speedtest` 1.13.0 with an accuracy-first sequence. Packet loss is intentionally omitted until Velnox has a reliable measurement path for it. Missing measurements are not inferred.
+Therefore the primary Cloudflare measurement plan, fallback measurement, Velnox Score, Real-World Use classifier, confidence logic, country detection, benchmark percentile/index mathematics, history storage contract and benchmark pipeline remain the deployed implementations from the prior release.
 
-A full run commonly takes around a minute, but duration and data usage vary with device, route and connection speed. Fast connections can transfer substantial test data.
+The V1.7 presentation layer is isolated in:
 
-## Velnox Score
+- `premium.css`
+- `premium.js`
 
-Velnox Score is a **0–100 heuristic**, not a population percentile. Core weights are Download 35%, Upload 20%, Ping 25% and Jitter 20%, with a bounded loaded-latency penalty when loaded-latency data is available.
+`index.html` only links those assets and updates the visible version. `sw.js` only bumps the app-shell cache and precaches the new premium assets while preserving the benchmark cache and network-first/no-store benchmark policy.
 
-## Country / Worldwide benchmark
+## Test-duration wording
 
-Velnox compares the current measurement with the **Velnox Standard Base**, generated from Cloudflare Radar speed histograms over a rolling 90-day window. Country and Worldwide are separate distributions. Percentile standing is estimated from bucketed histogram data; the overall Velnox Benchmark Index is a weighted composite of available metric percentiles.
+Velnox does not promise an exact completion time. Network path, device load and connection behavior can change the duration of the accuracy-first test. V1.7 therefore uses stage progress and an honest approximate message rather than a countdown that could become false.
 
-The benchmark workflow remains at `.github/workflows/update-benchmarks.yml`. The Radar API token belongs only in a GitHub repository secret and is never shipped in the public app.
+## Product trust
 
-## Privacy
+The V1.6 Trust & Product Maturity features remain in place: structured Settings, Motion controls, Measurement & Transparency, Help & Feedback, voluntary Thailand/Worldwide support, Legal & Privacy, proprietary source notice and non-sensitive diagnostics.
 
-- No Velnox account is required.
-- Test history is stored in browser LocalStorage only when Save History is enabled.
-- Velnox does not place a raw IP address into local test history.
-- Network-exit country is used to select a country benchmark; VPN/proxy use can change the detected country.
-- Test traffic is sent to Cloudflare speed-test endpoints.
-- V1.6 contains no advertising or cross-site behavioural advertising tracker.
-
-## Help, support and legal
-
-V1.6 includes Help & Feedback, voluntary Benedict Interactive support routes, and a Legal Center covering Copyright & IP, Terms of Use, Privacy and Third-Party Notices. Repository notices are under `docs/legal/`.
-
-Velnox is free to use but its original source and product materials are **proprietary unless separately licensed**. See `LICENSE.md`.
+© 2026 Benedict Interactive. See `LICENSE.md` and `docs/legal/`.

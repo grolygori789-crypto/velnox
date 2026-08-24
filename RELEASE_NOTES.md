@@ -1,3 +1,16 @@
+# Velnox V1.7.0 — Premium Experience
+
+- Adds an isolated `premium.css` / `premium.js` presentation layer over the deployed V1.6 product-trust release.
+- Redesigns the benchmark hero so `Estimated`, `TOP x%`, composite score, detected location, provenance and freshness have a clearer premium hierarchy.
+- Refines benchmark metric cards, typography, spacing, source/footer presentation and mobile responsiveness.
+- Keeps the existing Velnox SVG turtle/medal identity; adds restrained polish around the race area rather than introducing heavy 3D/WebGL assets.
+- Adds stage-based test progress with `Usually about 1 minute` / Thai equivalent. No exact seconds-remaining countdown is fabricated.
+- Adds premium microinteractions, focus-visible treatment, empty/error/toast polish and a lightweight embedded-WebView presentation mode.
+- Preserves V1.6 Motion / Reduced Motion behavior.
+- Updates visible/About version to V1.7.0 and app-shell cache to `velnox-app-v1.7.0`.
+- Benchmark cache remains `velnox-benchmarks-v1`; benchmark requests remain network-first with `cache: no-store`.
+- `app.js`, `styles.css`, `manifest.webmanifest`, benchmark datasets, benchmark workflow/generator and all measurement/scoring/ranking logic are intentionally not replaced by this package.
+
 # Velnox V1.6.0 — Trust & Product Maturity
 
 - Rebuilds Settings into a structured product control center: Experience, Privacy & Data, Measurement & Transparency, Support Velnox, Help & Feedback, Legal & Privacy, and About Velnox.

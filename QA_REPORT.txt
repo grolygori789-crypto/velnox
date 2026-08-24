@@ -1,96 +1,76 @@
-VELNOX V1.6.0 — TRUST & PRODUCT MATURITY
+VELNOX V1.7.0 — PREMIUM EXPERIENCE
 QA REPORT
 Date: 2026-08-24
 
-SOURCE BASELINE
-- Live repository checked before implementation and re-checked before packaging.
-- main HEAD: 06499f1ef138f85613e00c65f81bbd114edc21e9
-- Commit: chore: refresh Velnox Standard Base
-- Parent runtime: 08b16e08ef6f65bd9b15b48938e00ffe3f188b2f — Velnox V1.5.2 defect hardening
-- The current HEAD only refreshes benchmark data above that runtime parent.
+BASELINE
+- Live main inspected before work.
+- Baseline commit: d34dd1e2a8feb48a56dd653927d61cb801f2a7b1
+- Baseline message: Velnox V1.6.0 trust and product maturity
+- Local V1.6 source package used for the patch matched the deployed Git blob for index.html and trust.js; other V1.6 package files were produced by the same uploaded release.
 
-CHANGE BOUNDARY
-V1.6 intentionally does NOT replace or modify:
-- app.js measurement/scoring/runtime logic
-- styles.css locked Velnox core visual system
-- manifest.webmanifest
-- benchmarks/
-- benchmark generator/workflow
-- Velnox Score mathematics
-- V1.5.2 Real-World classifier
-- accuracy-first interleaved measurement sequence
+REGRESSION BOUNDARY
+PASS — package does not contain replacements for app.js, styles.css or manifest.webmanifest.
+PASS — package does not contain benchmark JSON, benchmark generator or GitHub workflow files.
+PASS — measurement engine, measurement sequence, fallback measurement, Velnox Score, Real-World Use classifier, confidence logic, country detection, benchmark percentile/index math and history code are therefore outside the V1.7 edit surface.
 
-Runtime changes are isolated to:
-- index.html: trust.css/trust.js linkage, version string, PWA fullscreen display-mode Exit detection
-- trust.js: settings/trust/support/help/legal/about layer
-- trust.css: V1.6 trust-layer visual system + Reduced Motion controls
-- sw.js: app cache v1.6.0 + trust assets in app shell
+INTENTIONAL RUNTIME FILE CHANGES
+- index.html: links premium.css/premium.js and shows V1.7.0.
+- premium.css: presentation-only premium layer.
+- premium.js: DOM presentation enhancement for benchmark hierarchy, test-progress guidance and container presentation detection.
+- trust.js: V1.7 version alignment; existing V1.6 trust functionality retained.
+- trust.css is intentionally not replaced; the deployed V1.6 trust visual layer remains the base and premium.css overrides only presentation where needed.
+- sw.js: app-shell cache bump + new premium assets; benchmark cache policy unchanged.
 
-STATIC ACCEPTANCE — PASS
-- trust.js: node --check PASS
-- sw.js: node --check PASS
-- index.html parsed without duplicate IDs PASS
-- trust.css linked exactly once PASS
-- trust.js linked exactly once PASS
-- About version V1.6.0 PASS
-- Exit detection includes display-mode: fullscreen PASS
-- index.html regression diff PASS: after reversing the four intended edits, file is byte-identical to the V1.5.2 baseline index
-- Service Worker app cache = velnox-app-v1.6.0 PASS
-- Service Worker CORE includes trust.css + trust.js PASS
-- Benchmark cache remains velnox-benchmarks-v1 PASS
-- Benchmark fetch remains network-first / cache:no-store PASS
-- No benchmarks directory in patch package PASS (prevents accidental overwrite of freshly synced data)
-- No app.js/styles.css in patch package PASS (prevents accidental measurement/UI regression)
-- Secret-pattern scan PASS; no Cloudflare token/API key/private key embedded
-- Legal repository documents present PASS
+STATIC GATES
+PASS — node --check: trust.js
+PASS — node --check: premium.js
+PASS — node --check: sw.js
+PASS — no duplicate IDs in production index.html
+PASS — index links app.js + trust.js + premium.js
+PASS — index links styles.css + trust.css + premium.css
+PASS — Service Worker app cache = velnox-app-v1.7.0
+PASS — benchmark cache remains velnox-benchmarks-v1
+PASS — benchmark network path still uses cache: no-store
+PASS — premium CSS brace sanity
+PASS — secret-pattern scan
+PASS — package does not ship protected core files
 
-DETERMINISTIC CHROMIUM ACCEPTANCE — PASS
-The environment blocks localhost/file/data navigation by administrator policy, so the V1.6 DOM layer was tested in Chromium through an about:blank deterministic harness with the production index DOM and V1.6 trust assets injected directly.
+DETERMINISTIC CHROMIUM ACCEPTANCE
+Environment: Chromium headless, about:blank CDP injection because local/file/data navigation is restricted by the execution environment.
+Viewport tested: mobile 390 CSS px.
+PASS — VelnoxPremium initializes as 1.7.0
+PASS — stage progress panel is injected exactly once
+PASS — initial Ping stage reports 10% stage progress
+PASS — Upload stage advances to 68% without a time countdown
+PASS — user guidance displays `Usually about 1 minute`
+PASS — Thai guidance displays `โดยทั่วไปใช้เวลาประมาณ 1 นาที`
+PASS — benchmark hero transforms into premium hierarchy
+PASS — `EST. TOP 26%` is presented as ESTIMATED + TOP + 26% without changing the underlying rank
+PASS — `74/100` is reformatted as `74 / 100` without changing the value
+PASS — benchmark freshness moves into the hero header
+PASS — all four benchmark metric cards receive the premium presentation hook
+PASS — no horizontal overflow in 320 / 350 / 360 / 390 / 412 / 768 px deterministic responsive checks
+PASS — Analysis stage reports 94% stage progress, shows `Finalizing analysis…`, and removes the approximate-time note
+PASS — Reduced Motion computes no premium progress animation / transition
+PASS — dynamic Country/Global rerender is re-enhanced automatically without modifying benchmark values
+PASS — V1.7 Trust/Settings initializes 7 groups with Motion control intact
+PASS — Settings sheet remains within viewport at 320 / 360 / 390 / 412 px and caps at 520 px on tablet/desktop
+PASS — VelnoxTrust and VelnoxPremium both report version 1.7.0
 
-Observed acceptance results:
-- Page/runtime errors: 0
-- Settings groups created: 7
-- Motion control created: 1
-- Support controls: 2
-- Help/Feedback controls: 3
-- Legal Center control: 1
-- VelnoxTrust runtime API available: PASS
-- Legal Center opens: PASS
-- Legal document cards: 4
-- Privacy Policy document renders: PASS
-- Reduced Motion state applies: PASS
-- Diagnostic output excludes raw IP and saved test history: PASS
-- Thai Legal Center copy renders: PASS
-- External-link disclosure appears before Ko-fi/PromptPay navigation: PASS
-- Trust screen horizontal overflow at 390 px viewport: NONE
-
-PRIVACY / TRUST CONTRACTS — PASS
-- No account introduced.
-- Local test history behaviour remains controlled by the existing V1.5.2 Save History setting.
-- V1.6 diagnostics include only app/platform/browser/environment/viewport/time/service-worker state.
-- Diagnostics do not include raw IP, saved test history, payment details or benchmark token.
-- Support is explicitly optional and isolated from measurement, ranking, feature access and quality.
-- External destinations receive an in-app disclosure before navigation.
-- Legal Center does not add a mandatory consent wall before testing.
-
-KNOWN EXTERNAL DEPENDENCY
-- Thailand support reuses the existing Benedict Interactive PromptPay QR hosted by the same owner under the Little Ganesha GitHub Pages asset path.
-- If that external asset is unavailable/offline, Velnox hides the broken image and preserves the support card/recipient verification text.
-- Ko-fi, PromptPay, email-app handoff and GitHub Pages are external services and must be verified after deployment on the target phone.
+DESIGN/ACCURACY CONTRACT
+- No exact seconds-remaining countdown is shown because Velnox cannot guarantee an exact duration under variable network/device conditions.
+- Progress is stage-based, not a claim about bytes/time remaining.
+- Existing SVG turtle/medal identity remains; no 3D/WebGL dependency added.
+- Reduced Motion disables premium progress animation/microinteraction animation.
 
 REAL-DEVICE ACCEPTANCE STILL REQUIRED AFTER DEPLOYMENT
-Automated/static acceptance is complete for the package, but the following cannot be truthfully certified before the new build is deployed:
-1. Installed-PWA Service Worker update from 1.5.2 -> 1.6.0 on the target Android phone.
-2. Final visual feel of the expanded Settings sheet with the production core CSS on the target device.
-3. Ko-fi external-open/return flow from Chrome and in-app browsers such as HelloTalk.
-4. PromptPay QR loading/opening and banking-app recipient verification.
-5. mailto handoff to the user's installed email app.
-6. Fullscreen/PWA Exit visibility across the target browser/PWA container.
+Automated and deterministic browser tests cannot prove every Android/WebView/PWA policy. Final device acceptance should verify:
+1. Chrome complete test and result rendering.
+2. Installed PWA Service Worker update from 1.6.0 to 1.7.0.
+3. Fullscreen/Exit behavior.
+4. Sound on/off on real speaker hardware.
+5. HelloTalk/in-app-browser behavior.
+6. Ko-fi / PromptPay / mail-app external handoff.
+7. Country/Global benchmark live data after deployment.
 
-LEGAL NOTE
-The V1.6 legal documents are product notices drafted to describe the implemented application and its current data flows. They are not a substitute for jurisdiction-specific legal counsel.
-
-QA CONCLUSION
-PASS for packaging and deployment candidate status.
-No measurement, scoring or benchmark regression was introduced by the patch boundary.
-Final production sign-off should follow the short real-device acceptance pass after GitHub Pages deploys V1.6.0.
+No claim of 100% real-device validation is made until those device-specific checks are completed.

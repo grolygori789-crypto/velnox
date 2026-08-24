@@ -3,4 +3,4 @@ In-app Legal Center and repository notices use legal version **1.0.0**, effectiv
 
 Documents: Copyright & Intellectual Property, Terms of Use, Privacy Policy, and Third-Party Notices.
 
-These notices describe Velnox V1.6 as implemented and are not a substitute for jurisdiction-specific legal advice.
+These notices describe Velnox V1.7 as implemented and are not a substitute for jurisdiction-specific legal advice.
