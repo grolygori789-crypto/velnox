@@ -69,7 +69,7 @@ const translations = {
     goldTurtle:"เต่าเหรียญทอง", silverTurtle:"เต่าเหรียญเงิน", bronzeTurtle:"เต่าเหรียญทองแดง", attentionTurtle:"ควรตรวจสอบ",
     excellentConnection:"การเชื่อมต่อยอดเยี่ยม", goodConnection:"การเชื่อมต่อดี", fairConnection:"การเชื่อมต่อพอใช้", poorConnection:"การเชื่อมต่อควรได้รับการแก้ไข",
     streaming4k:"สตรีม 4K", onlineGaming:"เกมออนไลน์", videoCalls:"วิดีโอคอล", cloudGaming:"Cloud Gaming", liveStreaming:"ไลฟ์สตรีม", largeDownloads:"ดาวน์โหลดไฟล์ใหญ่",
-    noBenchmark:"ยังไม่ได้เชื่อมข้อมูล Benchmark ที่ตรวจสอบแล้ว", noBenchmarkCopy:"ระบบเปรียบเทียบพร้อมใช้งาน แต่ Velnox จะไม่สร้างอันดับประเทศหรือทั่วโลกขึ้นมาเอง ต้องเชื่อมชุดข้อมูลปัจจุบันที่ตรวจสอบแหล่งที่มาแล้วก่อนใช้งานจริง",
+    noBenchmark:"ยังไม่ได้เชื่อมข้อมูล Benchmark ที่ตรวจสอบแล้ว", noBenchmarkCopy:"ระบบเปรียบเทียบพร้อมใช้งาน แต่ Velnox จะไม่สร้างอันดับประเทศหรือทั่วโลกขึ้นมาเอง ต้องเชื่อมชุดข้อมูลปัจจุบันที่ตรวจสอบแหล่งข้อมูลแล้วก่อนใช้งานจริง",
     previousCompare:"เทียบกับครั้งก่อน", fasterThanPrevious:"ดาวน์โหลดเร็วขึ้น {x}% จากการทดสอบครั้งก่อน", slowerThanPrevious:"ดาวน์โหลดช้าลง {x}% จากการทดสอบครั้งก่อน",
     stableFastTitle:"เร็วและตอบสนองดี", stableFastBody:"การเชื่อมต่อมีทั้งความเร็วสูงและความหน่วงต่ำ",
     highLatencyTitle:"พบ Latency สูง", highLatencyBody:"การตอบสนองค่อนข้างช้า เกมและการโทรสดอาจรู้สึกหน่วง แม้ความเร็วดาวน์โหลดจะสูง",
@@ -911,8 +911,8 @@ window.VelnoxApp=Object.freeze({
 function boot(){
   setLang(state.lang);renderSettings();renderLastResult();renderHistory();updateConnectionStatus();
   detectCountry().then(()=>loadBenchmarkIndex()).catch(()=>{});
-  setTimeout(()=>{$("#splash").classList.add("exit");$("#mainShell").classList.remove("hidden")},1550);
-  setTimeout(()=>$("#splash").remove(),2250);
+  setTimeout(()=>{$("#splash").classList.add("exit");$("#mainShell").classList.remove("hidden")},2050);
+  setTimeout(()=>$("#splash").remove(),2700);
   if("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).then(reg=>reg.update()).catch(()=>{});
 }
 boot();
