@@ -596,11 +596,15 @@ function resetRace(){
   $("#liveValue").textContent="—"; $("#miniPing").textContent=$("#miniDown").textContent=$("#miniUp").textContent=$("#miniJitter").textContent="—";
   ["#line1","#line2","#line3"].forEach(x=>$(x).style.width="0");
 }
-async function ensureCloudflareEngine(){
+const CLOUDFLARE_MODULE_TIMEOUT_MS=10000;
+async function ensureCloudflareEngine(timeoutMs=CLOUDFLARE_MODULE_TIMEOUT_MS){
+  let timer=null;
   try{
-    const mod=await import("https://cdn.jsdelivr.net/npm/@cloudflare/speedtest@1.13.0/+esm");
-    return mod.default;
+    const importPromise=import("https://cdn.jsdelivr.net/npm/@cloudflare/speedtest@1.13.0/+esm").then(mod=>mod.default);
+    const timeoutPromise=new Promise(resolve=>{timer=setTimeout(()=>resolve(null),timeoutMs)});
+    return await Promise.race([importPromise,timeoutPromise]);
   }catch{return null}
+  finally{if(timer)clearTimeout(timer)}
 }
 function numericPercentile(values,p=.5){
   const a=(values||[]).filter(Number.isFinite).sort((x,y)=>x-y);
@@ -647,7 +651,8 @@ async function runFallback(signal){
   setStage("latency");
   for(let i=0;i<14;i++){
     const s=performance.now();
-    await fetch(`${base}/__down?bytes=0&_=${Date.now()}-${i}`,{cache:"no-store",signal});
+    const response=await fetch(`${base}/__down?bytes=0&_=${Date.now()}-${i}`,{cache:"no-store",signal});
+    if(!response.ok)throw new Error(`Fallback latency HTTP ${response.status}`);
     const p=performance.now()-s;
     if(i>=2)pings.push(p);
     $("#liveValue").textContent=p.toFixed(0);$("#miniPing").textContent=`${p.toFixed(0)} ms`;
@@ -660,13 +665,17 @@ async function runFallback(signal){
   const measureDown=async(bytes)=>{
     const s=performance.now();
     const r=await fetch(`${base}/__down?bytes=${bytes}&_=${Date.now()}-${Math.random()}`,{cache:"no-store",signal});
+    if(!r.ok)throw new Error(`Fallback download HTTP ${r.status}`);
     const blob=await r.blob();
+    const expectedLength=Number(r.headers.get("content-length"));
+    if(!blob.size || (Number.isFinite(expectedLength)&&expectedLength>0&&blob.size<expectedLength))throw new Error("Fallback download response incomplete");
     const sec=(performance.now()-s)/1000;
     return {mbps:(blob.size*8/sec)/1e6,ms:sec*1000};
   };
   const measureUp=async(bytes)=>{
     const body=new Uint8Array(bytes),s=performance.now();
-    await fetch(`${base}/__up?_=${Date.now()}-${Math.random()}`,{method:"POST",body,cache:"no-store",signal});
+    const r=await fetch(`${base}/__up?_=${Date.now()}-${Math.random()}`,{method:"POST",body,cache:"no-store",signal});
+    if(!r.ok)throw new Error(`Fallback upload HTTP ${r.status}`);
     const sec=(performance.now()-s)/1000;
     return {mbps:(bytes*8/sec)/1e6,ms:sec*1000};
   };
@@ -743,7 +752,13 @@ function withTimeoutAndCancel(promise,ms=75000,runId=state.runSerial){
   let timer=null,cancelReject=null;
   const cancelPromise=new Promise((_,reject)=>{cancelReject=()=>reject(cancelError())});
   if(runId===state.runSerial)state.cancelCurrent=cancelReject;
-  const timeoutPromise=new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error("VELNOX_TIMEOUT")),ms)});
+  const timeoutPromise=new Promise((_,reject)=>{timer=setTimeout(()=>{
+    reject(new Error("VELNOX_TIMEOUT"));
+    if(runId===state.runSerial){
+      try{state.activeEngine?.pause?.()}catch{}
+      try{state.abortController?.abort()}catch{}
+    }
+  },ms)});
   return Promise.race([promise,cancelPromise,timeoutPromise]).finally(()=>{
     if(timer)clearTimeout(timer);
     if(state.cancelCurrent===cancelReject)state.cancelCurrent=null;
@@ -835,8 +850,11 @@ async function runTest(){
           if(runId!==state.runSerial){reject(cancelError());return}
           const download=(safeCall(res,"getDownloadBandwidth")||0)/1e6;
           const upload=(safeCall(res,"getUploadBandwidth")||0)/1e6;
-          const ping=safeCall(res,"getUnloadedLatency");
-          const jitter=safeCall(res,"getUnloadedJitter");
+          const pingRaw=safeCall(res,"getUnloadedLatency");
+          const jitterRaw=safeCall(res,"getUnloadedJitter");
+          const pingNumber=Number(pingRaw), jitterNumber=Number(jitterRaw);
+          const ping=pingRaw===null||pingRaw===undefined||pingRaw===""||!Number.isFinite(pingNumber)||pingNumber<0?null:pingNumber;
+          const jitter=jitterRaw===null||jitterRaw===undefined||jitterRaw===""||!Number.isFinite(jitterNumber)||jitterNumber<0?null:jitterNumber;
           const dl=safeCall(res,"getDownLoadedLatency"), ul=safeCall(res,"getUpLoadedLatency");
           const loaded=[dl,ul].filter(Number.isFinite);
           const aimScores=safeCall(res,"getScores")||null;
@@ -844,7 +862,7 @@ async function runTest(){
           const uploadPoints=safeCall(res,"getUploadBandwidthPoints")||[];
           const latencyPoints=safeCall(res,"getUnloadedLatencyPoints")||[];
           const confidence=confidenceFromSamples(downloadPoints,uploadPoints,latencyPoints);
-          resolve({download,upload,ping:Number(ping)||0,jitter:Number(jitter)||0,loadedLatency:loaded.length?Math.max(...loaded):null,aimScores,confidence});
+          resolve({download,upload,ping,jitter,loadedLatency:loaded.length?Math.max(...loaded):null,aimScores,confidence});
         };
         st.play();
       });
@@ -855,7 +873,7 @@ async function runTest(){
     }
 
     if(runId!==state.runSerial)throw cancelError();
-    if(!result.download || !Number.isFinite(result.ping)) throw new Error("Invalid measurement");
+    if(!result.download || !Number.isFinite(result.ping) || !Number.isFinite(result.jitter)) throw new Error("Invalid measurement");
     setStage("analysis"); $("#liveValue").textContent=""; $("#liveUnit").textContent="";
     await new Promise(r=>setTimeout(r,500));
     if(runId!==state.runSerial)throw cancelError();
@@ -873,7 +891,12 @@ async function runTest(){
     renderResult(result); saveHistory(result);
     showView("#resultView");
   }catch(err){
-    if(err?.message==="VELNOX_CANCELLED"||err?.name==="AbortError"){
+    const cancelled=err?.message==="VELNOX_CANCELLED"||err?.name==="AbortError";
+    if(!cancelled&&runId===state.runSerial){
+      try{engine?.pause?.()}catch{}
+      try{controller.abort()}catch{}
+    }
+    if(cancelled){
       if(runId===state.runSerial)showView("#homeView");
     }else{
       console.error(err); toast(err?.message==="VELNOX_TIMEOUT"?t("testTimedOut"):t("engineError"));
@@ -890,8 +913,8 @@ function renderSettings(){
   setLang(state.lang);
 }
 $("#startBtn").addEventListener("click",runTest); $("#retestBtn").addEventListener("click",runTest);
-$("#homeBtn").addEventListener("click",()=>showView("#homeView"));
-$("#historyBtn").addEventListener("click",()=>{renderHistory();showView("#historyView")}); $("#backFromHistory").addEventListener("click",()=>showView("#homeView"));
+$("#homeBtn").addEventListener("click",async()=>{if(state.running)await cancelActiveTest({returnHome:false});showView("#homeView")});
+$("#historyBtn").addEventListener("click",async()=>{if(state.running)await cancelActiveTest({returnHome:false});renderHistory();showView("#historyView")}); $("#backFromHistory").addEventListener("click",()=>showView("#homeView"));
 $("#settingsBtn").addEventListener("click",()=>{renderSettings();openSheet("#settingsSheet","#sheetBackdrop")}); $("#closeSettings").addEventListener("click",()=>closeSheet("#settingsSheet","#sheetBackdrop")); $("#sheetBackdrop").addEventListener("click",()=>closeSheet("#settingsSheet","#sheetBackdrop"));
 $("#technicalBtn").addEventListener("click",()=>openSheet("#techSheet","#techBackdrop")); $("#closeTech").addEventListener("click",()=>closeSheet("#techSheet","#techBackdrop")); $("#techBackdrop").addEventListener("click",()=>closeSheet("#techSheet","#techBackdrop"));
 ["#langTh","#sheetTh"].forEach(s=>$(s).addEventListener("click",()=>setLang("th")));["#langEn","#sheetEn"].forEach(s=>$(s).addEventListener("click",()=>setLang("en")));
