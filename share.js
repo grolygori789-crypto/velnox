@@ -205,6 +205,45 @@
   function loadMark(){return new Promise(resolve=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>resolve(null);img.src='assets/velnox-mark.svg'})}
   function drawFallbackMark(ctx,x,y,s){ctx.save();ctx.translate(x,y);ctx.strokeStyle='#d8b762';ctx.lineWidth=s*.035;ctx.beginPath();ctx.arc(s*.5,s*.5,s*.36,Math.PI*.15,Math.PI*.85,true);ctx.stroke();ctx.strokeStyle='#5fe1e7';ctx.lineWidth=s*.13;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(s*.22,s*.28);ctx.lineTo(s*.5,s*.77);ctx.lineTo(s*.78,s*.28);ctx.stroke();ctx.restore()}
 
+  function fitRankName(ctx,text,maxWidth,start=22,min=14){
+    const value=String(text||'—').trim()||'—';
+    let size=start;
+    while(size>min){
+      ctx.font=`560 ${size}px system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif`;
+      if(ctx.measureText(value).width<=maxWidth)return {text:value,size};
+      size-=1;
+    }
+    ctx.font=`560 ${min}px system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif`;
+    if(ctx.measureText(value).width<=maxWidth)return {text:value,size:min};
+    let out=value;
+    while(out.length>1&&ctx.measureText(`${out}…`).width>maxWidth)out=out.slice(0,-1);
+    return {text:`${out}…`,size:min};
+  }
+  function drawRankIdentity(ctx,r,x,y,width){
+    const right=x+width-24;
+    const identityLeft=x+(width===456?236:470);
+    const flag=String(r.flag||'').trim();
+    const gap=flag?10:0;
+    ctx.save();
+    ctx.beginPath();ctx.rect(identityLeft,y+52,Math.max(0,right-identityLeft),54);ctx.clip();
+    const flagWidth=flag?32:0;
+    const nameMax=Math.max(42,right-identityLeft-flagWidth-gap);
+    const fitted=fitRankName(ctx,r.name,nameMax,22,14);
+    ctx.font=`560 ${fitted.size}px system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif`;
+    const nameWidth=Math.min(nameMax,ctx.measureText(fitted.text).width);
+    const groupWidth=flagWidth+gap+nameWidth;
+    const groupX=Math.max(identityLeft,right-groupWidth);
+    if(flag){
+      ctx.fillStyle='#f0f4f5';
+      ctx.font='500 22px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",system-ui,sans-serif';
+      ctx.textAlign='left';ctx.fillText(flag,groupX,y+89);
+    }
+    ctx.fillStyle='#cbd6da';
+    ctx.font=`560 ${fitted.size}px system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif`;
+    ctx.textAlign='left';ctx.fillText(fitted.text,groupX+flagWidth+gap,y+89);
+    ctx.restore();ctx.textAlign='left';
+  }
+
   async function drawShareCard(data,opts){
     const W=SHARE_SIZE.width,H=SHARE_SIZE.height,c=document.createElement('canvas');c.width=W;c.height=H;const ctx=c.getContext('2d',{alpha:false});
     const bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#071018');bg.addColorStop(.55,'#050a0f');bg.addColorStop(1,'#030609');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
@@ -244,7 +283,7 @@
       ctx.fillStyle='#7f91a2';ctx.font='740 18px system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif';trackText(ctx,t('benchmark').toUpperCase(),74,y+24,1.4);
       y+=48;
       const width=rankItems.length===1?936:456;
-      rankItems.forEach((r,i)=>{const x=72+i*(width+24);fillRound(ctx,x,y,width,132,22,'rgba(19,23,27,.78)','rgba(216,183,98,.13)');ctx.fillStyle='#8fa1b1';ctx.font='700 17px system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif';ctx.fillText(r.label,x+24,y+34);ctx.fillStyle='#d8b762';ctx.font='620 45px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';ctx.fillText(`TOP ${r.top}`,x+24,y+90);ctx.fillStyle='#cbd6da';ctx.font='560 22px system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif';const name=`${r.flag?r.flag+' ':''}${r.name}`;const size=fitText(ctx,name,width-235,22,16);ctx.font=`560 ${size}px system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif`;ctx.textAlign='right';ctx.fillText(name,x+width-24,y+89);ctx.textAlign='left'});
+      rankItems.forEach((r,i)=>{const x=72+i*(width+24);fillRound(ctx,x,y,width,132,22,'rgba(19,23,27,.78)','rgba(216,183,98,.13)');ctx.fillStyle='#8fa1b1';ctx.font='700 17px system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif';ctx.fillText(r.label,x+24,y+34);ctx.fillStyle='#d8b762';ctx.font='620 45px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';ctx.fillText(`TOP ${r.top}`,x+24,y+90);drawRankIdentity(ctx,r,x,y,width)});
       y+=154;
     } else if(data.historical){
       fillRound(ctx,72,y,936,86,18,'rgba(255,255,255,.018)','rgba(255,255,255,.05)');ctx.fillStyle='#728496';ctx.font='520 20px system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif';drawWrapped(ctx,t('noRank'),98,y+34,875,27,2);y+=106;
